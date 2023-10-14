@@ -19,4 +19,4 @@ install(
 )
 
 # ament_auto_package(INSTALL_TO_SHARE behavior_trees config launch params)
-ament_auto_package(INSTALL_TO_SHARE config launch param)
+ament_package()

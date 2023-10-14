@@ -10,4 +10,9 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-ament_auto_package(INSTALL_TO_SHARE models scripts worlds)
+install(
+  DIRECTORY launch src meshes rviz urdf
+  DESTINATION share/${PROJECT_NAME}
+)
+
+ament_package()
