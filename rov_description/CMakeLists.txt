@@ -11,8 +11,9 @@ if(BUILD_TESTING)
 endif()
 
 install(
-  DIRECTORY launch src meshes rviz urdf
+  DIRECTORY launch meshes models rviz scripts src urdf worlds
   DESTINATION share/${PROJECT_NAME}
 )
 
 ament_package()
+#ament_auto_package(INSTALL_TO_SHARE models scripts worlds)

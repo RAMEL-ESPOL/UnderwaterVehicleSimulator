@@ -4,7 +4,7 @@ from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch.substitutions import LaunchConfiguration
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, ExecuteProcess
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 
@@ -14,6 +14,7 @@ import xacro
 def generate_launch_description():
 
     pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')
+    rov_description_dir = get_package_share_directory('rov_description')
 
     # Check if we're told to use sim time
     use_sim_time = LaunchConfiguration('use_sim_time')
@@ -22,6 +23,8 @@ def generate_launch_description():
     pkg_path = os.path.join(get_package_share_directory('rov_description'))
     xacro_file = os.path.join(pkg_path,'urdf','loco.urdf.xacro')
     robot_description_config = xacro.process_file(xacro_file)
+    robot_description = {'robot_description': robot_description_config.toxml()}
+    world_file = os.path.join(rov_description_dir, 'worlds', 'sand.world')
 
     # Config time simulation
     config_time = DeclareLaunchArgument(
@@ -47,12 +50,12 @@ def generate_launch_description():
     )
 
     # Gazebo Sim
-    gazebo = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(pkg_ros_gz_sim, 'launch', 'gz_sim.launch.py')
-        ),
-        launch_arguments={'gz_args': '-r empty.sdf'}.items(),
-    )
+    # gazebo = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource(
+    #         os.path.join(pkg_ros_gz_sim, 'launch', 'gz_sim.launch.py')
+    #     ),
+    #     launch_arguments={'gz_args': '-r empty.sdf'}.items(),
+    # )
 
     # RViz
     rviz = Node(
@@ -62,22 +65,34 @@ def generate_launch_description():
     )
 
     # Spawn
-    spawn = Node(
-        package='ros_gz_sim',
-        executable='create',
-        arguments=[
-            '-name', 'rrbot',
-            '-topic', 'robot_description',
-        ],
-        output='screen',
-    )
+    # spawn = Node(
+    #     package='ros_gz_sim',
+    #     executable='create',
+    #     arguments=[
+    #         '-name', 'rov_ramel',
+    #         '-topic', 'robot_description',
+    #     ],
+    #     output='screen',
+    # )
 
     # Launch!
     return LaunchDescription([
         config_time,
         node_robot_state_publisher,
         node_joint_state_publisher,
-        gazebo,
+        #gazebo,
         rviz,
-        spawn
+        #spawn,
+        ExecuteProcess(
+            cmd=['echo', '"-----------------INICIADO-----------------"'],
+            output='screen'
+        ),
+        ExecuteProcess(
+            cmd=['gz', 'sim', '-v', '3', '-r', world_file],
+            output='screen'
+        ),
+        ExecuteProcess(
+            cmd=['echo', '"-----------------TERMINADO-----------------"'],
+            output='screen'
+        )
     ])
