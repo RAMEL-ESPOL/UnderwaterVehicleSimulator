@@ -75,24 +75,51 @@ def generate_launch_description():
     #     output='screen',
     # )
 
+    gz_sim = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(pkg_ros_gz_sim, 'launch', 'gz_sim.launch.py')),
+        launch_arguments={
+            'gz_args': '-r ~/ros2_ws/src/rov_robot/rov_description/worlds/sand.world'
+        }.items(),
+    )
+
+    bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=['/rov/th_1/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
+                   '/rov/th_1/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',
+                   '/rov/th_2/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
+                   '/rov/th_2/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',
+                   '/rov/th_3/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
+                   '/rov/th_3/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',
+                   '/rov/th_4/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
+                   '/rov/th_4/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',
+                   '/rov/th_5/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
+                   '/rov/th_5/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',
+                   '/rov/th_6/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
+                   '/rov/th_6/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',],
+        parameters=[{'qos_overrides./rov/th_1.subscriber.reliability': 'reliable',
+                     'qos_overrides./rov/th_2.subscriber.reliability': 'reliable',
+                     'qos_overrides./rov/th_3.subscriber.reliability': 'reliable',
+                     'qos_overrides./rov/th_4.subscriber.reliability': 'reliable',
+                     'qos_overrides./rov/th_5.subscriber.reliability': 'reliable',
+                     'qos_overrides./rov/th_6.subscriber.reliability': 'reliable'}],
+        output='screen'
+    )
+
     # Launch!
     return LaunchDescription([
         config_time,
         node_robot_state_publisher,
         node_joint_state_publisher,
-        #gazebo,
+        # gazebo,
         rviz,
-        #spawn,
-        ExecuteProcess(
-            cmd=['echo', '"-----------------INICIADO-----------------"'],
-            output='screen'
-        ),
-        ExecuteProcess(
-            cmd=['gz', 'sim', '-v', '3', '-r', world_file],
-            output='screen'
-        ),
-        ExecuteProcess(
-            cmd=['echo', '"-----------------TERMINADO-----------------"'],
-            output='screen'
-        )
+        # spawn,
+        # ExecuteProcess(
+        #     cmd=['gz', 'sim', '-v', '3', '-r', world_file],
+        #     output='screen'
+        # ),
+        gz_sim,
+        bridge
+
     ])

@@ -40,20 +40,21 @@
         </density_change>
       </graded_buoyancy>
       <!-- Enable by model name -->
-      <enable>orca4</enable>
+      <enable>rov_max</enable>
     </plugin>
 
     <include>
       <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Sun</uri>
     </include>
 
-    <!-- <include>
+    <!-- World create by BlueRov -->
+    <include>
      <uri>model://sand_heightmap</uri>
      <pose>0 7 -10 0 0 0</pose>
-    </include> -->
+    </include>
 
     <include>
-      <uri>model://orca4</uri>
+      <uri>model://rov_max</uri>
       <pose>0 0 -0.2 0 0 0</pose>
     </include>
 
