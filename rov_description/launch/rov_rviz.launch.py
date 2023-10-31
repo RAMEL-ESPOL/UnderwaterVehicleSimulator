@@ -21,10 +21,12 @@ def generate_launch_description():
 
     # Process the URDF file
     pkg_path = os.path.join(get_package_share_directory('rov_description'))
-    xacro_file = os.path.join(pkg_path,'urdf','loco.urdf.xacro')
+    xacro_file = os.path.join(pkg_path,'urdf','rov_max.urdf.xacro')
+    rviz_file = os.path.join(pkg_path,'rviz','max_view.rviz')
+    world_file = os.path.join(rov_description_dir, 'worlds', 'sand.world')
+
     robot_description_config = xacro.process_file(xacro_file)
     robot_description = {'robot_description': robot_description_config.toxml()}
-    world_file = os.path.join(rov_description_dir, 'worlds', 'sand.world')
 
     # Config time simulation
     config_time = DeclareLaunchArgument(
@@ -61,7 +63,7 @@ def generate_launch_description():
     rviz = Node(
         package='rviz2',
         executable='rviz2',
-        arguments=['-d', os.path.join(pkg_path, 'rviz', 'urdf.rviz')],
+        arguments=['-d', rviz_file],
     )
 
     # Spawn

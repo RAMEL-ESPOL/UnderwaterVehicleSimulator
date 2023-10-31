@@ -1,0 +1,268 @@
+<?xml version="1.0"?>
+<robot name="rov_max" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:property name="negligible" value="1e-5" />
+  <xacro:property name="blade_geometry" value="0.015 0.02 .003" />
+
+  <material name="LightBlue">
+    <color rgba="0.678431 0.847059 0.901961 1.0"/>
+  </material>
+
+  <material name="MediumBlue">
+    <color rgba="0.000000 0.000000 0.803922 1.0"/>
+  </material>
+
+  <material name="LightYellow">
+    <color rgba="1.000000 1.000000 0.690196 1.0"/>
+  </material>
+
+  <material name="MediumYellow">
+    <color rgba="1.000000 1.000000 0.000000 1.0"/>
+  </material>
+
+  <material name="Gray">
+    <color rgba="0.7 0.7 0.7 1.0"/>
+  </material>
+
+  <material name="Black">
+    <color rgba="0 0 0 1"/>
+  </material>
+
+  <material name="LightGreen">
+    <color rgba="0.678431 1.000000 0.184314 1.0"/>
+  </material>
+
+  <material name="MediumGreen">
+    <color rgba="0.000000 0.501961 0.000000 1.0"/>
+  </material>
+
+  <material name="Green">
+    <color rgba="0.0 0.8 0.0 1.0"/>
+  </material>
+
+  <link name="rov_max_frame">
+  </link>
+
+  <link name="rov_max_shell">
+    <visual>
+      <!--The origin shift visually shifts the model to CAD model origin-->
+      <origin xyz="1.5571 0.0016 0.0084" rpy="0 0 ${pi}" />
+        .0175
+      <geometry>
+        <mesh filename="package://rov_description/meshes/Rov_Max.stl" scale="0.01 0.01 0.01"/>
+      </geometry>
+      <material name="MediumYellow"/>
+    </visual>
+    <collision>
+      <geometry>
+	      <!--Bounding box for collision geometry used to decrease computational requirements.-->
+        <box size="3.65 2.5 1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="13.2"/>
+      <inertia ixx=".15" ixy="0.0" ixz="0.0" iyy=".66" iyz="0.0" izz=".53"/>
+    </inertial>
+  </link>
+
+  <joint name="base_frame_to_shell" type="fixed">
+    <parent link="rov_max_frame"/>
+    <child link="rov_max_shell"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+  <link name="camera">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <visual>
+      <origin xyz="0.025223 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.2 0.4 0.2"/>
+      </geometry>
+      <material name="Gray"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.2 0.4 0.2"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="${negligible}"/>
+      <inertia ixx="${negligible}" ixy="0.00" ixz="0.00" iyy="${negligible}" iyz="0.00" izz="${negligible}"/>
+    </inertial>
+  </link>
+
+  <joint name="shell_to_camera" type="fixed">
+    <parent link="rov_max_shell"/>
+    <child link="camera"/>
+    <origin xyz="1.5571 0 0"/>
+  </joint>
+
+  <link name="vert_thrust_left">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <inertial>
+      <mass value="${negligible}"/>
+      <inertia ixx="${negligible}" ixy="0.00" ixz="0.00" iyy="${negligible}" iyz="0.00" izz="${negligible}"/>
+    </inertial>
+
+    <visual>
+      <origin xyz="0.03 0 0" rpy="${-pi/4} 0 0"/>
+      <geometry>
+        <box size="${blade_geometry}"/>
+      </geometry>
+      <material name="Green"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${blade_geometry}"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="-0.03 0 0" rpy="${pi/4} 0 0"/>
+      <geometry>
+        <box size="${blade_geometry}"/>
+      </geometry>
+      <material name="Green"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${blade_geometry}"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="shell_to_vert_thrust_left" type="continuous">
+    <parent link="rov_max_shell"/>
+    <child link="vert_thrust_left"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="1.08 0.69949 0"/>
+  </joint>
+
+  <link name="vert_thrust_right">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <inertial>
+      <mass value="${negligible}"/>
+      <inertia ixx="${negligible}" ixy="0.00" ixz="0.00" iyy="${negligible}" iyz="0.00" izz="${negligible}"/>
+    </inertial>
+
+    <visual>
+      <origin xyz="0.03 0 0" rpy="${-pi/4} 0 0"/>
+      <geometry>
+        <box size="${blade_geometry}"/>
+      </geometry>
+      <material name="Green"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${blade_geometry}"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="-0.03 0 0" rpy="${pi/4} 0 0"/>
+      <geometry>
+        <box size="${blade_geometry}"/>
+      </geometry>
+      <material name="Green"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${blade_geometry}"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="shell_to_vert_thrust_right" type="continuous">
+    <parent link="rov_max_shell"/>
+    <child link="vert_thrust_right"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="1.08 -0.69949 0"/>
+  </joint>
+
+
+  <link name="left_thruster">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <inertial>
+      <mass value="${negligible}"/>
+      <inertia ixx="${negligible}" ixy="0.00" ixz="0.00" iyy="${negligible}" iyz="0.00" izz="${negligible}"/>
+    </inertial>
+
+    <visual>
+      <origin xyz="0.03 0 0" rpy="${pi/4} 0 0"/>
+      <geometry>
+        <box size="${blade_geometry}"/>
+      </geometry>
+      <material name="Green"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${blade_geometry}"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="-0.03 0 0" rpy="${-pi/4} 0 0"/>
+      <geometry>
+        <box size="${blade_geometry}"/>
+      </geometry>
+      <material name="Green"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${blade_geometry}"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="shell_to_left_thrust" type="continuous">
+    <parent link="rov_max_shell"/>
+    <child link="left_thruster"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="-1.2429 0.69949 0" rpy="0 ${pi/2} 0"/>
+    <!--In actual model: <origin xyz="-0.302 0.109 -0.000635" rpy="0 ${pi/2} 0"/> -->
+  </joint>
+
+
+  <link name="right_thruster">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <inertial>
+      <mass value="${negligible}"/>
+      <inertia ixx="${negligible}" ixy="0.00" ixz="0.00" iyy="${negligible}" iyz="0.00" izz="${negligible}"/>
+    </inertial>
+
+    <visual>
+      <origin xyz="0.03 0 0" rpy="${-pi/4} 0 0"/>
+      <geometry>
+        <box size="${blade_geometry}"/>
+      </geometry>
+      <material name="Green"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${blade_geometry}"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="-0.03 0 0" rpy="${pi/4} 0 0"/>
+      <geometry>
+        <box size="${blade_geometry}"/>
+      </geometry>
+      <material name="Green"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${blade_geometry}"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="shell_to_right_thrust" type="continuous">
+    <parent link="rov_max_shell"/>
+    <child link="right_thruster"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="-1.2429 -0.69949 0" rpy="0 ${pi/2} 0"/>
+    <!--In actual model: <origin xyz="-0.302 -0.109 -0.000635" rpy="0 ${pi/2} 0"/> -->
+  </joint>
+
+</robot>
