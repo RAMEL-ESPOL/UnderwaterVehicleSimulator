@@ -23,7 +23,7 @@
       <origin xyz=".3655 -0.1725 -0.071" rpy="${pi/2} 0 ${pi}" />
       <!--<origin xyz=".383 -0.172 -0.0705" rpy="${pi/2} 0 ${pi}" />-->.0175
       <geometry>
-        <mesh filename="package://rov_description/meshes/LoCO_Shell.STL" scale="1 1 1" />
+        <mesh filename="package://rov_description/meshes/Rov_Max.stl" scale="1 1 1" />
       </geometry>
       <material name="Gray"/>
     </visual>
