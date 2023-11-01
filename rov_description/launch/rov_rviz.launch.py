@@ -95,17 +95,11 @@ def generate_launch_description():
                    '/rov/th_3/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
                    '/rov/th_3/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',
                    '/rov/th_4/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
-                   '/rov/th_4/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',
-                   '/rov/th_5/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
-                   '/rov/th_5/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',
-                   '/rov/th_6/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
-                   '/rov/th_6/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',],
+                   '/rov/th_4/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',],
         parameters=[{'qos_overrides./rov/th_1.subscriber.reliability': 'reliable',
                      'qos_overrides./rov/th_2.subscriber.reliability': 'reliable',
                      'qos_overrides./rov/th_3.subscriber.reliability': 'reliable',
-                     'qos_overrides./rov/th_4.subscriber.reliability': 'reliable',
-                     'qos_overrides./rov/th_5.subscriber.reliability': 'reliable',
-                     'qos_overrides./rov/th_6.subscriber.reliability': 'reliable'}],
+                     'qos_overrides./rov/th_4.subscriber.reliability': 'reliable'}],
         output='screen'
     )
 
