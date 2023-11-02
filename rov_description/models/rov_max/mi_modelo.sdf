@@ -3,9 +3,9 @@
   <model name="rov_max">
     <pose>0 0 0 0 0 0</pose>
 
-    <link name="base_link">
+    <link name="rov_max_shell">
       <pose>1.5571 0.0016 0.0084 0 0 3.141592653589793</pose>  
-      <visual name="base_link_visual">
+      <visual name="rov_max_shell_visual">
         <geometry>
           <mesh>
             <uri>model://rov_max/meshes/rov_max.stl</uri>
@@ -20,7 +20,7 @@
       </visual>
       
       <!-- Collision volume * fluid_density == displaced mass, used by BuoyancyPlugin -->
-      <collision name="base_link_collision">
+      <collision name="rov_max_shell_collision">
         <pose>0 0 0.06 0 0 0</pose>
         <geometry>
           <box>
@@ -57,7 +57,7 @@
     <plugin
         filename="gz-sim-hydrodynamics-system"
         name="gz::sim::systems::Hydrodynamics">
-      <link_name>base_link</link_name>
+      <link_name>rov_max_shell</link_name>
       <water_density>1000</water_density>
       <!-- Added mass: -->
       <xDotU>0</xDotU>
@@ -82,7 +82,7 @@
       <nRabsR>-4.0</nRabsR>
     </plugin>
 
-    <link name="thruster1">
+    <link name="vert_thrust_left">
       <pose>1.08 0.69949 0 0 0 0</pose>
       <visual name="thruster_prop_visual">
         <pose>0 0 0 1.5707963267948966 0 0</pose>
@@ -106,7 +106,7 @@
       </inertial>
     </link>
 
-    <link name="thruster2">
+    <link name="vert_thrust_right">
       <pose>1.08 -0.69949 0 0 0 0</pose>
       <visual name="thruster_prop_visual">
         <pose>0 0 0 -1.5707963267948966 0 0</pose>
@@ -130,7 +130,7 @@
       </inertial>
     </link>
 
-    <link name="thruster3">
+    <link name="left_thruster">
       <pose>-1.2429 0.69949 0 0 1.5707963267948966 0</pose>
       <visual name="thruster_prop_visual">
         <pose>0 0 0 -1.5707963267948966 0 0</pose>
@@ -154,7 +154,7 @@
       </inertial>
     </link>
 
-    <link name="thruster4">
+    <link name="right_thruster">
       <pose>-1.2429 -0.69949 0 0 1.5707963267948966 0</pose>
       <visual name="thruster_prop_visual">
         <pose>0 0 0 1.5707963267948966 0 0</pose>
@@ -178,33 +178,33 @@
       </inertial>
     </link>
 
-    <joint name="thruster1_joint" type="revolute">
-      <parent>base_link</parent>
-      <child>thruster1</child>
+    <joint name="shell_to_vert_thrust_left" type="revolute">
+      <parent>rov_max_shell</parent>
+      <child>vert_thrust_left</child>
       <axis>
         <xyz>0 0 -1</xyz>
       </axis>
     </joint>
 
-    <joint name="thruster2_joint" type="revolute">
-      <parent>base_link</parent>
-      <child>thruster2</child>
+    <joint name="shell_to_vert_thrust_right" type="revolute">
+      <parent>rov_max_shell</parent>
+      <child>vert_thrust_right</child>
       <axis>
         <xyz>0 0 -1</xyz>
       </axis>
     </joint>
 
-    <joint name="thruster3_joint" type="revolute">
-      <parent>base_link</parent>
-      <child>thruster3</child>
+    <joint name="shell_to_left_thrust" type="revolute">
+      <parent>rov_max_shell</parent>
+      <child>left_thruster</child>
       <axis>
         <xyz>0 0 -1</xyz>
       </axis>
     </joint>
 
-    <joint name="thruster4_joint" type="revolute">
-      <parent>base_link</parent>
-      <child>thruster4</child>
+    <joint name="shell_to_right_thrust" type="revolute">
+      <parent>rov_max_shell</parent>
+      <child>right_thruster</child>
       <axis>
         <xyz>0 0 -1</xyz>
       </axis>
@@ -214,7 +214,7 @@
         filename="gz-sim-thruster-system"
         name="gz::sim::systems::Thruster">
       <namespace>rov_max</namespace>
-      <joint_name>thruster1_joint</joint_name>
+      <joint_name>shell_to_vert_thrust_left</joint_name>
       <thrust_coefficient>0.02</thrust_coefficient>
       <fluid_density>1000</fluid_density>
       <propeller_diameter>0.55</propeller_diameter>
@@ -226,7 +226,7 @@
         filename="gz-sim-thruster-system"
         name="gz::sim::systems::Thruster">
       <namespace>rov_max</namespace>
-      <joint_name>thruster2_joint</joint_name>
+      <joint_name>shell_to_vert_thrust_right</joint_name>
       <thrust_coefficient>-0.02</thrust_coefficient>
       <fluid_density>1000</fluid_density>
       <propeller_diameter>0.55</propeller_diameter>
@@ -238,7 +238,7 @@
         filename="gz-sim-thruster-system"
         name="gz::sim::systems::Thruster">
       <namespace>rov_max</namespace>
-      <joint_name>thruster3_joint</joint_name>
+      <joint_name>shell_to_left_thrust</joint_name>
       <thrust_coefficient>0.02</thrust_coefficient>
       <fluid_density>1000</fluid_density>
       <propeller_diameter>0.55</propeller_diameter>
@@ -250,7 +250,7 @@
         filename="gz-sim-thruster-system"
         name="gz::sim::systems::Thruster">
       <namespace>rov_max</namespace>
-      <joint_name>thruster4_joint</joint_name>
+      <joint_name>shell_to_right_thrust</joint_name>
       <thrust_coefficient>-0.02</thrust_coefficient>
       <fluid_density>1000</fluid_density>
       <propeller_diameter>0.55</propeller_diameter>
@@ -278,38 +278,38 @@
 
       <!-- Thrusters -->
       <control channel="0">
-        <jointName>thruster1_joint</jointName>
+        <jointName>shell_to_vert_thrust_left</jointName>
         <servo_min>1100</servo_min>
         <servo_max>1900</servo_max>
         <type>COMMAND</type>
-        <cmd_topic>/model/rov_max/joint/thruster1_joint/cmd_thrust</cmd_topic>
+        <cmd_topic>/model/rov_max/joint/shell_to_vert_thrust_left/cmd_thrust</cmd_topic>
         <offset>-0.5</offset>
         <multiplier>100</multiplier>
       </control>
       <control channel="1">
-        <jointName>thruster2_joint</jointName>
+        <jointName>shell_to_vert_thrust_right</jointName>
         <servo_min>1100</servo_min>
         <servo_max>1900</servo_max>
         <type>COMMAND</type>
-        <cmd_topic>/model/rov_max/joint/thruster2_joint/cmd_thrust</cmd_topic>
+        <cmd_topic>/model/rov_max/joint/shell_to_vert_thrust_right/cmd_thrust</cmd_topic>
         <offset>-0.5</offset>
         <multiplier>100</multiplier>
       </control>
       <control channel="2">
-        <jointName>thruster3_joint</jointName>
+        <jointName>shell_to_left_thrust</jointName>
         <servo_min>1100</servo_min>
         <servo_max>1900</servo_max>
         <type>COMMAND</type>
-        <cmd_topic>/model/rov_max/joint/thruster3_joint/cmd_thrust</cmd_topic>
+        <cmd_topic>/model/rov_max/joint/shell_to_left_thrust/cmd_thrust</cmd_topic>
         <offset>-0.5</offset>
         <multiplier>100</multiplier>
       </control>
       <control channel="3">
-        <jointName>thruster4_joint</jointName>
+        <jointName>shell_to_right_thrust</jointName>
         <servo_min>1100</servo_min>
         <servo_max>1900</servo_max>
         <type>COMMAND</type>
-        <cmd_topic>/model/rov_max/joint/thruster4_joint/cmd_thrust</cmd_topic>
+        <cmd_topic>/model/rov_max/joint/shell_to_right_thrust/cmd_thrust</cmd_topic>
         <offset>-0.5</offset>
         <multiplier>100</multiplier>
       </control>
@@ -359,9 +359,9 @@
       </inertial>
     </link>
 
-    <!-- Attach camera_link to base_link -->
-    <joint name="right_camera_joint" type="fixed">
-      <parent>base_link</parent>
+    <!-- Attach camera_link to rov_max_shell -->
+    <joint name="shell_to_camera" type="fixed">
+      <parent>rov_max_shell</parent>
       <child>camera</child>
     </joint>
 
