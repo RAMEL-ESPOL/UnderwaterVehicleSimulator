@@ -99,84 +99,64 @@
 
   <link name="vert_thrust_left">
     <origin xyz="0 0 0" rpy="0 0 0"/>
+
     <inertial>
       <mass value="${negligible}"/>
       <inertia ixx="${negligible}" ixy="0.00" ixz="0.00" iyy="${negligible}" iyz="0.00" izz="${negligible}"/>
     </inertial>
 
     <visual>
-      <origin xyz="0.03 0 0" rpy="${-pi/4} 0 0"/>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
       <geometry>
-        <box size="${blade_geometry}"/>
+        <mesh filename="package://rov_description/models/rov_max/meshes/t200-cw-prop.dae" scale="6 6 6"/>
       </geometry>
       <material name="Green"/>
     </visual>
+
     <collision>
       <geometry>
         <box size="${blade_geometry}"/>
       </geometry>
     </collision>
 
-    <visual>
-      <origin xyz="-0.03 0 0" rpy="${pi/4} 0 0"/>
-      <geometry>
-        <box size="${blade_geometry}"/>
-      </geometry>
-      <material name="Green"/>
-    </visual>
-    <collision>
-      <geometry>
-        <box size="${blade_geometry}"/>
-      </geometry>
-    </collision>
   </link>
 
   <joint name="shell_to_vert_thrust_left" type="continuous">
     <parent link="rov_max_shell"/>
     <child link="vert_thrust_left"/>
     <axis xyz="0 0 1"/>
-    <origin xyz="1.08 0.69949 0"/>
+    <origin xyz="1.08 0.71 0"/>
   </joint>
 
   <link name="vert_thrust_right">
     <origin xyz="0 0 0" rpy="0 0 0"/>
+
     <inertial>
       <mass value="${negligible}"/>
       <inertia ixx="${negligible}" ixy="0.00" ixz="0.00" iyy="${negligible}" iyz="0.00" izz="${negligible}"/>
     </inertial>
 
     <visual>
-      <origin xyz="0.03 0 0" rpy="${-pi/4} 0 0"/>
+      <origin xyz="0 0 0" rpy="${-pi/2} 0 0"/>
       <geometry>
-        <box size="${blade_geometry}"/>
+        <mesh filename="package://rov_description/models/rov_max/meshes/t200-ccw-prop.dae" scale="6 6 6"/>
       </geometry>
       <material name="Green"/>
     </visual>
+
     <collision>
       <geometry>
         <box size="${blade_geometry}"/>
       </geometry>
     </collision>
 
-    <visual>
-      <origin xyz="-0.03 0 0" rpy="${pi/4} 0 0"/>
-      <geometry>
-        <box size="${blade_geometry}"/>
-      </geometry>
-      <material name="Green"/>
-    </visual>
-    <collision>
-      <geometry>
-        <box size="${blade_geometry}"/>
-      </geometry>
-    </collision>
   </link>
 
   <joint name="shell_to_vert_thrust_right" type="continuous">
     <parent link="rov_max_shell"/>
     <child link="vert_thrust_right"/>
     <axis xyz="0 0 1"/>
-    <origin xyz="1.08 -0.69949 0"/>
+    <origin xyz="1.08 -0.71 0"/>
   </joint>
 
 
@@ -188,37 +168,26 @@
     </inertial>
 
     <visual>
-      <origin xyz="0.03 0 0" rpy="${pi/4} 0 0"/>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
       <geometry>
-        <box size="${blade_geometry}"/>
+        <mesh filename="package://rov_description/models/rov_max/meshes/t200-ccw-prop.dae" scale="6 6 6"/>
       </geometry>
       <material name="Green"/>
     </visual>
+
     <collision>
       <geometry>
         <box size="${blade_geometry}"/>
       </geometry>
     </collision>
 
-    <visual>
-      <origin xyz="-0.03 0 0" rpy="${-pi/4} 0 0"/>
-      <geometry>
-        <box size="${blade_geometry}"/>
-      </geometry>
-      <material name="Green"/>
-    </visual>
-    <collision>
-      <geometry>
-        <box size="${blade_geometry}"/>
-      </geometry>
-    </collision>
   </link>
 
   <joint name="shell_to_left_thrust" type="continuous">
     <parent link="rov_max_shell"/>
     <child link="left_thruster"/>
     <axis xyz="0 0 1"/>
-    <origin xyz="-1.2429 0.69949 0" rpy="0 ${pi/2} 0"/>
+    <origin xyz="-1.2429 0.75 0" rpy="0 ${pi/2} 0"/>
     <!--In actual model: <origin xyz="-0.302 0.109 -0.000635" rpy="0 ${pi/2} 0"/> -->
   </joint>
 
@@ -231,22 +200,9 @@
     </inertial>
 
     <visual>
-      <origin xyz="0.03 0 0" rpy="${-pi/4} 0 0"/>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
       <geometry>
-        <box size="${blade_geometry}"/>
-      </geometry>
-      <material name="Green"/>
-    </visual>
-    <collision>
-      <geometry>
-        <box size="${blade_geometry}"/>
-      </geometry>
-    </collision>
-
-    <visual>
-      <origin xyz="-0.03 0 0" rpy="${pi/4} 0 0"/>
-      <geometry>
-        <box size="${blade_geometry}"/>
+        <mesh filename="package://rov_description/models/rov_max/meshes/t200-cw-prop.dae" scale="6 6 6"/>
       </geometry>
       <material name="Green"/>
     </visual>
@@ -261,7 +217,7 @@
     <parent link="rov_max_shell"/>
     <child link="right_thruster"/>
     <axis xyz="0 0 1"/>
-    <origin xyz="-1.2429 -0.69949 0" rpy="0 ${pi/2} 0"/>
+    <origin xyz="-1.2429 -0.75 0" rpy="0 ${pi/2} 0"/>
     <!--In actual model: <origin xyz="-0.302 -0.109 -0.000635" rpy="0 ${pi/2} 0"/> -->
   </joint>
 
