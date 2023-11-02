@@ -83,13 +83,13 @@
     </plugin>
 
     <link name="vert_thrust_left">
-      <pose>1.08 0.69949 0 0 0 0</pose>
+      <pose>1.08 0.71 0 0 0 0</pose>
       <visual name="thruster_prop_visual">
         <pose>0 0 0 1.5707963267948966 0 0</pose>
         <geometry>
           <mesh>
             <uri>model://rov_max/meshes/t200-cw-prop.dae</uri>
-            <scale>5.5 5.5 5.5</scale>
+            <scale>6 6 6</scale>
           </mesh>
         </geometry>
       </visual>
@@ -107,13 +107,13 @@
     </link>
 
     <link name="vert_thrust_right">
-      <pose>1.08 -0.69949 0 0 0 0</pose>
+      <pose>1.08 -0.71 0 0 0 0</pose>
       <visual name="thruster_prop_visual">
         <pose>0 0 0 -1.5707963267948966 0 0</pose>
         <geometry>
           <mesh>
             <uri>model://rov_max/meshes/t200-ccw-prop.dae</uri>
-            <scale>5.5 5.5 5.5</scale>
+            <scale>6 6 6</scale>
           </mesh>
         </geometry>
       </visual>
@@ -131,13 +131,13 @@
     </link>
 
     <link name="left_thruster">
-      <pose>-1.2429 0.69949 0 0 1.5707963267948966 0</pose>
+      <pose>-1.2429 0.75 0 0 1.5707963267948966 0</pose>
       <visual name="thruster_prop_visual">
         <pose>0 0 0 -1.5707963267948966 0 0</pose>
         <geometry>
           <mesh>
             <uri>model://rov_max/meshes/t200-ccw-prop.dae</uri>
-            <scale>5.5 5.5 5.5</scale>
+            <scale>6 6 6</scale>
           </mesh>
         </geometry>
       </visual>
@@ -155,13 +155,13 @@
     </link>
 
     <link name="right_thruster">
-      <pose>-1.2429 -0.69949 0 0 1.5707963267948966 0</pose>
+      <pose>-1.2429 -0.75 0 0 1.5707963267948966 0</pose>
       <visual name="thruster_prop_visual">
         <pose>0 0 0 1.5707963267948966 0 0</pose>
         <geometry>
           <mesh>
             <uri>model://rov_max/meshes/t200-cw-prop.dae</uri>
-            <scale>5.5 5.5 5.5</scale>
+            <scale>6 6 6</scale>
           </mesh>
         </geometry>
       </visual>
