@@ -49,7 +49,7 @@
       <origin xyz="1.5571 0.0016 0.0084" rpy="0 0 ${pi}" />
         .0175
       <geometry>
-        <mesh filename="package://rov_description/meshes/Rov_Max.stl" scale="0.01 0.01 0.01"/>
+        <mesh filename="package://rov_description/models/rov_max/meshes/rov_max.stl" scale="0.01 0.01 0.01"/>
       </geometry>
       <material name="MediumYellow"/>
     </visual>
