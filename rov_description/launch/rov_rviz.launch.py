@@ -86,21 +86,18 @@ def generate_launch_description():
     )
 
     bridge = Node(
-        package='ros_gz_bridge',
-        executable='parameter_bridge',
-        arguments=['/rov/th_1/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
-                   '/rov/th_1/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',
-                   '/rov/th_2/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
-                   '/rov/th_2/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',
-                   '/rov/th_3/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
-                   '/rov/th_3/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',
-                   '/rov/th_4/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
-                   '/rov/th_4/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',],
-        parameters=[{'qos_overrides./rov/th_1.subscriber.reliability': 'reliable',
-                     'qos_overrides./rov/th_2.subscriber.reliability': 'reliable',
-                     'qos_overrides./rov/th_3.subscriber.reliability': 'reliable',
-                     'qos_overrides./rov/th_4.subscriber.reliability': 'reliable'}],
-        output='screen'
+            package='ros_gz_bridge',
+            executable='parameter_bridge',
+            arguments=['/model/rov_max/joint/shell_to_vert_thrust_left/cmd_thrust@std_msgs/msg/Float64@gz.msgs.Double',
+                        '/model/rov_max/joint/shell_to_vert_thrust_right/cmd_thrust@std_msgs/msg/Float64@gz.msgs.Double',
+                        '/model/rov_max/joint/shell_to_left_thrust/cmd_thrust@std_msgs/msg/Float64@gz.msgs.Double',
+                        '/model/rov_max/joint/shell_to_right_thrust/cmd_thrust@std_msgs/msg/Float64@gz.msgs.Double',
+                        '/model/rov_max/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',],
+            parameters=[{'qos_overrides./model/rov_max/joint/shell_to_vert_thrust_left.subscriber.reliability': 'reliable',
+                            'qos_overrides./model/rov_max/joint/shell_to_vert_thrust_right.subscriber.reliability': 'reliable',
+                            'qos_overrides./model/rov_max/joint/shell_to_left_thrust.subscriber.reliability': 'reliable',
+                            'qos_overrides./model/rov_max/joint/shell_to_right_thrust.subscriber.reliability': 'reliable'}],
+            output='screen'
     )
 
     # Launch!
