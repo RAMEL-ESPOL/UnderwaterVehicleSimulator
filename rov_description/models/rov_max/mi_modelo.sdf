@@ -90,8 +90,8 @@
             <height>600</height>
           </image>
           <clip>
-            <near>0.2</near>
-            <far>4</far>
+            <near>0.4</near>
+            <far>100</far>
           </clip>
         </camera>
         <always_on>1</always_on>
