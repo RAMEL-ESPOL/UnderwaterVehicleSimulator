@@ -38,6 +38,13 @@ private:
         int vert_left_count = 0;
         int vert_right_count = 0;
 
+        double left_thrust = 0.0;
+        double right_thrust = 0.0;
+        double vert_left_thrust = 0.0;
+        double vert_right_thrust = 0.0;
+
+        double escala = 0.1;
+
         while (true)
         {
             clear(); // Limpia la pantalla
@@ -52,7 +59,13 @@ private:
             mvprintw(8, 0, "Presiona 'j' para girar propulsor delantero derecho");
             mvprintw(9, 0, "Presiona 'l' para invertir giro propulsor delantero derecho");
             mvprintw(10, 0, "Presiona 'q' para salir");
-            
+            mvprintw(11, 0, "--------------------------------------------------");
+            mvprintw(12, 0, "Velocidad propulsor trasero izquierdo: %f", left_thrust);
+            mvprintw(13, 0, "Velocidad propulsor trasero derecho: %f", right_thrust);
+            mvprintw(14, 0, "Velocidad propulsor delantero izquierdo: %f", vert_left_thrust);
+            mvprintw(15, 0, "Velocidad propulsor delantero derecho: %f", vert_right_thrust);
+            mvprintw(16, 0, "Pulse una tecla para mover el Rov Max...   ");
+
             key = getch();
 
             switch (key)
@@ -60,35 +73,43 @@ private:
                 // Teclas para subir y bajar la velocidad de cada propulsor
                 case 'w':
                     left_count++;
-                    publishThrust(pub_left_thrust_, "left", 0.1 * left_count);
+                    left_thrust = escala * left_count;
+                    publishThrust(pub_left_thrust_, left_thrust);
                     break;
                 case 's':
                     left_count--;
-                    publishThrust(pub_left_thrust_, "left", 0.1 * left_count);
+                    left_thrust = escala * left_count;
+                    publishThrust(pub_left_thrust_, left_thrust);
                     break;
                 case 'i':
                     right_count++;
-                    publishThrust(pub_right_thrust_, "right", 0.1 * right_count);
+                    right_thrust = escala * right_count;
+                    publishThrust(pub_right_thrust_, right_thrust);
                     break;
                 case 'k':
                     right_count--;
-                    publishThrust(pub_right_thrust_, "right", 0.1 * right_count);
+                    right_thrust = escala * right_count;
+                    publishThrust(pub_right_thrust_, right_thrust);
                     break;
                 case 'a':
                     vert_left_count++;
-                    publishThrust(pub_vert_left_thrust_, "vertical left", 0.1 * vert_left_count);
+                    vert_left_thrust = escala * vert_left_count;
+                    publishThrust(pub_vert_left_thrust_, vert_left_thrust);
                     break;
                 case 'd':
                     vert_left_count--;
-                    publishThrust(pub_vert_left_thrust_, "vertical left", 0.1 * vert_left_count);
+                    vert_left_thrust = escala * vert_left_count;
+                    publishThrust(pub_vert_left_thrust_, vert_left_thrust);
                     break;
                 case 'j':
                     vert_right_count++;
-                    publishThrust(pub_vert_right_thrust_, "vertical right", 0.1 * vert_right_count);
+                    vert_right_thrust = escala * vert_right_count;
+                    publishThrust(pub_vert_right_thrust_, vert_right_thrust);
                     break;
                 case 'l':
                     vert_right_count--;
-                    publishThrust(pub_vert_right_thrust_, "vertical right", 0.1 * vert_right_count);
+                    vert_right_thrust = escala * vert_right_count;
+                    publishThrust(pub_vert_right_thrust_, vert_right_thrust);
                     break;
                 case 'q':
                     endwin();
@@ -98,7 +119,7 @@ private:
         }
     }
 
-    void publishThrust(rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr pub, const std::string &propulsor, double velocidad)
+    void publishThrust(rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr pub, double velocidad)
     {
         auto msg = std_msgs::msg::Float64();
         msg.data = velocidad;
