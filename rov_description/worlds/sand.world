@@ -182,13 +182,13 @@
 
     <include>
       <uri>model://rov_max</uri>
-      <pose>0 0 -0.2 0 3.1416 0</pose>
+      <pose>0 0 -0.2 3.1416 0 0</pose>
     </include>
 
-    <!-- <include>
+    <include>
      <uri>model://axes</uri>
      <pose>0 0 0.2 0 0 0</pose>
-    </include> -->
+    </include>
 
   </world>
 </sdf>
