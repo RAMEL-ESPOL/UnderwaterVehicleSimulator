@@ -40,6 +40,19 @@ private:
 
         while (true)
         {
+            clear(); // Limpia la pantalla
+            mvprintw(0, 0, "Control del Rov Max:");
+            mvprintw(1, 0, "--------------------------------------------------");
+            mvprintw(2, 0, "Presiona 'w' para girar propulsor trasero izquierdo");
+            mvprintw(3, 0, "Presiona 's' para invertir giro propulsor trasero izquierdo");
+            mvprintw(4, 0, "Presiona 'i' para girar propulsor trasero derecho");
+            mvprintw(5, 0, "Presiona 'k' para invertir giro propulsor trasero derecho");
+            mvprintw(6, 0, "Presiona 'a' para girar propulsor delantero izquierdo");
+            mvprintw(7, 0, "Presiona 'd' para invertir giro propulsor delantero izquierdo");
+            mvprintw(8, 0, "Presiona 'j' para girar propulsor delantero derecho");
+            mvprintw(9, 0, "Presiona 'l' para invertir giro propulsor delantero derecho");
+            mvprintw(10, 0, "Presiona 'q' para salir");
+            
             key = getch();
 
             switch (key)
@@ -77,6 +90,9 @@ private:
                     vert_right_count--;
                     publishThrust(pub_vert_right_thrust_, "vertical right", 0.1 * vert_right_count);
                     break;
+                case 'q':
+                    endwin();
+                    return;
                 // Otras teclas o casos adicionales si es necesario
             }
         }
@@ -87,8 +103,6 @@ private:
         auto msg = std_msgs::msg::Float64();
         msg.data = velocidad;
         pub->publish(msg);
-
-        RCLCPP_INFO(this->get_logger(), "Propulsor %s: Velocidad %f", propulsor.c_str(), velocidad);
     }
 
     rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr pub_left_thrust_;
