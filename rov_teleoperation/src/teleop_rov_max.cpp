@@ -30,6 +30,42 @@ public:
     }
 
 private:
+    void printMsg(double left_thrust, double right_thrust, double vert_left_thrust, double vert_right_thrust)
+    {
+        clear(); // Limpia la pantalla
+        mvprintw(0, 15, "Control del Rov Max");
+        mvprintw(1, 0, "--------------------------------------------------");
+        mvprintw(2, 0, "Los traseros izquierdo (PTI) y derecho (PTD) permiten mover hacia delante o atras");
+        mvprintw(3, 0, "Los propulsores delanteros izquierdo (PTI) y derecho (PTD) permiten mover hacia arriba o abajo");
+        mvprintw(4, 0, "Presiona 'w' para girar PTI");
+        mvprintw(5, 0, "Presiona 's' para invertir giro PTI");
+        mvprintw(6, 0, "Presiona 'i' para girar PTD");
+        mvprintw(7, 0, "Presiona 'k' para invertir giro PTD");
+        mvprintw(8, 0, "Presiona 'a' para girar PDI");
+        mvprintw(9, 0, "Presiona 'd' para invertir giro PDI");
+        mvprintw(10, 0, "Presiona 'j' para girar PDD");
+        mvprintw(11, 0, "Presiona 'l' para invertir giro PDD");
+        mvprintw(12, 0, "Presiona 'q' para salir");
+        mvprintw(13, 0, "--------------------------------------------------");
+        mvprintw(14, 0, "  ____________________   "); //24
+        mvprintw(15, 0, " /                    \\ ");
+        mvprintw(16, 0, "/                      \\");
+        mvprintw(17, 0, "|    _____    _____    |");
+        mvprintw(18, 0, "|   | PTI |  | PTD |   |");
+        mvprintw(19, 0, "|    -----    -----    |");
+        mvprintw(20, 0, "|                      |    Vel. PTI: %f", left_thrust);
+        mvprintw(21, 0, "|                      |    Vel. PTD: %f", right_thrust);
+        mvprintw(22, 0, "|                      |    Vel. PDI: %f", vert_left_thrust);
+        mvprintw(23, 0, "|                      |    Vel. PDD: %f", vert_right_thrust);
+        mvprintw(24, 0, "|                      |");
+        mvprintw(25, 0, "|  _____        _____  |");
+        mvprintw(26, 0, "| | PDI | CAME | PDD | |");
+        mvprintw(27, 0, "|  -----        -----  |");
+        mvprintw(28, 0, "\\                     /");
+        mvprintw(29, 0, " \\___________________/ ");
+        mvprintw(30, 0, "Pulse una tecla para mover el Rov Max...   ");
+    }
+
     void teleop()
     {
         int key;
@@ -47,24 +83,7 @@ private:
 
         while (true)
         {
-            clear(); // Limpia la pantalla
-            mvprintw(0, 0, "Control del Rov Max:");
-            mvprintw(1, 0, "--------------------------------------------------");
-            mvprintw(2, 0, "Presiona 'w' para girar propulsor trasero izquierdo");
-            mvprintw(3, 0, "Presiona 's' para invertir giro propulsor trasero izquierdo");
-            mvprintw(4, 0, "Presiona 'i' para girar propulsor trasero derecho");
-            mvprintw(5, 0, "Presiona 'k' para invertir giro propulsor trasero derecho");
-            mvprintw(6, 0, "Presiona 'a' para girar propulsor delantero izquierdo");
-            mvprintw(7, 0, "Presiona 'd' para invertir giro propulsor delantero izquierdo");
-            mvprintw(8, 0, "Presiona 'j' para girar propulsor delantero derecho");
-            mvprintw(9, 0, "Presiona 'l' para invertir giro propulsor delantero derecho");
-            mvprintw(10, 0, "Presiona 'q' para salir");
-            mvprintw(11, 0, "--------------------------------------------------");
-            mvprintw(12, 0, "Velocidad propulsor trasero izquierdo: %f", left_thrust);
-            mvprintw(13, 0, "Velocidad propulsor trasero derecho: %f", right_thrust);
-            mvprintw(14, 0, "Velocidad propulsor delantero izquierdo: %f", vert_left_thrust);
-            mvprintw(15, 0, "Velocidad propulsor delantero derecho: %f", vert_right_thrust);
-            mvprintw(16, 0, "Pulse una tecla para mover el Rov Max...   ");
+            printMsg(left_thrust, right_thrust, vert_left_thrust, vert_right_thrust);
 
             key = getch();
 
