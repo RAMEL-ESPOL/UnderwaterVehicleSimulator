@@ -127,7 +127,7 @@
         <pose>0 0 0 1.5707963267948966 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://rov_max/meshes/t200-cw-prop.dae</uri>
+            <uri>model://rov_max/meshes/t200-ccw-prop.dae</uri>
             <scale>6 6 6</scale>
           </mesh>
         </geometry>
@@ -162,7 +162,7 @@
         <pose>0 0 0 -1.5707963267948966 0 0</pose>
         <geometry>
           <mesh>
-            <uri>model://rov_max/meshes/t200-ccw-prop.dae</uri>
+            <uri>model://rov_max/meshes/t200-cw-prop.dae</uri>
             <scale>6 6 6</scale>
           </mesh>
         </geometry>
