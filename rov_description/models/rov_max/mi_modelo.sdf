@@ -10,12 +10,12 @@
     <!-- ********* CHASSIS *********** -->
     <!-- ***************************** -->
     <link name="rov_max_shell">
-      <pose>1.5571 0.0016 0.0084 0 3.1416 0</pose>  
+      <pose>0.15571 0.00016 0.00084 0 3.1416 0</pose>  
       <visual name="rov_max_shell_visual">
         <geometry>
           <mesh>
             <uri>model://rov_max/meshes/rov_max.stl</uri>
-            <scale>0.01 0.01 0.01</scale>
+            <scale>0.001 0.001 0.001</scale>
           </mesh>
         </geometry>
         <material>
@@ -27,24 +27,24 @@
       
       <!-- Collision volume * fluid_density == displaced mass, used by BuoyancyPlugin -->
       <collision name="rov_max_shell_collision">
-        <pose>1.5571 -0.0016 -0.0084 0 0 0</pose>
+        <pose>0.15571 -0.00016 -0.00084 0 3.1416 0</pose>
         <geometry>
           <box>
-            <size>3.65 2.5 1</size>
+            <size>0.6 0.311 0.065</size> <!-- 452 -->
           </box>
         </geometry>
       </collision>
 
       <inertial>
-        <pose>1.5571 -0.0016 -0.0084 0 0 0</pose>  
-        <mass>13.2</mass>
+        <pose>0.15571 -0.00016 -0.00084 0 3.1416 0</pose>  
+        <mass>9.209</mass>
         <inertia>
-          <ixx>0.15</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>0.66</iyy>
+          <ixx>0.07746</ixx> 
+          <ixy>0.00000</ixy>
+          <ixz>0.00000</ixz>
+          <iyy>0.16002</iyy> 
           <iyz>0</iyz>
-          <izz>0.53</izz>
+          <izz>0.23101</izz>
         </inertia>
       </inertial>
 
@@ -52,7 +52,7 @@
       <sensor name="imu_sensor" type="imu">
         <!-- Transform from the Gazebo body frame (x-forward, y-left, z-up)
              to the ArduPilot body frame (x-forward, y-right, z-down) -->
-        <pose>0 0 0 3.141592653589793 0 0</pose>
+        <pose>1.5571 -0.0016 -0.0084 0 3.1416 0</pose>
         <always_on>1</always_on>
         <update_rate>1000.0</update_rate>
       </sensor>
@@ -68,11 +68,11 @@
     <!-- *********** CAMERA ********** -->
     <!-- ***************************** -->
     <link name="camera">
-      <pose>1.5571 0 0 0 0 0</pose>
+      <pose>0.15571 0 0 0 0 0</pose>
       <visual name="camera_tube">
         <geometry>
           <box>
-            <size>0.2 0.4 0.2</size>
+            <size>0.02 0.04 0.02</size>
           </box>
         </geometry>
         <material>
@@ -82,7 +82,7 @@
         </material>
       </visual>
       <sensor name="sensor_camera" type="camera">
-        <pose>0 0 -0.08750000000000001 0 0 0</pose>
+        <pose>0 0 0.008750000000000001 0 0 0</pose>
         <camera>
           <horizontal_fov>1.4</horizontal_fov>
           <image>
@@ -122,13 +122,13 @@
     <!-- **** VERTICAL THRUST LEFT *** -->
     <!-- ***************************** -->
     <link name="vert_thrust_left">
-      <pose>1.08 0.71 0 0 0 0</pose>
+      <pose>0.108 0.071 0 0 0 0</pose>
       <visual name="thruster_prop_visual">
         <pose>0 0 0 1.5707963267948966 0 0</pose>
         <geometry>
           <mesh>
             <uri>model://rov_max/meshes/t200-ccw-prop.dae</uri>
-            <scale>6 6 6</scale>
+            <scale>0.8 0.8 0.8</scale>
           </mesh>
         </geometry>
       </visual>
@@ -157,13 +157,13 @@
     <!-- *** VERTICAL THRUST RIGHT *** -->
     <!-- ***************************** -->
     <link name="vert_thrust_right">
-      <pose>1.08 -0.71 0 0 0 0</pose>
+      <pose>0.108 -0.071 0 0 0 0</pose>
       <visual name="thruster_prop_visual">
         <pose>0 0 0 -1.5707963267948966 0 0</pose>
         <geometry>
           <mesh>
             <uri>model://rov_max/meshes/t200-cw-prop.dae</uri>
-            <scale>6 6 6</scale>
+            <scale>0.8 0.8 0.8</scale>
           </mesh>
         </geometry>
       </visual>
@@ -192,13 +192,13 @@
     <!-- ******* THRUSTER LEFT ******* -->
     <!-- ***************************** -->
     <link name="left_thruster">
-      <pose>-1.2429 0.75 0 0 1.5707963267948966 0</pose>
+      <pose>-0.12429 0.075 0 0 1.5707963267948966 0</pose>
       <visual name="thruster_prop_visual">
         <pose>0 0 0 -1.5707963267948966 0 0</pose>
         <geometry>
           <mesh>
             <uri>model://rov_max/meshes/t200-ccw-prop.dae</uri>
-            <scale>6 6 6</scale>
+            <scale>0.8 0.8 0.8</scale>
           </mesh>
         </geometry>
       </visual>
@@ -227,13 +227,13 @@
     <!-- ******* THRUSTER RIGHT ****** -->
     <!-- ***************************** -->
     <link name="right_thruster">
-      <pose>-1.2429 -0.75 0 0 1.5707963267948966 0</pose>
+      <pose>-0.12429 -0.075 0 0 1.5707963267948966 0</pose>
       <visual name="thruster_prop_visual">
         <pose>0 0 0 1.5707963267948966 0 0</pose>
         <geometry>
           <mesh>
             <uri>model://rov_max/meshes/t200-cw-prop.dae</uri>
-            <scale>6 6 6</scale>
+            <scale>0.8 0.8 0.8</scale>
           </mesh>
         </geometry>
       </visual>
@@ -253,6 +253,41 @@
     <joint name="shell_to_right_thrust" type="revolute">
       <parent>rov_max_shell</parent>
       <child>right_thruster</child>
+      <axis>
+        <xyz>0 0 -1</xyz>
+      </axis>
+    </joint>
+
+    <!-- ***************************** -->
+    <!-- ******* THRUSTER CENTR ****** -->
+    <!-- ***************************** -->
+    <link name="center_thruster">
+      <pose>-0.175 0 0 0 0 0</pose>
+      <visual name="thruster_prop_visual">
+        <pose>0 0 0 1.5707963267948966 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://rov_max/meshes/t200-ccw-prop.dae</uri>
+            <scale>0.8 0.8 0.8</scale>
+          </mesh>
+        </geometry>
+      </visual>
+      <inertial>
+        <mass>0.001</mass>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0</iyz>
+          <izz>0.001</izz>
+        </inertia>
+      </inertial>
+    </link>
+
+    <joint name="shell_to_center_thrust" type="revolute">
+      <parent>rov_max_shell</parent>
+      <child>center_thruster</child>
       <axis>
         <xyz>0 0 -1</xyz>
       </axis>
@@ -283,12 +318,12 @@
       <mQ>0</mQ>
       <nR>0</nR>
       <!-- Second order stability derivative: -->
-      <xUabsU>-33.800000000000004</xUabsU>
-      <yVabsV>-54.26875</yVabsV>
-      <zWabsW>-73.37135</zWabsW>
-      <kPabsP>-4.0</kPabsP>
-      <mQabsQ>-4.0</mQabsQ>
-      <nRabsR>-4.0</nRabsR>
+      <xUabsU>-33.732</xUabsU>
+      <yVabsV>-54.16</yVabsV>
+      <zWabsW>-73.225</zWabsW>
+      <kPabsP>-3.992</kPabsP>
+      <mQabsQ>-3.992</mQabsQ>
+      <nRabsR>-3.992</nRabsR>
     </plugin>
 
     <!-- **** PLUGINS FOR THRUSTERS **** -->
@@ -337,6 +372,19 @@
         name="gz::sim::systems::Thruster">
       <namespace>rov_max</namespace>
       <joint_name>shell_to_right_thrust</joint_name>
+      <thrust_coefficient>-0.02</thrust_coefficient>
+      <fluid_density>1000</fluid_density>
+      <propeller_diameter>0.55</propeller_diameter>
+      <velocity_control>true</velocity_control>
+      <use_angvel_cmd>False</use_angvel_cmd>
+    </plugin>
+    
+    <!-- THRUSTER CENTER -->
+    <plugin
+        filename="gz-sim-thruster-system"
+        name="gz::sim::systems::Thruster">
+      <namespace>rov_max</namespace>
+      <joint_name>shell_to_center_thrust</joint_name>
       <thrust_coefficient>-0.02</thrust_coefficient>
       <fluid_density>1000</fluid_density>
       <propeller_diameter>0.55</propeller_diameter>
@@ -397,6 +445,15 @@
         <servo_max>1900</servo_max>
         <type>COMMAND</type>
         <cmd_topic>/model/rov_max/joint/shell_to_right_thrust/cmd_thrust</cmd_topic>
+        <offset>-0.5</offset>
+        <multiplier>100</multiplier>
+      </control>
+      <control channel="4">
+        <jointName>shell_to_center_thrust</jointName>
+        <servo_min>1100</servo_min>
+        <servo_max>1900</servo_max>
+        <type>COMMAND</type>
+        <cmd_topic>/model/rov_max/joint/shell_to_center_thrust/cmd_thrust</cmd_topic>
         <offset>-0.5</offset>
         <multiplier>100</multiplier>
       </control>
