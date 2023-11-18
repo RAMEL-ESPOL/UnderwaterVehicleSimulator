@@ -12,6 +12,7 @@ public:
         pub_right_thrust_ = this->create_publisher<std_msgs::msg::Float64>("/model/rov_max/joint/shell_to_right_thrust/cmd_thrust", 10);
         pub_vert_left_thrust_ = this->create_publisher<std_msgs::msg::Float64>("/model/rov_max/joint/shell_to_vert_thrust_left/cmd_thrust", 10);
         pub_vert_right_thrust_ = this->create_publisher<std_msgs::msg::Float64>("/model/rov_max/joint/shell_to_vert_thrust_right/cmd_thrust", 10);
+        pub_vert_center_thrust_ = this->create_publisher<std_msgs::msg::Float64>("/model/rov_max/joint/shell_to_center_thrust/cmd_thrust", 10);
 
         // Iniciar la interfaz de ncurses
         initscr();
@@ -30,40 +31,43 @@ public:
     }
 
 private:
-    void printMsg(double left_thrust, double right_thrust, double vert_left_thrust, double vert_right_thrust)
+    void printMsg(double left_thrust, double right_thrust, double vert_left_thrust, double vert_right_thrust, double vert_center_thrust)
     {
         clear(); // Limpia la pantalla
         mvprintw(0, 15, "Control del Rov Max");
         mvprintw(1, 0, "--------------------------------------------------");
-        mvprintw(2, 0, "Los traseros izquierdo (PTI) y derecho (PTD) permiten mover hacia delante o atras");
-        mvprintw(3, 0, "Los propulsores delanteros izquierdo (PTI) y derecho (PTD) permiten mover hacia arriba o abajo");
-        mvprintw(4, 0, "Presiona 'w' para girar PTI");
-        mvprintw(5, 0, "Presiona 's' para invertir giro PTI");
-        mvprintw(6, 0, "Presiona 'i' para girar PTD");
-        mvprintw(7, 0, "Presiona 'k' para invertir giro PTD");
-        mvprintw(8, 0, "Presiona 'a' para girar PDI");
-        mvprintw(9, 0, "Presiona 'd' para invertir giro PDI");
-        mvprintw(10, 0, "Presiona 'j' para girar PDD");
-        mvprintw(11, 0, "Presiona 'l' para invertir giro PDD");
-        mvprintw(12, 0, "Presiona 'q' para salir");
-        mvprintw(13, 0, "--------------------------------------------------");
-        mvprintw(14, 0, "  ____________________   "); //24
-        mvprintw(15, 0, " /                    \\ ");
-        mvprintw(16, 0, "/                      \\");
-        mvprintw(17, 0, "|    _____    _____    |");
-        mvprintw(18, 0, "|   | PTI |  | PTD |   |");
-        mvprintw(19, 0, "|    -----    -----    |");
-        mvprintw(20, 0, "|                      |    Vel. PTI: %f", left_thrust);
-        mvprintw(21, 0, "|                      |    Vel. PTD: %f", right_thrust);
-        mvprintw(22, 0, "|                      |    Vel. PDI: %f", vert_left_thrust);
-        mvprintw(23, 0, "|                      |    Vel. PDD: %f", vert_right_thrust);
-        mvprintw(24, 0, "|                      |");
-        mvprintw(25, 0, "|  _____        _____  |");
-        mvprintw(26, 0, "| | PDI | CAME | PDD | |");
-        mvprintw(27, 0, "|  -----        -----  |");
-        mvprintw(28, 0, "\\                     /");
-        mvprintw(29, 0, " \\___________________/ ");
-        mvprintw(30, 0, "Pulse una tecla para mover el Rov Max...   ");
+        mvprintw(2, 0, "Los propulsores traseros izquierdo (PTI) y derecho (PTD) permiten mover hacia delante o atras");
+        mvprintw(3, 0, "El propulsor trasero central (PTC) permite mover hacia arriba o abajo");
+        mvprintw(4, 0, "Los propulsores delanteros izquierdo (PTI) y derecho (PTD) permiten mover hacia arriba o abajo");
+        mvprintw(5, 0, "Presiona 'w' para girar PTI");
+        mvprintw(6, 0, "Presiona 's' para invertir giro PTI");
+        mvprintw(7, 0, "Presiona 'i' para girar PTD");
+        mvprintw(8, 0, "Presiona 'k' para invertir giro PTD");
+        mvprintw(9, 0, "Presiona 'a' para girar PDI");
+        mvprintw(10, 0, "Presiona 'd' para invertir giro PDI");
+        mvprintw(11, 0, "Presiona 'j' para girar PDD");
+        mvprintw(12, 0, "Presiona 'l' para invertir giro PDD");
+        mvprintw(13, 0, "Presiona 't' para girar PTC");
+        mvprintw(14, 0, "Presiona 'g' para invertir giro PTC");
+        mvprintw(15, 0, "Presiona 'q' para salir");
+        mvprintw(16, 0, "--------------------------------------------------");
+        mvprintw(17, 0, "  ____________________   "); //24
+        mvprintw(18, 0, " /                    \\ ");
+        mvprintw(19, 0, "/                      \\");
+        mvprintw(20, 0, "|  _____        _____  |");
+        mvprintw(21, 0, "| | PTI | *PTC | PTD | |");
+        mvprintw(22, 0, "|  -----        -----  |");
+        mvprintw(23, 0, "|                      |    Vel. PTI: %f", left_thrust);
+        mvprintw(24, 0, "|                      |    Vel. PTD: %f", right_thrust);
+        mvprintw(25, 0, "|                      |    Vel. PTC: %f", vert_center_thrust);
+        mvprintw(26, 0, "|                      |    Vel. PDI: %f", vert_left_thrust);
+        mvprintw(27, 0, "|                      |    Vel. PDD: %f", vert_right_thrust);
+        mvprintw(28, 0, "|  _____        _____  |");
+        mvprintw(29, 0, "| | PDI | CAME | PDD | |");
+        mvprintw(30, 0, "|  -----        -----  |");
+        mvprintw(31, 0, "\\                     /");
+        mvprintw(32, 0, " \\___________________/ ");
+        mvprintw(33, 0, "Pulse una tecla para mover el Rov Max...   ");
     }
 
     void teleop()
@@ -73,17 +77,19 @@ private:
         int right_count = 0;
         int vert_left_count = 0;
         int vert_right_count = 0;
+        int vert_center_count = 0;
 
         double left_thrust = 0.0;
         double right_thrust = 0.0;
         double vert_left_thrust = 0.0;
         double vert_right_thrust = 0.0;
+        double vert_center_thrust = 0.0;
 
         double escala = 0.1;
 
         while (true)
         {
-            printMsg(left_thrust, right_thrust, vert_left_thrust, vert_right_thrust);
+            printMsg(left_thrust, right_thrust, vert_left_thrust, vert_right_thrust, vert_center_thrust);
 
             key = getch();
 
@@ -130,6 +136,16 @@ private:
                     vert_right_thrust = escala * vert_right_count;
                     publishThrust(pub_vert_right_thrust_, vert_right_thrust);
                     break;
+                case 't':
+                    vert_center_count++;
+                    vert_center_thrust = escala * vert_center_count;
+                    publishThrust(pub_vert_center_thrust_, vert_center_thrust);
+                    break;
+                case 'g':
+                    vert_center_count--;
+                    vert_center_thrust = escala * vert_center_count;
+                    publishThrust(pub_vert_center_thrust_, vert_center_thrust);
+                    break;
                 case 'q':
                     endwin();
                     return;
@@ -149,6 +165,7 @@ private:
     rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr pub_right_thrust_;
     rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr pub_vert_left_thrust_;
     rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr pub_vert_right_thrust_;
+    rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr pub_vert_center_thrust_;
 };
 
 int main(int argc, char **argv)
