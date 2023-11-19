@@ -10,7 +10,7 @@
     <!-- ********* CHASSIS *********** -->
     <!-- ***************************** -->
     <link name="rov_max_shell">
-      <pose>0.15571 0.00016 0.00084 3.1416 3.1416 0</pose>  
+      <pose>0.15571 -0.00016 -0.00084 3.1416 3.1416 0</pose>  
       <visual name="rov_max_shell_visual">
         <geometry>
           <mesh>
