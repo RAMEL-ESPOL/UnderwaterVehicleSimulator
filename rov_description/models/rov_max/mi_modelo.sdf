@@ -10,7 +10,7 @@
     <!-- ********* CHASSIS *********** -->
     <!-- ***************************** -->
     <link name="rov_max_shell">
-      <pose>0.15571 0.00016 0.00084 0 3.1416 0</pose>  
+      <pose>0.15571 0.00016 0.00084 3.1416 3.1416 0</pose>  
       <visual name="rov_max_shell_visual">
         <geometry>
           <mesh>
@@ -27,7 +27,7 @@
       
       <!-- Collision volume * fluid_density == displaced mass, used by BuoyancyPlugin -->
       <collision name="rov_max_shell_collision">
-        <pose>0.15571 -0.00016 -0.00084 0 3.1416 0</pose>
+        <pose>0.15571 -0.00016 -0.00084 3.1416 3.1416 0</pose>
         <geometry>
           <box>
             <size>0.53 0.32 0.033</size> <!-- 452 -->
@@ -36,7 +36,7 @@
       </collision>
 
       <inertial>
-        <pose>0.15571 -0.00016 -0.00084 0 3.1416 0</pose>  
+        <pose>0.15571 -0.00016 -0.00084 3.1416 3.1416 0</pose>  
         <mass>4.488</mass>
         <inertia>
           <ixx>0.03870488600000001</ixx> 
@@ -52,7 +52,7 @@
       <sensor name="imu_sensor" type="imu">
         <!-- Transform from the Gazebo body frame (x-forward, y-left, z-up)
              to the ArduPilot body frame (x-forward, y-right, z-down) -->
-        <pose>1.5571 -0.0016 -0.0084 0 3.1416 0</pose>
+        <pose>1.5571 -0.0016 -0.0084 3.1416 3.1416 0</pose>
         <always_on>1</always_on>
         <update_rate>1000.0</update_rate>
       </sensor>
@@ -124,7 +124,7 @@
     <link name="vert_thrust_left">
       <pose>0.108 0.071 0 0 0 0</pose>
       <visual name="thruster_prop_visual">
-        <pose>0 0 0 1.5707963267948966 0 0</pose>
+        <pose>0 0 0 -1.5707963267948966 0 0</pose>
         <geometry>
           <mesh>
             <uri>model://rov_max/meshes/t200-ccw-prop.dae</uri>
@@ -159,7 +159,7 @@
     <link name="vert_thrust_right">
       <pose>0.108 -0.071 0 0 0 0</pose>
       <visual name="thruster_prop_visual">
-        <pose>0 0 0 -1.5707963267948966 0 0</pose>
+        <pose>0 0 0 1.5707963267948966 0 0</pose>
         <geometry>
           <mesh>
             <uri>model://rov_max/meshes/t200-cw-prop.dae</uri>
@@ -264,7 +264,7 @@
     <link name="center_thruster">
       <pose>-0.175 0 0 0 0 0</pose>
       <visual name="thruster_prop_visual">
-        <pose>0 0 0 1.5707963267948966 0 0</pose>
+        <pose>0 0 0 -1.5707963267948966 0 0</pose>
         <geometry>
           <mesh>
             <uri>model://rov_max/meshes/t200-ccw-prop.dae</uri>

@@ -184,7 +184,7 @@
 
     <include>
       <uri>model://rov_max</uri>
-      <pose>-5 0 -2 3.1416 0 0</pose>
+      <pose>-5 0 -2 0 0 0</pose>
     </include>
 
     <include>
