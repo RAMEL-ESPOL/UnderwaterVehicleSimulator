@@ -51,7 +51,7 @@ private:
         mvprintw(14, 0, "Presiona 'g' para invertir giro PTC");
         mvprintw(15, 0, "Presiona 'q' para salir");
         mvprintw(16, 0, "--------------------------------------------------");
-        mvprintw(17, 0, "  ____________________   "); //24
+        mvprintw(17, 0, "  ____________________   ");
         mvprintw(18, 0, " /                    \\ ");
         mvprintw(19, 0, "/                      \\");
         mvprintw(20, 0, "|  _____        _____  |");
@@ -69,7 +69,8 @@ private:
         mvprintw(32, 0, " \\___________________/ ");
         mvprintw(33, 0, "--------------------------------------------------");
         mvprintw(34, 0, "Cambiar la escala de velocidad aumentar(m)/disminuir(n)");
-        mvprintw(35, 0, "Pulse una tecla para mover el Rov Max...   ");
+        mvprintw(35, 0, "Para detener todos los propulsores pulse la letra 'c'");
+        mvprintw(36, 0, "Pulse una tecla para mover el Rov Max...   ");
     }
 
     void teleop()
@@ -88,6 +89,7 @@ private:
         double vert_center_thrust = 0.0;
 
         double escala = 0.1;
+        const double cambiar_escala = 0.05;
 
         while (true)
         {
@@ -98,61 +100,73 @@ private:
             switch (key)
             {
                 // Teclas para subir y bajar la velocidad de cada propulsor
-                case 'a':
+                case 'd':
                     left_count++;
                     left_thrust = escala * left_count;
                     publishThrust(pub_left_thrust_, left_thrust);
                     break;
-                case 'd':
+                case 'a':
                     left_count--;
                     left_thrust = escala * left_count;
                     publishThrust(pub_left_thrust_, left_thrust);
                     break;
-                case 'j':
+                case 'l':
                     right_count++;
                     right_thrust = escala * right_count;
                     publishThrust(pub_right_thrust_, right_thrust);
                     break;
-                case 'l':
+                case 'j':
                     right_count--;
                     right_thrust = escala * right_count;
                     publishThrust(pub_right_thrust_, right_thrust);
                     break;
-                case 'w':
+                case 's':
                     vert_left_count--;
                     vert_left_thrust = escala * vert_left_count;
                     publishThrust(pub_vert_left_thrust_, vert_left_thrust);
                     break;
-                case 's':
+                case 'w':
                     vert_left_count++;
                     vert_left_thrust = escala * vert_left_count;
                     publishThrust(pub_vert_left_thrust_, vert_left_thrust);
                     break;
-                case 'i':
+                case 'k':
                     vert_right_count--;
                     vert_right_thrust = escala * vert_right_count;
                     publishThrust(pub_vert_right_thrust_, vert_right_thrust);
                     break;
-                case 'k':
+                case 'i':
                     vert_right_count++;
                     vert_right_thrust = escala * vert_right_count;
                     publishThrust(pub_vert_right_thrust_, vert_right_thrust);
                     break;
-                case 't':
+                case 'g':
                     vert_center_count--;
                     vert_center_thrust = escala * vert_center_count;
                     publishThrust(pub_vert_center_thrust_, vert_center_thrust);
                     break;
-                case 'g':
+                case 't':
                     vert_center_count++;
                     vert_center_thrust = escala * vert_center_count;
                     publishThrust(pub_vert_center_thrust_, vert_center_thrust);
                     break;
                 case 'm':
-                    escala = escala + 0.1;
+                    escala = escala + cambiar_escala;
                     break;
                 case 'n':
-                    escala = escala - 0.1;
+                    escala = escala - cambiar_escala;
+                    break;
+                case 'c':
+                    left_thrust = 0.0;
+                    right_thrust = 0.0;
+                    vert_left_thrust = 0.0;
+                    vert_right_thrust = 0.0;
+                    vert_center_thrust = 0.0;
+                    publishThrust(pub_left_thrust_, left_thrust);
+                    publishThrust(pub_right_thrust_, right_thrust);
+                    publishThrust(pub_vert_left_thrust_, vert_left_thrust);
+                    publishThrust(pub_vert_right_thrust_, vert_right_thrust);
+                    publishThrust(pub_vert_center_thrust_, vert_center_thrust);
                     break;
                 case 'q':
                     endwin();

@@ -149,7 +149,7 @@
       <parent>rov_max_shell</parent>
       <child>vert_thrust_left</child>
       <axis>
-        <xyz>0 0 -1</xyz>
+        <xyz>0 0 1</xyz>
       </axis>
     </joint>
 
@@ -184,7 +184,7 @@
       <parent>rov_max_shell</parent>
       <child>vert_thrust_right</child>
       <axis>
-        <xyz>0 0 -1</xyz>
+        <xyz>0 0 1</xyz>
       </axis>
     </joint>
 
@@ -219,7 +219,7 @@
       <parent>rov_max_shell</parent>
       <child>left_thruster</child>
       <axis>
-        <xyz>0 0 -1</xyz>
+        <xyz>0 0 1</xyz>
       </axis>
     </joint>
 
@@ -254,7 +254,7 @@
       <parent>rov_max_shell</parent>
       <child>right_thruster</child>
       <axis>
-        <xyz>0 0 -1</xyz>
+        <xyz>0 0 1</xyz>
       </axis>
     </joint>
 
@@ -289,7 +289,7 @@
       <parent>rov_max_shell</parent>
       <child>center_thruster</child>
       <axis>
-        <xyz>0 0 -1</xyz>
+        <xyz>0 0 1</xyz>
       </axis>
     </joint>
 
