@@ -53,60 +53,62 @@
   <!-- ********* CHASSIS *********** -->
   <!-- ***************************** -->
   <link name="rov_max_shell">
+
     <visual>
       <!--The origin shift visually shifts the model to CAD model origin-->
-      <origin xyz="1.5571 0.0016 0.0084" rpy="0 0 ${pi}" />
-        .0175
+      <origin xyz="0.15571 0.00016 0.00084" rpy="${pi} ${pi} 0" />
       <geometry>
-        <mesh filename="package://rov_description/models/rov_max/meshes/rov_max.stl" scale="0.01 0.01 0.01"/>
+        <mesh filename="package://rov_description/models/rov_max/meshes/rov_max.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="MediumYellow"/>
     </visual>
+
     <collision>
+      <origin xyz="0.15571 0.00016 0.00084" rpy="${pi} ${pi} 0" />
       <geometry>
 	      <!--Bounding box for collision geometry used to decrease computational requirements.-->
-        <box size="3.65 2.5 1"/>
+        <box size="0.53 0.32 0.033"/>
       </geometry>
     </collision>
+
     <inertial>
-      <mass value="13.2"/>
-      <inertia ixx=".15" ixy="0.0" ixz="0.0" iyy=".66" iyz="0.0" izz=".53"/>
+      <origin xyz="0.15571 0.00016 0.00084" rpy="${pi} ${pi} 0" />  
+      <mass value="4.488"/>
+      <inertia ixx=".03870488600000001" ixy="0.0" ixz="0.0" iyy=".067961036" iyz="0.0" izz=".10585135000000001"/>
     </inertial>
+
   </link>
 
   <joint name="base_frame_to_shell" type="fixed">
     <parent link="rov_max_frame"/>
     <child link="rov_max_shell"/>
-    <origin xyz="0 0 0"/>
+    <origin xyz="0.15571 0.00016 0.00084" rpy="${pi} ${pi} 0"/>
+    <axis xyz="0 0 1"/>
   </joint>
 
   <!-- ***************************** -->
   <!-- *********** CAMERA ********** -->
   <!-- ***************************** -->
   <link name="camera">
-    <origin xyz="0 0 0" rpy="0 0 0"/>
     <visual>
-      <origin xyz="0.025223 0 0" rpy="0 0 0"/>
       <geometry>
-        <box size="0.2 0.4 0.2"/>
+        <box size="0.02 0.04 0.02"/>
       </geometry>
       <material name="Gray"/>
     </visual>
-    <collision>
-      <geometry>
-        <box size="0.2 0.4 0.2"/>
-      </geometry>
-    </collision>
+
     <inertial>
-      <mass value="${negligible}"/>
-      <inertia ixx="${negligible}" ixy="0.00" ixz="0.00" iyy="${negligible}" iyz="0.00" izz="${negligible}"/>
+      <mass value="0.00133"/>
+      <inertia ixx="0.001" ixy="0.00" ixz="0.00" iyy="0.001" iyz="0.00" izz="0.001"/>
     </inertial>
+
   </link>
 
   <joint name="shell_to_camera" type="fixed">
     <parent link="rov_max_shell"/>
     <child link="camera"/>
-    <origin xyz="1.5571 0 0"/>
+    <origin xyz="0.15571 0 0"/>
+    <axis xyz="0 0 1"/>
   </joint>
 
   <!-- ***************************** -->
@@ -116,23 +118,17 @@
     <origin xyz="0 0 0" rpy="0 0 0"/>
 
     <inertial>
-      <mass value="${negligible}"/>
-      <inertia ixx="${negligible}" ixy="0.00" ixz="0.00" iyy="${negligible}" iyz="0.00" izz="${negligible}"/>
+      <mass value="0.001"/>
+      <inertia ixx="0.001" ixy="0.00" ixz="0.00" iyy="0.001" iyz="0.00" izz="0.001"/>
     </inertial>
 
     <visual>
-      <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+      <origin xyz="0 0 0" rpy="${-pi/2} 0 0"/>
       <geometry>
-        <mesh filename="package://rov_description/models/rov_max/meshes/t200-cw-prop.dae" scale="6 6 6"/>
+        <mesh filename="package://rov_description/models/rov_max/meshes/t200-ccw-prop.dae" scale="0.8 0.8 0.8"/>
       </geometry>
       <material name="Green"/>
     </visual>
-
-    <collision>
-      <geometry>
-        <box size="${blade_geometry}"/>
-      </geometry>
-    </collision>
 
   </link>
 
@@ -140,7 +136,7 @@
     <parent link="rov_max_shell"/>
     <child link="vert_thrust_left"/>
     <axis xyz="0 0 1"/>
-    <origin xyz="1.08 0.71 0"/>
+    <origin xyz="0.108 0.071 0" rpy="0 0 0"/>
   </joint>
 
   <!-- ***************************** -->
@@ -150,23 +146,17 @@
     <origin xyz="0 0 0" rpy="0 0 0"/>
 
     <inertial>
-      <mass value="${negligible}"/>
-      <inertia ixx="${negligible}" ixy="0.00" ixz="0.00" iyy="${negligible}" iyz="0.00" izz="${negligible}"/>
+      <mass value="0.001"/>
+      <inertia ixx="0.001" ixy="0.00" ixz="0.00" iyy="0.001" iyz="0.00" izz="0.001"/>
     </inertial>
 
     <visual>
-      <origin xyz="0 0 0" rpy="${-pi/2} 0 0"/>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
       <geometry>
-        <mesh filename="package://rov_description/models/rov_max/meshes/t200-ccw-prop.dae" scale="6 6 6"/>
+        <mesh filename="package://rov_description/models/rov_max/meshes/t200-cw-prop.dae" scale="0.8 0.8 0.8"/>
       </geometry>
       <material name="Green"/>
     </visual>
-
-    <collision>
-      <geometry>
-        <box size="${blade_geometry}"/>
-      </geometry>
-    </collision>
 
   </link>
 
@@ -174,32 +164,28 @@
     <parent link="rov_max_shell"/>
     <child link="vert_thrust_right"/>
     <axis xyz="0 0 1"/>
-    <origin xyz="1.08 -0.71 0"/>
+    <origin xyz="0.108 -0.071 0"/>
   </joint>
 
   <!-- ***************************** -->
   <!-- ******* THRUSTER LEFT ******* -->
   <!-- ***************************** -->
+  
   <link name="left_thruster">
     <origin xyz="0 0 0" rpy="0 0 0"/>
+
     <inertial>
-      <mass value="${negligible}"/>
-      <inertia ixx="${negligible}" ixy="0.00" ixz="0.00" iyy="${negligible}" iyz="0.00" izz="${negligible}"/>
+      <mass value="0.001"/>
+      <inertia ixx="0.001" ixy="0.00" ixz="0.00" iyy="0.001" iyz="0.00" izz="0.001"/>
     </inertial>
 
     <visual>
-      <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+      <origin xyz="0 0 0" rpy="${-pi/2} 0 0"/>
       <geometry>
-        <mesh filename="package://rov_description/models/rov_max/meshes/t200-ccw-prop.dae" scale="6 6 6"/>
+        <mesh filename="package://rov_description/models/rov_max/meshes/t200-ccw-prop.dae" scale="0.8 0.8 0.8"/>
       </geometry>
       <material name="Green"/>
     </visual>
-
-    <collision>
-      <geometry>
-        <box size="${blade_geometry}"/>
-      </geometry>
-    </collision>
 
   </link>
 
@@ -207,8 +193,7 @@
     <parent link="rov_max_shell"/>
     <child link="left_thruster"/>
     <axis xyz="0 0 1"/>
-    <origin xyz="-1.2429 0.75 0" rpy="0 ${pi/2} 0"/>
-    <!--In actual model: <origin xyz="-0.302 0.109 -0.000635" rpy="0 ${pi/2} 0"/> -->
+    <origin xyz="-0.12429 0.075 0" rpy="0 ${pi/2} 0"/>
   </joint>
 
   <!-- ***************************** -->
@@ -216,31 +201,55 @@
   <!-- ***************************** -->
   <link name="right_thruster">
     <origin xyz="0 0 0" rpy="0 0 0"/>
+
     <inertial>
-      <mass value="${negligible}"/>
-      <inertia ixx="${negligible}" ixy="0.00" ixz="0.00" iyy="${negligible}" iyz="0.00" izz="${negligible}"/>
+      <mass value="0.001"/>
+      <inertia ixx="0.001" ixy="0.00" ixz="0.00" iyy="0.001" iyz="0.00" izz="0.001"/>
     </inertial>
 
     <visual>
       <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
       <geometry>
-        <mesh filename="package://rov_description/models/rov_max/meshes/t200-cw-prop.dae" scale="6 6 6"/>
+        <mesh filename="package://rov_description/models/rov_max/meshes/t200-cw-prop.dae" scale="0.8 0.8 0.8"/>
       </geometry>
       <material name="Green"/>
     </visual>
-    <collision>
-      <geometry>
-        <box size="${blade_geometry}"/>
-      </geometry>
-    </collision>
+
   </link>
 
   <joint name="shell_to_right_thrust" type="continuous">
     <parent link="rov_max_shell"/>
     <child link="right_thruster"/>
     <axis xyz="0 0 1"/>
-    <origin xyz="-1.2429 -0.75 0" rpy="0 ${pi/2} 0"/>
-    <!--In actual model: <origin xyz="-0.302 -0.109 -0.000635" rpy="0 ${pi/2} 0"/> -->
+    <origin xyz="-0.12429 -0.075 0" rpy="0 ${pi/2} 0"/>
+  </joint>
+
+  <!-- ***************************** -->
+  <!-- ******* THRUSTER CENTR ****** -->
+  <!-- ***************************** -->
+  <link name="center_thruster">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="0.001" ixy="0.00" ixz="0.00" iyy="0.001" iyz="0.00" izz="0.001"/>
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="${-pi/2} 0 0"/>
+      <geometry>
+        <mesh filename="package://rov_description/models/rov_max/meshes/t200-ccw-prop.dae" scale="0.8 0.8 0.8"/>
+      </geometry>
+      <material name="Green"/>
+    </visual>
+
+  </link>
+
+  <joint name="shell_to_center_thrust" type="continuous">
+    <parent link="rov_max_shell"/>
+    <child link="center_thruster"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="-0.175 -0.0 0" rpy="0 0 0"/>
   </joint>
 
 </robot>
