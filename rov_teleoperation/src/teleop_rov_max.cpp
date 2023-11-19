@@ -31,7 +31,7 @@ public:
     }
 
 private:
-    void printMsg(double left_thrust, double right_thrust, double vert_left_thrust, double vert_right_thrust, double vert_center_thrust)
+    void printMsg(double left_thrust, double right_thrust, double vert_left_thrust, double vert_right_thrust, double vert_center_thrust, double escala)
     {
         clear(); // Limpia la pantalla
         mvprintw(0, 15, "Control del Rov Max");
@@ -39,14 +39,14 @@ private:
         mvprintw(2, 0, "Los propulsores traseros izquierdo (PTI) y derecho (PTD) permiten mover hacia delante o atras");
         mvprintw(3, 0, "El propulsor trasero central (PTC) permite mover hacia arriba o abajo");
         mvprintw(4, 0, "Los propulsores delanteros izquierdo (PTI) y derecho (PTD) permiten mover hacia arriba o abajo");
-        mvprintw(5, 0, "Presiona 'w' para girar PTI");
-        mvprintw(6, 0, "Presiona 's' para invertir giro PTI");
-        mvprintw(7, 0, "Presiona 'i' para girar PTD");
-        mvprintw(8, 0, "Presiona 'k' para invertir giro PTD");
-        mvprintw(9, 0, "Presiona 'a' para girar PDI");
-        mvprintw(10, 0, "Presiona 'd' para invertir giro PDI");
-        mvprintw(11, 0, "Presiona 'j' para girar PDD");
-        mvprintw(12, 0, "Presiona 'l' para invertir giro PDD");
+        mvprintw(5, 0, "Presiona 'd' para girar PTI");
+        mvprintw(6, 0, "Presiona 'a' para invertir giro PTI");
+        mvprintw(7, 0, "Presiona 'l' para girar PTD");
+        mvprintw(8, 0, "Presiona 'j' para invertir giro PTD");
+        mvprintw(9, 0, "Presiona 'w' para girar PDI");
+        mvprintw(10, 0, "Presiona 's' para invertir giro PDI");
+        mvprintw(11, 0, "Presiona 'i' para girar PDD");
+        mvprintw(12, 0, "Presiona 'k' para invertir giro PDD");
         mvprintw(13, 0, "Presiona 't' para girar PTC");
         mvprintw(14, 0, "Presiona 'g' para invertir giro PTC");
         mvprintw(15, 0, "Presiona 'q' para salir");
@@ -62,12 +62,14 @@ private:
         mvprintw(25, 0, "|                      |    Vel. PTC: %f", vert_center_thrust);
         mvprintw(26, 0, "|                      |    Vel. PDI: %f", vert_left_thrust);
         mvprintw(27, 0, "|                      |    Vel. PDD: %f", vert_right_thrust);
-        mvprintw(28, 0, "|  _____        _____  |");
+        mvprintw(28, 0, "|  _____        _____  |    Escala de velocidad: %f", escala);
         mvprintw(29, 0, "| | PDI | CAME | PDD | |");
         mvprintw(30, 0, "|  -----        -----  |");
         mvprintw(31, 0, "\\                     /");
         mvprintw(32, 0, " \\___________________/ ");
-        mvprintw(33, 0, "Pulse una tecla para mover el Rov Max...   ");
+        mvprintw(33, 0, "--------------------------------------------------");
+        mvprintw(34, 0, "Cambiar la escala de velocidad aumentar(m)/disminuir(n)");
+        mvprintw(35, 0, "Pulse una tecla para mover el Rov Max...   ");
     }
 
     void teleop()
@@ -89,62 +91,68 @@ private:
 
         while (true)
         {
-            printMsg(left_thrust, right_thrust, vert_left_thrust, vert_right_thrust, vert_center_thrust);
+            printMsg(left_thrust, right_thrust, vert_left_thrust, vert_right_thrust, vert_center_thrust, escala);
 
             key = getch();
 
             switch (key)
             {
                 // Teclas para subir y bajar la velocidad de cada propulsor
-                case 'w':
+                case 'a':
                     left_count++;
                     left_thrust = escala * left_count;
                     publishThrust(pub_left_thrust_, left_thrust);
                     break;
-                case 's':
+                case 'd':
                     left_count--;
                     left_thrust = escala * left_count;
                     publishThrust(pub_left_thrust_, left_thrust);
                     break;
-                case 'i':
+                case 'j':
                     right_count++;
                     right_thrust = escala * right_count;
                     publishThrust(pub_right_thrust_, right_thrust);
                     break;
-                case 'k':
+                case 'l':
                     right_count--;
                     right_thrust = escala * right_count;
                     publishThrust(pub_right_thrust_, right_thrust);
                     break;
-                case 'a':
-                    vert_left_count++;
-                    vert_left_thrust = escala * vert_left_count;
-                    publishThrust(pub_vert_left_thrust_, vert_left_thrust);
-                    break;
-                case 'd':
+                case 'w':
                     vert_left_count--;
                     vert_left_thrust = escala * vert_left_count;
                     publishThrust(pub_vert_left_thrust_, vert_left_thrust);
                     break;
-                case 'j':
-                    vert_right_count++;
-                    vert_right_thrust = escala * vert_right_count;
-                    publishThrust(pub_vert_right_thrust_, vert_right_thrust);
+                case 's':
+                    vert_left_count++;
+                    vert_left_thrust = escala * vert_left_count;
+                    publishThrust(pub_vert_left_thrust_, vert_left_thrust);
                     break;
-                case 'l':
+                case 'i':
                     vert_right_count--;
                     vert_right_thrust = escala * vert_right_count;
                     publishThrust(pub_vert_right_thrust_, vert_right_thrust);
                     break;
+                case 'k':
+                    vert_right_count++;
+                    vert_right_thrust = escala * vert_right_count;
+                    publishThrust(pub_vert_right_thrust_, vert_right_thrust);
+                    break;
                 case 't':
-                    vert_center_count++;
+                    vert_center_count--;
                     vert_center_thrust = escala * vert_center_count;
                     publishThrust(pub_vert_center_thrust_, vert_center_thrust);
                     break;
                 case 'g':
-                    vert_center_count--;
+                    vert_center_count++;
                     vert_center_thrust = escala * vert_center_count;
                     publishThrust(pub_vert_center_thrust_, vert_center_thrust);
+                    break;
+                case 'm':
+                    escala = escala + 0.1;
+                    break;
+                case 'n':
+                    escala = escala - 0.1;
                     break;
                 case 'q':
                     endwin();
