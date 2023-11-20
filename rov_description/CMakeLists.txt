@@ -11,7 +11,7 @@ if(BUILD_TESTING)
 endif()
 
 install(
-  DIRECTORY launch models rviz scripts src urdf worlds
+  DIRECTORY launch models rviz urdf worlds
   DESTINATION share/${PROJECT_NAME}
 )
 
