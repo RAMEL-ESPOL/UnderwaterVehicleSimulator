@@ -4,17 +4,13 @@ from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch.substitutions import LaunchConfiguration
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, ExecuteProcess
-from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.actions import DeclareLaunchArgument
 from launch_ros.actions import Node
 
 import xacro
 
 
 def generate_launch_description():
-
-    pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')
-    # rov_description_dir = get_package_share_directory('rov_description')
 
     # Check if we're told to use sim time
     use_sim_time = LaunchConfiguration('use_sim_time')
@@ -24,9 +20,6 @@ def generate_launch_description():
     xacro_file = os.path.join(pkg_path_description,'urdf','rov_max.urdf.xacro')
     rviz_file = os.path.join(pkg_path_description,'rviz','max_view.rviz')
     
-    pkg_path_gazebo = os.path.join(get_package_share_directory('rov_gazebo'))
-    world_file = os.path.join(pkg_path_gazebo, 'worlds', 'sand.world')
-
     robot_description_config = xacro.process_file(xacro_file)
     robot_description = {'robot_description': robot_description_config.toxml()}
 
@@ -60,51 +53,10 @@ def generate_launch_description():
         arguments=['-d', rviz_file],
     )
 
-    # Spawn
-    # spawn = Node(
-    #     package='ros_gz_sim',
-    #     executable='create',
-    #     arguments=[
-    #         '-name', 'rov_ramel',
-    #         '-topic', 'robot_description',
-    #     ],
-    #     output='screen',
-    # )
-
-    gz_sim = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(pkg_ros_gz_sim, 'launch', 'gz_sim.launch.py')),
-        launch_arguments={
-            'gz_args': '-v 3 -r ~/ros2_ws/src/rov_robot/rov_gazebo/worlds/sand.world'
-        }.items(),
-    )
-
-    bridge = Node(
-            package='ros_gz_bridge',
-            executable='parameter_bridge',
-            arguments=['/model/rov_max/joint/shell_to_vert_thrust_left/cmd_thrust@std_msgs/msg/Float64@gz.msgs.Double',
-                        '/model/rov_max/joint/shell_to_vert_thrust_right/cmd_thrust@std_msgs/msg/Float64@gz.msgs.Double',
-                        '/model/rov_max/joint/shell_to_left_thrust/cmd_thrust@std_msgs/msg/Float64@gz.msgs.Double',
-                        '/model/rov_max/joint/shell_to_right_thrust/cmd_thrust@std_msgs/msg/Float64@gz.msgs.Double',
-                        '/model/rov_max/joint/shell_to_center_thrust/cmd_thrust@std_msgs/msg/Float64@gz.msgs.Double',
-                        '/model/rov_max/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',
-                        '/model/rov_max/camera@sensor_msgs/msg/Image@gz.msgs.Image',
-                        '/model/rov_max/camera_info@sensor_msgs/msg/CameraInfo@gz.msgs.CameraInfo',],
-            parameters=[{'qos_overrides./model/rov_max/joint/shell_to_vert_thrust_left.subscriber.reliability': 'reliable',
-                            'qos_overrides./model/rov_max/joint/shell_to_vert_thrust_right.subscriber.reliability': 'reliable',
-                            'qos_overrides./model/rov_max/joint/shell_to_left_thrust.subscriber.reliability': 'reliable',
-                            'qos_overrides./model/rov_max/joint/shell_to_right_thrust.subscriber.reliability': 'reliable',
-                            'qos_overrides./model/rov_max/joint/shell_to_center_thrust.subscriber.reliability': 'reliable',}],
-            output='screen'
-    )
-
     # Launch!
     return LaunchDescription([
         config_time,
         node_robot_state_publisher,
         node_joint_state_publisher,
         rviz,
-        # spawn,
-        gz_sim,
-        bridge
     ])
