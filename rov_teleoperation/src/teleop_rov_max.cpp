@@ -76,11 +76,6 @@ private:
     void teleop()
     {
         int key;
-        int left_count = 0;
-        int right_count = 0;
-        int vert_left_count = 0;
-        int vert_right_count = 0;
-        int vert_center_count = 0;
 
         double left_thrust = 0.0;
         double right_thrust = 0.0;
@@ -101,79 +96,44 @@ private:
             {
                 // Teclas para subir y bajar la velocidad de cada propulsor
                 case 'd':
-                    left_count++;
-                    left_thrust = escala * left_count;
-                    publishThrust(pub_left_thrust_, left_thrust);
+                    increaseThrust(&left_thrust, escala, pub_left_thrust_);
                     break;
                 case 'a':
-                    left_count--;
-                    left_thrust = escala * left_count;
-                    publishThrust(pub_left_thrust_, left_thrust);
+                    decreaseThrust(&left_thrust, escala, pub_left_thrust_);
                     break;
                 case 'l':
-                    right_count++;
-                    right_thrust = escala * right_count;
-                    publishThrust(pub_right_thrust_, right_thrust);
+                    increaseThrust(&right_thrust, escala, pub_right_thrust_);
                     break;
                 case 'j':
-                    right_count--;
-                    right_thrust = escala * right_count;
-                    publishThrust(pub_right_thrust_, right_thrust);
+                    decreaseThrust(&right_thrust, escala, pub_right_thrust_);
                     break;
                 case 's':
-                    vert_left_count--;
-                    vert_left_thrust = escala * vert_left_count;
-                    publishThrust(pub_vert_left_thrust_, vert_left_thrust);
+                    decreaseThrust(&vert_left_thrust, escala, pub_vert_left_thrust_);
                     break;
                 case 'w':
-                    vert_left_count++;
-                    vert_left_thrust = escala * vert_left_count;
-                    publishThrust(pub_vert_left_thrust_, vert_left_thrust);
+                    increaseThrust(&vert_left_thrust, escala, pub_vert_left_thrust_);
                     break;
                 case 'k':
-                    vert_right_count--;
-                    vert_right_thrust = escala * vert_right_count;
-                    publishThrust(pub_vert_right_thrust_, vert_right_thrust);
+                    decreaseThrust(&vert_right_thrust, escala, pub_vert_right_thrust_);
                     break;
                 case 'i':
-                    vert_right_count++;
-                    vert_right_thrust = escala * vert_right_count;
-                    publishThrust(pub_vert_right_thrust_, vert_right_thrust);
+                    increaseThrust(&vert_right_thrust, escala, pub_vert_right_thrust_);
                     break;
                 case 'g':
-                    vert_center_count--;
-                    vert_center_thrust = escala * vert_center_count;
-                    publishThrust(pub_vert_center_thrust_, vert_center_thrust);
+                    decreaseThrust(&vert_center_thrust, escala, pub_vert_center_thrust_);
                     break;
                 case 't':
-                    vert_center_count++;
-                    vert_center_thrust = escala * vert_center_count;
-                    publishThrust(pub_vert_center_thrust_, vert_center_thrust);
+                    increaseThrust(&vert_center_thrust, escala, pub_vert_center_thrust_);
                     break;
                 case 'm':
-                    escala = escala + cambiar_escala;
+                    escala += cambiar_escala;
                     break;
                 case 'n':
-                    escala = escala - cambiar_escala;
+                    escala -= cambiar_escala;
                     break;
                 case 'c':
-                    left_count = 0;
-                    right_count = 0;
-                    vert_left_count = 0;
-                    vert_right_count = 0;
-                    vert_center_count = 0;
-
-                    left_thrust = 0.0;
-                    right_thrust = 0.0;
-                    vert_left_thrust = 0.0;
-                    vert_right_thrust = 0.0;
-                    vert_center_thrust = 0.0;
-
-                    publishThrust(pub_left_thrust_, left_thrust);
-                    publishThrust(pub_right_thrust_, right_thrust);
-                    publishThrust(pub_vert_left_thrust_, vert_left_thrust);
-                    publishThrust(pub_vert_right_thrust_, vert_right_thrust);
-                    publishThrust(pub_vert_center_thrust_, vert_center_thrust);
+                    stopAllThrust(&left_thrust, &right_thrust, &vert_left_thrust, &vert_right_thrust, &vert_center_thrust,
+                                  pub_left_thrust_, pub_right_thrust_, pub_vert_left_thrust_, pub_vert_right_thrust_, pub_vert_center_thrust_);
                     break;
                 case 'q':
                     endwin();
@@ -181,6 +141,36 @@ private:
                 // Otras teclas o casos adicionales si es necesario
             }
         }
+    }
+
+    void increaseThrust(double* thrust, double escala, rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr pub)
+    {
+        (*thrust) += escala;
+        publishThrust(pub, *thrust);
+    }
+
+    void decreaseThrust(double* thrust, double escala, rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr pub)
+    {
+        (*thrust) -= escala;
+        publishThrust(pub, *thrust);
+    }
+
+    void stopAllThrust(double* left_thrust, double* right_thrust, double* vert_left_thrust, double* vert_right_thrust, double* vert_center_thrust,
+                       rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr pub_left, rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr pub_right,
+                       rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr pub_vert_left, rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr pub_vert_right,
+                       rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr pub_vert_center)
+    {
+        *left_thrust = 0.0;
+        *right_thrust = 0.0;
+        *vert_left_thrust = 0.0;
+        *vert_right_thrust = 0.0;
+        *vert_center_thrust = 0.0;
+
+        publishThrust(pub_left, *left_thrust);
+        publishThrust(pub_right, *right_thrust);
+        publishThrust(pub_vert_left, *vert_left_thrust);
+        publishThrust(pub_vert_right, *vert_right_thrust);
+        publishThrust(pub_vert_center, *vert_center_thrust);
     }
 
     void publishThrust(rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr pub, double velocidad)
