@@ -157,11 +157,18 @@ private:
                     escala = escala - cambiar_escala;
                     break;
                 case 'c':
+                    left_count = 0;
+                    right_count = 0;
+                    vert_left_count = 0;
+                    vert_right_count = 0;
+                    vert_center_count = 0;
+
                     left_thrust = 0.0;
                     right_thrust = 0.0;
                     vert_left_thrust = 0.0;
                     vert_right_thrust = 0.0;
                     vert_center_thrust = 0.0;
+
                     publishThrust(pub_left_thrust_, left_thrust);
                     publishThrust(pub_right_thrust_, right_thrust);
                     publishThrust(pub_vert_left_thrust_, vert_left_thrust);
