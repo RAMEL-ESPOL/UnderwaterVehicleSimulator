@@ -58,7 +58,7 @@
       <!--The origin shift visually shifts the model to CAD model origin-->
       <origin xyz="0.15571 0.00016 0.00084" rpy="${pi} ${pi} 0" />
       <geometry>
-        <mesh filename="package://rov_description/models/rov_max/meshes/rov_max.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rov_gazebo/models/rov_max/meshes/rov_max.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="MediumYellow"/>
     </visual>
@@ -125,7 +125,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="${-pi/2} 0 0"/>
       <geometry>
-        <mesh filename="package://rov_description/models/rov_max/meshes/t200-ccw-prop.dae" scale="0.8 0.8 0.8"/>
+        <mesh filename="package://rov_gazebo/models/rov_max/meshes/t200-ccw-prop.dae" scale="0.8 0.8 0.8"/>
       </geometry>
       <material name="Green"/>
     </visual>
@@ -153,7 +153,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
       <geometry>
-        <mesh filename="package://rov_description/models/rov_max/meshes/t200-cw-prop.dae" scale="0.8 0.8 0.8"/>
+        <mesh filename="package://rov_gazebo/models/rov_max/meshes/t200-cw-prop.dae" scale="0.8 0.8 0.8"/>
       </geometry>
       <material name="Green"/>
     </visual>
@@ -182,7 +182,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="${-pi/2} 0 0"/>
       <geometry>
-        <mesh filename="package://rov_description/models/rov_max/meshes/t200-ccw-prop.dae" scale="0.8 0.8 0.8"/>
+        <mesh filename="package://rov_gazebo/models/rov_max/meshes/t200-ccw-prop.dae" scale="0.8 0.8 0.8"/>
       </geometry>
       <material name="Green"/>
     </visual>
@@ -210,7 +210,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
       <geometry>
-        <mesh filename="package://rov_description/models/rov_max/meshes/t200-cw-prop.dae" scale="0.8 0.8 0.8"/>
+        <mesh filename="package://rov_gazebo/models/rov_max/meshes/t200-cw-prop.dae" scale="0.8 0.8 0.8"/>
       </geometry>
       <material name="Green"/>
     </visual>
@@ -238,7 +238,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="${-pi/2} 0 0"/>
       <geometry>
-        <mesh filename="package://rov_description/models/rov_max/meshes/t200-ccw-prop.dae" scale="0.8 0.8 0.8"/>
+        <mesh filename="package://rov_gazebo/models/rov_max/meshes/t200-ccw-prop.dae" scale="0.8 0.8 0.8"/>
       </geometry>
       <material name="Green"/>
     </visual>

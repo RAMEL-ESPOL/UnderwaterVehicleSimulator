@@ -20,10 +20,12 @@ def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time')
 
     # Process the URDF file
-    pkg_path = os.path.join(get_package_share_directory('rov_description'))
-    xacro_file = os.path.join(pkg_path,'urdf','rov_max.urdf.xacro')
-    rviz_file = os.path.join(pkg_path,'rviz','max_view.rviz')
-    world_file = os.path.join(pkg_path, 'worlds', 'sand.world')
+    pkg_path_description = os.path.join(get_package_share_directory('rov_description'))
+    xacro_file = os.path.join(pkg_path_description,'urdf','rov_max.urdf.xacro')
+    rviz_file = os.path.join(pkg_path_description,'rviz','max_view.rviz')
+    
+    pkg_path_gazebo = os.path.join(get_package_share_directory('rov_gazebo'))
+    world_file = os.path.join(pkg_path_gazebo, 'worlds', 'sand.world')
 
     robot_description_config = xacro.process_file(xacro_file)
     robot_description = {'robot_description': robot_description_config.toxml()}
@@ -59,21 +61,21 @@ def generate_launch_description():
     )
 
     # Spawn
-    spawn = Node(
-        package='ros_gz_sim',
-        executable='create',
-        arguments=[
-            '-name', 'rov_ramel',
-            '-topic', 'robot_description',
-        ],
-        output='screen',
-    )
+    # spawn = Node(
+    #     package='ros_gz_sim',
+    #     executable='create',
+    #     arguments=[
+    #         '-name', 'rov_ramel',
+    #         '-topic', 'robot_description',
+    #     ],
+    #     output='screen',
+    # )
 
     gz_sim = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(pkg_ros_gz_sim, 'launch', 'gz_sim.launch.py')),
         launch_arguments={
-            'gz_args': '-v 3 -r ~/ros2_ws/src/rov_robot/rov_description/worlds/sand.world'
+            'gz_args': '-v 3 -r ~/ros2_ws/src/rov_robot/rov_gazebo/worlds/sand.world'
         }.items(),
     )
 
@@ -102,7 +104,7 @@ def generate_launch_description():
         node_robot_state_publisher,
         node_joint_state_publisher,
         rviz,
-        spawn,
+        # spawn,
         gz_sim,
         bridge
     ])
