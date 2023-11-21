@@ -13,6 +13,9 @@ find_package(std_msgs REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
+include_directories(
+  include
+)
 
 add_executable(teleop_rov_max src/teleop_rov_max.cpp)
 
