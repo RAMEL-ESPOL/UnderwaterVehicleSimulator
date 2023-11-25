@@ -184,7 +184,7 @@
 
     <include>
       <uri>model://rov_max</uri>
-      <pose>-5 0 -2 0 0 0</pose>
+      <pose>-5 0 -0.2 0 0 0</pose>
     </include>
 
     <include>
@@ -288,7 +288,7 @@
 
     <include>
       <uri>model://bluerov2_heavy</uri>
-      <pose>-5 1 -2 0 0 0</pose>
+      <pose>-5 1 -0.2 0 0 0</pose>
     </include>
   </world>
 </sdf>

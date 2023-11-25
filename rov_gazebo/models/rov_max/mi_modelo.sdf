@@ -100,7 +100,7 @@
         <topic>/model/rov_max/camera</topic>
       </sensor>
       <inertial>
-        <mass>0.00133</mass>
+        <mass>0.002667</mass>
         <inertia>
           <ixx>0.001</ixx>
           <ixy>0</ixy>
@@ -133,7 +133,7 @@
         </geometry>
       </visual>
       <inertial>
-        <mass>0.001</mass>
+        <mass>0.002</mass>
         <inertia>
           <ixx>0.001</ixx>
           <ixy>0</ixy>
@@ -168,7 +168,7 @@
         </geometry>
       </visual>
       <inertial>
-        <mass>0.001</mass>
+        <mass>0.002</mass>
         <inertia>
           <ixx>0.001</ixx>
           <ixy>0</ixy>
@@ -203,7 +203,7 @@
         </geometry>
       </visual>
       <inertial>
-        <mass>0.001</mass>
+        <mass>0.002</mass>
         <inertia>
           <ixx>0.001</ixx>
           <ixy>0</ixy>
@@ -238,7 +238,7 @@
         </geometry>
       </visual>
       <inertial>
-        <mass>0.001</mass>
+        <mass>0.002</mass>
         <inertia>
           <ixx>0.001</ixx>
           <ixy>0</ixy>
@@ -273,7 +273,7 @@
         </geometry>
       </visual>
       <inertial>
-        <mass>0.001</mass>
+        <mass>0.002</mass>
         <inertia>
           <ixx>0.001</ixx>
           <ixy>0</ixy>
