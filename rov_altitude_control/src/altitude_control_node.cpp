@@ -1,5 +1,6 @@
 #include "rclcpp/rclcpp.hpp"
 #include "rov_altitude_control/altitude_controller.hpp"
+#include "rov_altitude_control/longitud_controller.hpp"
 #include <nav_msgs/msg/odometry.hpp>
 //#include <std_srvs/srv/set_float64.hpp>
 
@@ -8,6 +9,10 @@ public:
     AltitudeControlNode() : Node("altitude_control_node") {
         // Dejar el constructor vacío o solo para inicializaciones básicas
     }
+
+    /*LongitudController() : Node("longitud_control_node") {
+        // Dejar el constructor vacío o solo para inicializaciones básicas
+    }*/
 
     void init() {
         altitude_controller_ = std::make_shared<rov_altitude_control::AltitudeController>(shared_from_this());
@@ -26,12 +31,24 @@ public:
                 altitude_controller_->setTargetAltitude(request->data);
                 response->success = true;
             });*/
+        
+        longitud_controller_ = std::make_shared<rov_longitud_control::LongitudController>(shared_from_this());
+
+        odometry_subscription2_ = this->create_subscription<nav_msgs::msg::Odometry>(
+            "/model/rov_max/odometry", 10,
+            [this](const nav_msgs::msg::Odometry::SharedPtr msg) {
+                longitud_controller_->updateControl(msg);
+            });
+
+        longitud_controller_->setTargetAltitude(-5.0);
     }
 
 private:
     rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odometry_subscription_;
+    rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odometry_subscription2_;
     //rclcpp::Service<std_srvs::srv::SetFloat64>::SharedPtr set_altitude_service_;
     std::shared_ptr<rov_altitude_control::AltitudeController> altitude_controller_;
+    std::shared_ptr<rov_longitud_control::LongitudController> longitud_controller_;
 };
 
 int main(int argc, char** argv) {

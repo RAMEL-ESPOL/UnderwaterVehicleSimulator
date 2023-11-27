@@ -5,7 +5,7 @@ namespace rov_altitude_control {
 AltitudeController::AltitudeController(rclcpp::Node::SharedPtr node)
     : node_(node), target_altitude_(0.0), current_altitude_(0.0),
       error_(0.0), prev_error_(0.0), integral_(0.0), derivative_(0.0),
-      kp_(1.0), ki_(0.0), kd_(0.0), calculated_thrust_(0.0) {
+      kp_(2.4), ki_(0.007), kd_(0.02), calculated_thrust_(0.0) {
     initializePublishers();
 }
 
@@ -43,7 +43,7 @@ void AltitudeController::publishThrustCommands() {
 
     for (auto& publisher : propulsor_publishers_) {
         if (publisher == propulsor_publishers_[2]) {
-            thrust_msg.data = thrust_msg.data * 1.5;
+            thrust_msg.data = thrust_msg.data * 1.23;
         }
         RCLCPP_INFO(node_->get_logger(), "Thrust: %f", thrust_msg.data);
         publisher->publish(thrust_msg);

@@ -19,7 +19,8 @@ include_directories(
 
 add_library(${PROJECT_NAME}_lib
   "src/altitude_controller.cpp"
-  "src/altitude_control_node.cpp"  
+  "src/altitude_control_node.cpp" 
+  "src/longitud_controller.cpp"   
 )
 
 set(DEPENDENCIES
