@@ -10,10 +10,6 @@ public:
         // Dejar el constructor vacío o solo para inicializaciones básicas
     }
 
-    /*LongitudController() : Node("longitud_control_node") {
-        // Dejar el constructor vacío o solo para inicializaciones básicas
-    }*/
-
     void init() {
         altitude_controller_ = std::make_shared<rov_altitude_control::AltitudeController>(shared_from_this());
 
