@@ -5,6 +5,28 @@ import sys
 import termios
 import tty
 
+msg = """  
+-------------------------------------------------------------------------- 
+  ____________________   
+ /                     \\ 
+/                       \\ 
+|   _____        _____  |    Presiona w para subir 
+|  | PTI | *PTC | PTD | |    Presiona s para bajar
+|   -----        -----  |    Presiona a para avanzar 
+|                       |    Presiona d para retroceder 
+|                       |    Presiona q para girar a la izquierda
+|                       |    Presiona e para girar a la derecha
+|                       |    Presiona r para girar hacia adelante
+|                       |    Presiona f para girar hacia atras
+|   _____        _____  |    Presiona p para detener propulsores
+|  | PDI | CAME | PDD | |    Presiona m para aumentar escala de velocidad
+|   -----        -----  |    Presiona n para disminuir escala de velocidad
+ \\                     /
+  \\___________________/ 
+Para salir de la teleoperación presiona c para salir... 
+-------------------------------------------------------------------------- 
+"""
+
 class ROVTeleopNode(Node):
     def __init__(self):
         super().__init__('rov_teleop_node')
@@ -32,34 +54,6 @@ class ROVTeleopNode(Node):
             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
         return key
 
-    def printMsg(self):
-        print(f'--------------------------------------------------') 
-        print(f'Control del Rov Max') 
-        print(f'Presiona w para subir') 
-        print(f'Presiona s para bajar')
-        print(f'Presiona a para avanzar')
-        print(f'Presiona d para retroceder')
-        print(f'Presiona p para detener propulsores')
-        print(f'--------------------------------------------------') 
-        print(f'  ____________________  ') 
-        print(f' /                    \\') 
-        print(f'/                      \\') 
-        print(f'|  _____        _____  |') 
-        print(f'| | PTI | *PTC | PTD | |') 
-        print(f'|  -----        -----  |') 
-        print(f'|                      |') 
-        print(f'|                      |') 
-        print(f'|                      |') 
-        print(f'|                      |') 
-        print(f'|                      |') 
-        print(f'|  _____        _____  |') 
-        print(f'| | PDI | CAME | PDD | |') 
-        print(f'|  -----        -----  |') 
-        print(f'\\                     /') 
-        print(f' \\___________________/') 
-        print(f'Cambiar la escala de velocidad aumentar(m)/disminuir(n)') 
-        print(f'--------------------------------------------------') 
-
     def printValoresMtrs(self):
         print(f'Vel. PTI: {self.left_thrust}') 
         print(f'Vel. PTD: {self.right_thrust}') 
@@ -68,21 +62,29 @@ class ROVTeleopNode(Node):
         print(f'Vel. PDD: {self.vert_right_thrust}') 
         print(f'Escala de velocidad: {self.escala}') 
 
-    def subir(self):
+    def subir(self, rotar=False):
         self.vert_left_thrust += self.escala
         self.vert_right_thrust += self.escala
-        self.vert_center_thrust += self.escala*1.25
 
+        if rotar:
+            self.vert_center_thrust -= self.escala*1.25
+        else:
+            self.vert_center_thrust += self.escala*1.25
+        
         self.pub_vert_left.publish(Float64(data=self.vert_left_thrust))
         self.pub_vert_right.publish(Float64(data=self.vert_right_thrust))
         self.pub_vert_centrl.publish(Float64(data=self.vert_center_thrust))
 
         self.printValoresMtrs()
     
-    def bajar(self):
+    def bajar(self, rotar=False):
         self.vert_left_thrust -= self.escala
         self.vert_right_thrust -= self.escala
-        self.vert_center_thrust -= self.escala*1.25
+
+        if rotar:
+            self.vert_center_thrust += self.escala*1.25
+        else:
+            self.vert_center_thrust -= self.escala*1.25
 
         self.pub_vert_left.publish(Float64(data=self.vert_left_thrust))
         self.pub_vert_right.publish(Float64(data=self.vert_right_thrust))
@@ -123,13 +125,11 @@ class ROVTeleopNode(Node):
 
         self.printValoresMtrs()
 
-    def aumentarEscala(self):
-        self.escala += 0.1
-
-        self.printValoresMtrs()
-    
-    def disminuirEscala(self):
-        self.escala -= 0.1
+    def cambiarEscala(self, disminuir=False):
+        if disminuir:
+            self.escala -= 0.1
+        else:
+            self.escala += 0.1
 
         self.printValoresMtrs()
 
@@ -151,31 +151,9 @@ class ROVTeleopNode(Node):
 
         self.printValoresMtrs()
 
-    def giroFrente(self):
-        self.vert_left_thrust -= self.escala
-        self.vert_right_thrust -= self.escala
-        self.vert_center_thrust += self.escala*1.25
-
-        self.pub_vert_left.publish(Float64(data=self.vert_left_thrust))
-        self.pub_vert_right.publish(Float64(data=self.vert_right_thrust))
-        self.pub_vert_centrl.publish(Float64(data=self.vert_center_thrust))
-
-        self.printValoresMtrs()
-
-    def giroAtras(self):
-        self.vert_left_thrust += self.escala
-        self.vert_right_thrust += self.escala
-        self.vert_center_thrust -= self.escala*1.25
-
-        self.pub_vert_left.publish(Float64(data=self.vert_left_thrust))
-        self.pub_vert_right.publish(Float64(data=self.vert_right_thrust))
-        self.pub_vert_centrl.publish(Float64(data=self.vert_center_thrust))
-
-        self.printValoresMtrs()
-
     def run(self):
         estado_msg = 0
-        self.printMsg()
+        print(msg)
 
         while rclpy.ok():
 
@@ -198,11 +176,11 @@ class ROVTeleopNode(Node):
 
                 estado_msg += 1
             elif key == 'm':
-                self.aumentarEscala()
+                self.cambiarEscala()
 
                 estado_msg += 1
             elif key == 'n':
-                self.disminuirEscala()
+                self.cambiarEscala(disminuir=True)
                 
                 estado_msg += 1
             elif key == 'p':
@@ -218,11 +196,11 @@ class ROVTeleopNode(Node):
 
                 estado_msg += 1
             elif key == 'r':
-                self.giroFrente()
+                self.bajar(rotar=True)
 
                 estado_msg += 1
             elif key == 'f':
-                self.giroAtras()
+                self.subir(rotar=True)
 
                 estado_msg += 1
             elif key == 'c':
@@ -230,7 +208,7 @@ class ROVTeleopNode(Node):
 
             if estado_msg == 4:
                 estado_msg = 0
-                self.printMsg()
+                print(msg)
                 
 def main(args=None):
     rclpy.init(args=args)
