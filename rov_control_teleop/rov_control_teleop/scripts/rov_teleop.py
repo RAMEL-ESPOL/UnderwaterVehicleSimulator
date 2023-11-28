@@ -44,6 +44,9 @@ class ROVTeleopNode(Node):
         self.vert_left_thrust = 0.0
         self.vert_right_thrust = 0.0
 
+        self.LIMITE_THRUST_SUP = 2.0
+        self.LIMITE_THRUST_INF = -2.0
+
     def get_key(self):
         fd = sys.stdin.fileno()
         old_settings = termios.tcgetattr(fd)
@@ -62,6 +65,32 @@ class ROVTeleopNode(Node):
         print(f'Vel. PDD: {self.vert_right_thrust}') 
         print(f'Escala de velocidad: {self.escala}') 
 
+    def valVelocidad(self, inVel, thrustCenter=False):
+        if thrustCenter:
+            if inVel > self.LIMITE_THRUST_SUP*1.25:
+                inVel = self.LIMITE_THRUST_SUP*1.25
+            elif inVel < self.LIMITE_THRUST_INF*1.25:
+                inVel = self.LIMITE_THRUST_INF*1.25
+        else:
+            if inVel > self.LIMITE_THRUST_SUP:
+                inVel = self.LIMITE_THRUST_SUP
+            elif inVel < self.LIMITE_THRUST_INF:
+                inVel = self.LIMITE_THRUST_INF
+
+        return inVel
+    
+    def valEscala(self, inEscala):
+        if inEscala > self.LIMITE_THRUST_SUP:
+            inEscala = self.LIMITE_THRUST_SUP
+        elif inEscala < 0.0:
+            inEscala = 0.0
+
+        return inEscala
+
+    def publVel(self, pub, vel, thrustCenter=False):
+        vel = self.valVelocidad(vel, thrustCenter=thrustCenter)
+        pub.publish(Float64(data=vel))
+
     def subir(self, rotar=False):
         self.vert_left_thrust += self.escala
         self.vert_right_thrust += self.escala
@@ -70,10 +99,10 @@ class ROVTeleopNode(Node):
             self.vert_center_thrust -= self.escala*1.25
         else:
             self.vert_center_thrust += self.escala*1.25
-        
-        self.pub_vert_left.publish(Float64(data=self.vert_left_thrust))
-        self.pub_vert_right.publish(Float64(data=self.vert_right_thrust))
-        self.pub_vert_centrl.publish(Float64(data=self.vert_center_thrust))
+
+        self.publVel(self.pub_vert_left, self.vert_left_thrust)
+        self.publVel(self.pub_vert_right, self.vert_right_thrust)
+        self.publVel(self.pub_vert_centrl, self.vert_center_thrust, thrustCenter=True)
 
         self.printValoresMtrs()
     
@@ -86,9 +115,9 @@ class ROVTeleopNode(Node):
         else:
             self.vert_center_thrust -= self.escala*1.25
 
-        self.pub_vert_left.publish(Float64(data=self.vert_left_thrust))
-        self.pub_vert_right.publish(Float64(data=self.vert_right_thrust))
-        self.pub_vert_centrl.publish(Float64(data=self.vert_center_thrust))
+        self.publVel(self.pub_vert_left, self.vert_left_thrust)
+        self.publVel(self.pub_vert_right, self.vert_right_thrust)
+        self.publVel(self.pub_vert_centrl, self.vert_center_thrust, thrustCenter=True)
 
         self.printValoresMtrs()
 
@@ -96,8 +125,8 @@ class ROVTeleopNode(Node):
         self.left_thrust += self.escala
         self.right_thrust += self.escala
 
-        self.pub_left.publish(Float64(data=self.left_thrust))
-        self.pub_right.publish(Float64(data=self.right_thrust))
+        self.pubVel(self.pub_left, self.left_thrust)
+        self.pubVel(self.pub_right, self.right_thrust)
 
         self.printValoresMtrs()
 
@@ -105,8 +134,8 @@ class ROVTeleopNode(Node):
         self.left_thrust -= self.escala
         self.right_thrust -= self.escala
 
-        self.pub_left.publish(Float64(data=self.left_thrust))
-        self.pub_right.publish(Float64(data=self.right_thrust))
+        self.pubVel(self.pub_left, self.left_thrust)
+        self.pubVel(self.pub_right, self.right_thrust)
 
         self.printValoresMtrs()
 
@@ -130,6 +159,8 @@ class ROVTeleopNode(Node):
             self.escala -= 0.1
         else:
             self.escala += 0.1
+        
+        self.escala = self.valEscala(self.escala)
 
         self.printValoresMtrs()
 
@@ -137,8 +168,8 @@ class ROVTeleopNode(Node):
         self.left_thrust -= self.escala
         self.right_thrust += self.escala
 
-        self.pub_left.publish(Float64(data=self.left_thrust))
-        self.pub_right.publish(Float64(data=self.right_thrust))
+        self.pubVel(self.pub_left, self.left_thrust)
+        self.pubVel(self.pub_right, self.right_thrust)
 
         self.printValoresMtrs()
     
@@ -146,8 +177,8 @@ class ROVTeleopNode(Node):
         self.left_thrust += self.escala
         self.right_thrust -= self.escala
 
-        self.pub_left.publish(Float64(data=self.left_thrust))
-        self.pub_right.publish(Float64(data=self.right_thrust))
+        self.pubVel(self.pub_left, self.left_thrust)
+        self.pubVel(self.pub_right, self.right_thrust)
 
         self.printValoresMtrs()
 
