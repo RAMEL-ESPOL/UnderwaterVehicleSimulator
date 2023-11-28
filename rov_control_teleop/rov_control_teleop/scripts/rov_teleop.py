@@ -151,6 +151,28 @@ class ROVTeleopNode(Node):
 
         self.printValoresMtrs()
 
+    def giroFrente(self):
+        self.vert_left_thrust -= self.escala
+        self.vert_right_thrust -= self.escala
+        self.vert_center_thrust += self.escala*1.25
+
+        self.pub_vert_left.publish(Float64(data=self.vert_left_thrust))
+        self.pub_vert_right.publish(Float64(data=self.vert_right_thrust))
+        self.pub_vert_centrl.publish(Float64(data=self.vert_center_thrust))
+
+        self.printValoresMtrs()
+
+    def giroAtras(self):
+        self.vert_left_thrust += self.escala
+        self.vert_right_thrust += self.escala
+        self.vert_center_thrust -= self.escala*1.25
+
+        self.pub_vert_left.publish(Float64(data=self.vert_left_thrust))
+        self.pub_vert_right.publish(Float64(data=self.vert_right_thrust))
+        self.pub_vert_centrl.publish(Float64(data=self.vert_center_thrust))
+
+        self.printValoresMtrs()
+
     def run(self):
         estado_msg = 0
         self.printMsg()
@@ -193,6 +215,14 @@ class ROVTeleopNode(Node):
                 estado_msg += 1
             elif key == 'e':
                 self.giroDer()
+
+                estado_msg += 1
+            elif key == 'r':
+                self.giroFrente()
+
+                estado_msg += 1
+            elif key == 'f':
+                self.giroAtras()
 
                 estado_msg += 1
             elif key == 'c':
