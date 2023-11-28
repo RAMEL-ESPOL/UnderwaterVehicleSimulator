@@ -33,13 +33,12 @@ class ROVTeleopNode(Node):
         return key
 
     def printMsg(self):
-        print(f'Control del Rov Max') 
         print(f'--------------------------------------------------') 
-        print(f'Los propulsores traseros izquierdo (PTI) y derecho (PTD) permiten mover hacia delante o atras') 
-        print(f'El propulsor trasero central (PTC) permite mover hacia arriba o abajo') 
-        print(f'Los propulsores delanteros izquierdo (PTI) y derecho (PTD) permiten mover hacia arriba o abajo') 
+        print(f'Control del Rov Max') 
         print(f'Presiona w para subir') 
-        print(f'Presiona s para bajar') 
+        print(f'Presiona s para bajar')
+        print(f'Presiona a para avanzar')
+        print(f'Presiona d para retroceder')
         print(f'Presiona p para detener propulsores')
         print(f'--------------------------------------------------') 
         print(f'  ____________________  ') 
@@ -58,10 +57,8 @@ class ROVTeleopNode(Node):
         print(f'|  -----        -----  |') 
         print(f'\\                     /') 
         print(f' \\___________________/') 
-        print(f'--------------------------------------------------') 
         print(f'Cambiar la escala de velocidad aumentar(m)/disminuir(n)') 
-        print(f'Para detener todos los propulsores pulse la letra ') 
-        print(f'Pulse una tecla para mover el Rov Max...  ') 
+        print(f'--------------------------------------------------') 
 
     def printValoresMtrs(self):
         print(f'Vel. PTI: {self.left_thrust}') 
@@ -70,6 +67,71 @@ class ROVTeleopNode(Node):
         print(f'Vel. PDI: {self.vert_left_thrust}') 
         print(f'Vel. PDD: {self.vert_right_thrust}') 
         print(f'Escala de velocidad: {self.escala}') 
+
+    def subir(self):
+        self.vert_left_thrust += self.escala
+        self.vert_right_thrust += self.escala
+        self.vert_center_thrust += self.escala*1.25
+
+        self.pub_vert_left.publish(Float64(data=self.vert_left_thrust))
+        self.pub_vert_right.publish(Float64(data=self.vert_right_thrust))
+        self.pub_vert_centrl.publish(Float64(data=self.vert_center_thrust))
+
+        self.printValoresMtrs()
+    
+    def bajar(self):
+        self.vert_left_thrust -= self.escala
+        self.vert_right_thrust -= self.escala
+        self.vert_center_thrust -= self.escala*1.25
+
+        self.pub_vert_left.publish(Float64(data=self.vert_left_thrust))
+        self.pub_vert_right.publish(Float64(data=self.vert_right_thrust))
+        self.pub_vert_centrl.publish(Float64(data=self.vert_center_thrust))
+
+        self.printValoresMtrs()
+
+    def avanzar(self):
+        self.left_thrust += self.escala
+        self.right_thrust += self.escala
+
+        self.pub_left.publish(Float64(data=self.left_thrust))
+        self.pub_right.publish(Float64(data=self.right_thrust))
+
+        self.printValoresMtrs()
+
+    def retroceder(self):
+        self.left_thrust -= self.escala
+        self.right_thrust -= self.escala
+
+        self.pub_left.publish(Float64(data=self.left_thrust))
+        self.pub_right.publish(Float64(data=self.right_thrust))
+
+        self.printValoresMtrs()
+
+    def detener(self):
+        self.vert_left_thrust = 0.0
+        self.vert_right_thrust = 0.0
+        self.vert_center_thrust = 0.0
+        self.left_thrust = 0.0
+        self.right_thrust = 0.0
+
+        self.pub_vert_left.publish(Float64(data=self.vert_left_thrust))
+        self.pub_vert_right.publish(Float64(data=self.vert_right_thrust))
+        self.pub_vert_centrl.publish(Float64(data=self.vert_center_thrust))
+        self.pub_left.publish(Float64(data=self.left_thrust))
+        self.pub_right.publish(Float64(data=self.right_thrust))
+
+        self.printValoresMtrs()
+
+    def aumentarEscala(self):
+        self.escala += 0.1
+
+        self.printValoresMtrs()
+    
+    def disminuirEscala(self):
+        self.escala -= 0.1
+
+        self.printValoresMtrs()
 
     def run(self):
         estado_msg = 0
@@ -80,69 +142,32 @@ class ROVTeleopNode(Node):
             key = self.get_key()
 
             if key == 'w':
-                self.vert_left_thrust += self.escala
-                self.vert_right_thrust += self.escala
-                self.vert_center_thrust += self.escala*1.25
+                self.subir()
 
-                self.pub_vert_left.publish(Float64(data=self.vert_left_thrust))
-                self.pub_vert_right.publish(Float64(data=self.vert_right_thrust))
-                self.pub_vert_centrl.publish(Float64(data=self.vert_center_thrust))
-
-                self.printValoresMtrs()
                 estado_msg += 1
             elif key == 's':
-                self.vert_left_thrust -= self.escala
-                self.vert_right_thrust -= self.escala
-                self.vert_center_thrust -= self.escala*1.25
+                self.bajar()
 
-                self.pub_vert_left.publish(Float64(data=self.vert_left_thrust))
-                self.pub_vert_right.publish(Float64(data=self.vert_right_thrust))
-                self.pub_vert_centrl.publish(Float64(data=self.vert_center_thrust))
-
-                self.printValoresMtrs()
                 estado_msg += 1
             elif key == 'a':
-                self.left_thrust += self.escala
-                self.right_thrust += self.escala
+                self.avanzar()
 
-                self.pub_left.publish(Float64(data=self.left_thrust))
-                self.pub_right.publish(Float64(data=self.right_thrust))
-
-                self.printValoresMtrs()
                 estado_msg += 1
             elif key == 'd':
-                self.left_thrust -= self.escala
-                self.right_thrust -= self.escala
+                self.retroceder()
 
-                self.pub_left.publish(Float64(data=self.left_thrust))
-                self.pub_right.publish(Float64(data=self.right_thrust))
-
-                self.printValoresMtrs()
                 estado_msg += 1
             elif key == 'm':
-                self.escala += 0.1
+                self.aumentarEscala()
 
-                self.printValoresMtrs()
                 estado_msg += 1
             elif key == 'n':
-                self.escala -= 0.1
-
-                self.printValoresMtrs()
+                self.disminuirEscala()
+                
                 estado_msg += 1
             elif key == 'p':
-                self.vert_left_thrust = 0.0
-                self.vert_right_thrust = 0.0
-                self.vert_center_thrust = 0.0
-                self.left_thrust = 0.0
-                self.right_thrust = 0.0
+                self.detener()
 
-                self.pub_vert_left.publish(Float64(data=self.vert_left_thrust))
-                self.pub_vert_right.publish(Float64(data=self.vert_right_thrust))
-                self.pub_vert_centrl.publish(Float64(data=self.vert_center_thrust))
-                self.pub_left.publish(Float64(data=self.left_thrust))
-                self.pub_right.publish(Float64(data=self.right_thrust))
-
-                self.printValoresMtrs()
                 estado_msg += 1
             elif key == 'c':
                 break
@@ -151,7 +176,6 @@ class ROVTeleopNode(Node):
                 estado_msg = 0
                 self.printMsg()
                 
-
 def main(args=None):
     rclpy.init(args=args)
     rov_teleop_node = ROVTeleopNode()
