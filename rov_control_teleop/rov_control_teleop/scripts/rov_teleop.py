@@ -78,7 +78,7 @@ class ROVTeleopNode(Node):
         while rclpy.ok():
 
             key = self.get_key()
-            
+
             if key == 'w':
                 self.vert_left_thrust += self.escala
                 self.vert_right_thrust += self.escala
@@ -101,6 +101,24 @@ class ROVTeleopNode(Node):
 
                 self.printValoresMtrs()
                 estado_msg += 1
+            elif key == 'a':
+                self.left_thrust += self.escala
+                self.right_thrust += self.escala
+
+                self.pub_left.publish(Float64(data=self.left_thrust))
+                self.pub_right.publish(Float64(data=self.right_thrust))
+
+                self.printValoresMtrs()
+                estado_msg += 1
+            elif key == 'd':
+                self.left_thrust -= self.escala
+                self.right_thrust -= self.escala
+
+                self.pub_left.publish(Float64(data=self.left_thrust))
+                self.pub_right.publish(Float64(data=self.right_thrust))
+
+                self.printValoresMtrs()
+                estado_msg += 1
             elif key == 'm':
                 self.escala += 0.1
 
@@ -115,10 +133,14 @@ class ROVTeleopNode(Node):
                 self.vert_left_thrust = 0.0
                 self.vert_right_thrust = 0.0
                 self.vert_center_thrust = 0.0
+                self.left_thrust = 0.0
+                self.right_thrust = 0.0
 
                 self.pub_vert_left.publish(Float64(data=self.vert_left_thrust))
                 self.pub_vert_right.publish(Float64(data=self.vert_right_thrust))
                 self.pub_vert_centrl.publish(Float64(data=self.vert_center_thrust))
+                self.pub_left.publish(Float64(data=self.left_thrust))
+                self.pub_right.publish(Float64(data=self.right_thrust))
 
                 self.printValoresMtrs()
                 estado_msg += 1
