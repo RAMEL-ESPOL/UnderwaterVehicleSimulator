@@ -17,7 +17,7 @@ def generate_launch_description():
 
     # Process the URDF file
     pkg_path_description = os.path.join(get_package_share_directory('rov_description'))
-    xacro_file = os.path.join(pkg_path_description,'urdf','rov_max.urdf.xacro')
+    xacro_file = os.path.join(pkg_path_description,'urdf','rov_max.xacro')
     rviz_file = os.path.join(pkg_path_description,'rviz','max_view.rviz')
     
     robot_description_config = xacro.process_file(xacro_file)
