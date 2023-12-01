@@ -11,7 +11,7 @@ namespace rov_longitud_control {
 class LongitudController {
 public:
     LongitudController(rclcpp::Node::SharedPtr node);
-    void setTargetAltitude(double longitud);
+    void setTargetLongitud(double longitud);
     void updateControl(const nav_msgs::msg::Odometry::SharedPtr& odometry_msg);
 
 private:

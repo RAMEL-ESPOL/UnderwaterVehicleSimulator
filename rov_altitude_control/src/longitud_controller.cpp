@@ -9,7 +9,7 @@ LongitudController::LongitudController(rclcpp::Node::SharedPtr node)
     initializePublishers();
 }
 
-void LongitudController::setTargetAltitude(double longitud) {
+void LongitudController::setTargetLongitud(double longitud) {
     target_longitud_ = longitud;
 }
 
