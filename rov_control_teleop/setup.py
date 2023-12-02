@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'teleop_keyboard = rov_control_teleop.scripts.rov_teleop:main'
+            'teleop_keyboard = rov_control_teleop.scripts.rov_teleop:main',
+            'graficar_pid_long = rov_control_teleop.scripts.graficar_pid_long:main',
         ],
     },
 )
