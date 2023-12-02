@@ -12,6 +12,8 @@ find_package(geometry_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
 
 include_directories(
   include
@@ -20,7 +22,7 @@ include_directories(
 add_library(${PROJECT_NAME}_lib
   "src/altitude_controller.cpp"
   "src/altitude_control_node.cpp" 
-  "src/longitud_controller.cpp"   
+  "src/longitud_controller.cpp"
 )
 
 set(DEPENDENCIES
@@ -29,6 +31,8 @@ set(DEPENDENCIES
   "nav_msgs"
   "std_msgs"
   "std_srvs"
+  "tf2"
+  "tf2_geometry_msgs"
 )
 
 target_link_libraries(${PROJECT_NAME}_lib)
@@ -37,7 +41,7 @@ ament_target_dependencies(${PROJECT_NAME}_lib ${DEPENDENCIES})
 set(EXEC_NAME "altitude_control_node")
 
 add_executable(${EXEC_NAME} src/altitude_control_node.cpp)
-target_link_libraries(${EXEC_NAME} ${PROJECT_NAME}_lib)
+target_link_libraries(${EXEC_NAME} ${PROJECT_NAME}_lib ncurses)
 ament_target_dependencies(${EXEC_NAME} ${DEPENDENCIES})
 
 
@@ -55,4 +59,6 @@ ament_export_dependencies(rclcpp)
 ament_export_dependencies(std_msgs)
 ament_export_dependencies(nav_msgs)
 ament_export_dependencies(std_srvs)
+ament_export_dependencies(tf2)
+ament_export_dependencies(tf2_geometry_msgs)
 ament_package()

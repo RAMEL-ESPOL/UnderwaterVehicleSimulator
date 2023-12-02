@@ -3,11 +3,52 @@
 #include "rov_altitude_control/longitud_controller.hpp"
 #include <nav_msgs/msg/odometry.hpp>
 //#include <std_srvs/srv/set_float64.hpp>
+#include <ncurses.h>
 
 class AltitudeControlNode : public rclcpp::Node {
 public:
     AltitudeControlNode() : Node("altitude_control_node") {
         // Dejar el constructor vacío o solo para inicializaciones básicas
+    }
+
+    void keyboardThread() {
+        // Similar a tu función init anterior, pero en un hilo separado
+        initscr();
+        cbreak();
+        noecho();
+        keypad(stdscr, TRUE);
+
+        double targetAltitude = -0.1;
+        double targetLongitud = -5.0;
+
+        altitude_controller_->setTargetAltitude(targetAltitude);
+        longitud_controller_->setTargetLongitud(targetLongitud);
+
+        int ch;
+        while (rclcpp::ok()) {
+            clear();
+            ch = getch();
+            switch(ch) {
+                case KEY_UP:
+                    targetAltitude += 0.1;
+                    break;
+                case KEY_DOWN:
+                    targetAltitude -= 0.1;
+                    break;
+                case KEY_LEFT:
+                    targetLongitud += 0.1;
+                    break;
+                case KEY_RIGHT:
+                    targetLongitud -= 0.1;
+                    break;
+                case 'q':
+                    endwin(); // Finalizar ncurses antes de salir
+                    return; // Sale del bucle y del hilo
+            }
+            longitud_controller_->setTargetLongitud(targetLongitud);
+            altitude_controller_->setTargetAltitude(targetAltitude);
+        }
+        endwin();
     }
 
     void init() {
@@ -21,9 +62,9 @@ public:
                 longitud_controller_->updateControl(msg);
             });
 
-        altitude_controller_->setTargetAltitude(-0.6);
-        longitud_controller_->setTargetLongitud(-5.0);
-
+        // Crear un hilo para la teleoperación
+        std::thread keyboard_thread(&AltitudeControlNode::keyboardThread, this);
+        keyboard_thread.detach();
     }
 
 private:
