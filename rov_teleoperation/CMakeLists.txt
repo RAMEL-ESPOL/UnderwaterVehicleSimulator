@@ -25,6 +25,7 @@ add_library(${PROJECT_NAME}_lib
   "src/rov_teleoperacion.cpp" 
   "src/control_posxy.cpp"
   "src/control_yaw.cpp"
+  "src/control_pitch.cpp"
 )
 
 set(DEPENDENCIES
