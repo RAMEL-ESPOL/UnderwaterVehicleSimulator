@@ -22,6 +22,7 @@ setup(
         'console_scripts': [
             'teleop_keyboard = rov_control_teleop.scripts.rov_teleop:main',
             'graficar_pid_long = rov_control_teleop.scripts.graficar_pid_long:main',
+            'graficar_pid_angular = rov_control_teleop.scripts.graficar_pid_angular:main',
         ],
     },
 )
