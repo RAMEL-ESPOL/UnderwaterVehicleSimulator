@@ -7,9 +7,9 @@
 //#include <std_srvs/srv/set_float64.hpp>
 #include <ncurses.h>
 
-class AltitudeControlNode : public rclcpp::Node {
+class TeleopControlNode : public rclcpp::Node {
 public:
-    AltitudeControlNode() : Node("teleoperacion_node") {
+    TeleopControlNode() : Node("teleoperacion_node") {
         // Dejar el constructor vacío o solo para inicializaciones básicas
     }
 
@@ -87,7 +87,7 @@ public:
             });
 
         // Crear un hilo para la teleoperación
-        std::thread keyboard_thread(&AltitudeControlNode::keyboardThread, this);
+        std::thread keyboard_thread(&TeleopControlNode::keyboardThread, this);
         keyboard_thread.detach();
     }
 
@@ -101,7 +101,7 @@ private:
 
 int main(int argc, char** argv) {
     rclcpp::init(argc, argv);
-    auto node = std::make_shared<AltitudeControlNode>();
+    auto node = std::make_shared<TeleopControlNode>();
     node->init();  // Llama a la función init después de la creación del nodo
     rclcpp::spin(node);
     rclcpp::shutdown();
