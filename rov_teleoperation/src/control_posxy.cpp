@@ -5,7 +5,7 @@ namespace rov_control_posxy {
 ControlPosXY::ControlPosXY(rclcpp::Node::SharedPtr node)
     : node_(node), target_posXY_(0.0), current_posXY_(0.0),
       error_(0.0), prev_error_(0.0), integral_(0.0), derivative_(0.0),
-      kp_(550.0), ki_(0.0), kd_(540.0), calculated_thrust_(0.0) {
+      kp_(150.0), ki_(0.0), kd_(140.0), calculated_thrust_(0.0) {
     initializePublishers();
 }
 
