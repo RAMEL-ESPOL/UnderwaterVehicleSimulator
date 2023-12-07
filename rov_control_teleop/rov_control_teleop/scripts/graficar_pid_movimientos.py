@@ -20,6 +20,18 @@ class PositionPlotter(Node):
             self.target_callback_yaw,
             10
         )
+        self.target_posxy = self.create_subscription(
+            Float64,
+            '/model/rov_max/longitud_controller/target_longitud',
+            self.target_callback_posxy,
+            10
+        )
+        self.target_prof = self.create_subscription(
+            Float64,
+            '/model/rov_max/longitud_controller/target_altitud',
+            self.target_callback_prof,
+            10
+        )
         self.odometry_sub = self.create_subscription(
             Odometry,
             '/model/rov_max/odometry',
@@ -28,16 +40,24 @@ class PositionPlotter(Node):
         )
         self.pitch_positions = []
         self.yaw_positions = []
+        self.posxy_positions = []
+        self.prof_positions = []
         self.target_position_pitch = None
         self.target_position_yaw = None
+        self.target_position_posxy = None
+        self.target_position_prof = None
 
     def target_callback_pitch(self, msg):
-        print(msg.data)
         self.target_position_pitch = msg.data
     
     def target_callback_yaw(self, msg):
-        print(msg.data)
         self.target_position_yaw = msg.data
+
+    def target_callback_posxy(self, msg):
+        self.target_position_posxy = msg.data
+    
+    def target_callback_prof(self, msg):
+        self.target_position_prof = msg.data
 
     def euler_from_quaternion(self, quaternion):
         x = quaternion.x
@@ -64,17 +84,25 @@ class PositionPlotter(Node):
         yaw = euler[2]
         self.pitch_positions.append(pitch)
         self.yaw_positions.append(yaw)
+        self.posxy_positions.append(msg.pose.pose.position.x)
+        self.prof_positions.append(msg.pose.pose.position.z)
         self.plot_positions()
 
     def plot_positions(self):
         plt.plot(self.pitch_positions, label='Actual Position Pitch')
         plt.plot(self.yaw_positions, label='Actual Position Yaw')
+        plt.plot(self.posxy_positions, label='Actual Position PosXY')
+        plt.plot(self.prof_positions, label='Actual Position Profundidad')
         if self.target_position_pitch is not None:
             plt.axhline(y=self.target_position_pitch, color='r', linestyle='--', label='Target Position Pitch')
         if self.target_position_yaw is not None:
             plt.axhline(y=self.target_position_yaw, color='g', linestyle='--', label='Target Position Yaw')
+        if self.target_position_posxy is not None:
+            plt.axhline(y=self.target_position_posxy, color='b', linestyle='--', label='Target Position PosXY')
+        if self.target_position_prof is not None:
+            plt.axhline(y=self.target_position_prof, color='y', linestyle='--', label='Target Position Profundidad')
         plt.xlabel('Time')
-        plt.ylabel('Position Angular')
+        plt.ylabel('Movimientos angulares y lineales')
         plt.legend()
         plt.grid(True)
         plt.pause(0.01)
