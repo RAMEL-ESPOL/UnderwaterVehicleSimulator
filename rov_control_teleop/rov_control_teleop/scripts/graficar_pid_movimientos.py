@@ -47,6 +47,10 @@ class PositionPlotter(Node):
         self.target_position_posxy = None
         self.target_position_prof = None
 
+        # Crear subplots
+        self.fig, self.axes = plt.subplots(4, 1, figsize=(10, 8))
+        self.fig.tight_layout()
+
     def target_callback_pitch(self, msg):
         self.target_position_pitch = msg.data
     
@@ -89,24 +93,41 @@ class PositionPlotter(Node):
         self.plot_positions()
 
     def plot_positions(self):
-        plt.plot(self.pitch_positions, label='Actual Position Pitch')
-        plt.plot(self.yaw_positions, label='Actual Position Yaw')
-        plt.plot(self.posxy_positions, label='Actual Position PosXY')
-        plt.plot(self.prof_positions, label='Actual Position Profundidad')
+        self.axes[0].cla()
+        self.axes[0].plot(self.pitch_positions, label='Actual Position Pitch')
+        self.axes[0].set_ylabel('Pitch')
+        self.axes[0].set_xlabel('Time')
+
+        self.axes[1].cla()
+        self.axes[1].plot(self.yaw_positions, label='Actual Position Yaw')
+        self.axes[1].set_ylabel('Yaw')
+        self.axes[1].set_xlabel('Time')
+
+        self.axes[2].cla()
+        self.axes[2].plot(self.posxy_positions, label='Actual Position PosXY')
+        self.axes[2].set_ylabel('PosXY')
+        self.axes[2].set_xlabel('Time')
+
+        self.axes[3].cla()
+        self.axes[3].plot(self.prof_positions, label='Actual Position Profundidad')
+        self.axes[3].set_ylabel('Profundidad')
+        self.axes[3].set_xlabel('Time')
+
         if self.target_position_pitch is not None:
-            plt.axhline(y=self.target_position_pitch, color='r', linestyle='--', label='Target Position Pitch')
+            self.axes[0].axhline(y=self.target_position_pitch, color='r', linestyle='--', label='Target Position Pitch')
         if self.target_position_yaw is not None:
-            plt.axhline(y=self.target_position_yaw, color='g', linestyle='--', label='Target Position Yaw')
+            self.axes[1].axhline(y=self.target_position_yaw, color='g', linestyle='--', label='Target Position Yaw')
         if self.target_position_posxy is not None:
-            plt.axhline(y=self.target_position_posxy, color='b', linestyle='--', label='Target Position PosXY')
+            self.axes[2].axhline(y=self.target_position_posxy, color='b', linestyle='--', label='Target Position PosXY')
         if self.target_position_prof is not None:
-            plt.axhline(y=self.target_position_prof, color='y', linestyle='--', label='Target Position Profundidad')
-        plt.xlabel('Time')
-        plt.ylabel('Movimientos angulares y lineales')
-        plt.legend()
-        plt.grid(True)
+            self.axes[3].axhline(y=self.target_position_prof, color='y', linestyle='--', label='Target Position Profundidad')
+
+        for ax in self.axes:
+            ax.legend()
+            ax.grid(True)
+
+        self.fig.canvas.flush_events()
         plt.pause(0.01)
-        plt.clf()
 
 def main(args=None):
     rclpy.init(args=args)
