@@ -7,7 +7,7 @@ namespace rov_control_pitch {
 ControlPitch::ControlPitch(rclcpp::Node::SharedPtr node)
     : node_(node), target_pitch_(0.0), current_pitch_(0.0),
       error_(0.0), prev_error_(0.0), integral_(0.0), derivative_(0.0),
-      kp_(20.0), ki_(0.0), kd_(18.0), calculated_thrust_(0.0) {
+      kp_(20.0), ki_(0.04), kd_(18.0), calculated_thrust_(0.0) {
     initializePublishers();
 }
 
@@ -102,17 +102,22 @@ void ControlPitch::publishThrustCommands() {
     // Propulsor central [2]
 
     if (estado_1 || estado_2 || estado_3) {
+        limitValue(thrust_msg.data, true);
         propulsor_publishers_[2]->publish(thrust_msg);
 
+        limitValue(thrust_msg.data);
         thrust_msg.data = -thrust_msg.data; // inventir el giro para el giro
         propulsor_publishers_[0]->publish(thrust_msg);
         propulsor_publishers_[1]->publish(thrust_msg);
     } else if (estado_4 || estado_5 || estado_6) {
-        propulsor_publishers_[0]->publish(thrust_msg);
-        propulsor_publishers_[1]->publish(thrust_msg);
-
+        limitValue(thrust_msg.data, true);
         thrust_msg.data = -thrust_msg.data; // inventir el giro para el giro
         propulsor_publishers_[2]->publish(thrust_msg);
+
+        thrust_msg.data = std::abs(thrust_msg.data);
+        limitValue(thrust_msg.data);
+        propulsor_publishers_[0]->publish(thrust_msg);
+        propulsor_publishers_[1]->publish(thrust_msg);
     }
 }
 

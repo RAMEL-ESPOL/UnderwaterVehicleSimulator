@@ -76,11 +76,13 @@ void ControlYaw::publishThrustCommands() {
 
     thrust_msg.data = std::abs(calculated_thrust_);
 
-    if (std::abs(error_) < 0.5){
-        thrust_msg.data = std::abs(calculated_thrust_) * 0.5; 
-    }
-
     limitValue(thrust_msg.data);
+
+    if (std::abs(error_) < 0.3){
+        thrust_msg.data = std::abs(thrust_msg.data) * 0.3; 
+    } else if ((std::abs(error_) >= 0.3) && (std::abs(error_) < 0.5)){
+        thrust_msg.data = std::abs(thrust_msg.data) * 0.5;
+    }
 
     bool estado_1 = (current_yaw_ > target_yaw_) && (current_yaw_ > 0);
     bool estado_2 = (current_yaw_ > target_yaw_) && (current_yaw_ < 0);

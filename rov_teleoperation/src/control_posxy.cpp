@@ -5,7 +5,7 @@ namespace rov_control_posxy {
 ControlPosXY::ControlPosXY(rclcpp::Node::SharedPtr node)
     : node_(node), target_posXY_(0.0), current_posXY_(0.0),
       error_(0.0), prev_error_(0.0), integral_(0.0), derivative_(0.0),
-      kp_(150.0), ki_(0.0), kd_(140.0), calculated_thrust_(0.0) {
+      kp_(40.0), ki_(0.05), kd_(39.0), calculated_thrust_(0.0) {
     initializePublishers();
 }
 
@@ -53,8 +53,15 @@ void ControlPosXY::publishThrustCommands() {
     std_msgs::msg::Float64 thrust_msg;
     thrust_msg.data = calculated_thrust_;
 
+    limitValue(thrust_msg.data);
+
+    if (std::abs(error_) < 0.3) {
+        thrust_msg.data *= 0.25;
+    } else if ((std::abs(error_) >= 0.3) && (std::abs(error_) < 0.5)) {
+        thrust_msg.data *= 0.5;
+    }
+
     for (auto& publisher : propulsor_publishers_) {
-        limitValue(thrust_msg.data);
         publisher->publish(thrust_msg);
     }
 }
