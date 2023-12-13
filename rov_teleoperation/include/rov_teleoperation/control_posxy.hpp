@@ -23,6 +23,8 @@ private:
     double calculated_thrust_;
     double MAX_THRUST_ = 2.5;
     double MIN_THRUST_ = -2.5;
+    double max_integral_;
+    double derivative_filter_;
     rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr pub_target_posXY_;
     std::array<rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr, 2> propulsor_publishers_;
     void initializePublishers();
