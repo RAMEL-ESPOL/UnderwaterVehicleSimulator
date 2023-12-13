@@ -43,6 +43,7 @@
       <enable>rov_max</enable> <!-- ::rov_max_shell -->
       <enable>bluerov2_heavy</enable>
       <enable>tethys</enable>
+      <enable>vessel_f</enable>
     </plugin>
 
     <gui fullscreen="0">
@@ -180,6 +181,24 @@
     <include>
      <uri>model://sand_heightmap</uri>
      <pose>0 7 -10 0 0 0</pose>
+     <scale>100 100 100</scale>
+    </include>
+
+    <scene>
+      <sky>
+        <clouds>
+          <speed>1.0</speed>
+          <direction>0.5 0 0</direction>
+          <humidity>0.5</humidity>
+          <ambient>0.8 0.8 0.8 1</ambient>
+          <diffuse>0.9 0.9 0.9 1</diffuse>
+        </clouds>
+      </sky>
+    </scene>
+
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Coast Water</uri>
+      <pose>0 0 0 0 0 0</pose>
     </include>
 
     <include>
@@ -190,6 +209,11 @@
     <include>
      <uri>model://axes</uri>
      <pose>0 0 0.2 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Vessel F</uri>
+      <pose>0 7 0 0 0 0</pose>
     </include>
 
     <include>
