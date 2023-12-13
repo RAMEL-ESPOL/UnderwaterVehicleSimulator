@@ -7,7 +7,8 @@ namespace rov_control_yaw {
 ControlYaw::ControlYaw(rclcpp::Node::SharedPtr node)
     : node_(node), target_yaw_(0.0), current_yaw_(0.0),
       error_(0.0), prev_error_(0.0), integral_(0.0), derivative_(0.0),
-      kp_(20.0), ki_(0.0), kd_(18.0), calculated_thrust_(0.0) {
+      kp_(20.0), ki_(0.0), kd_(18.0), max_integral_(25.0),
+      derivative_filter_(0.3), calculated_thrust_(0.0) {
     initializePublishers();
 }
 
@@ -30,8 +31,8 @@ void ControlYaw::updateControl(const nav_msgs::msg::Odometry::SharedPtr& odometr
     current_yaw_ = yaw;   
 
     error_ = target_yaw_ - current_yaw_;
-    integral_ += error_;
-    derivative_ = error_ - prev_error_;
+    integral_ = std::max(std::min(integral_ + error_, max_integral_), -max_integral_);
+    derivative_ = derivative_filter_ * derivative_ + (1 - derivative_filter_) * (error_ - prev_error_);
     prev_error_ = error_;
 
     std_msgs::msg::Float64 target_yaw_msg;

@@ -28,6 +28,8 @@ private:
     double MIN_THRUST_ = -2.5;
     double MAX_YAW_ = 1.22175; // 70°
     double MIN_YAW_ = -1.22175; // -70°
+    double max_integral_;
+    double derivative_filter_;
     rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr pub_target_yaw_;
     std::array<rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr, 2> propulsor_publishers_;
     void initializePublishers();
