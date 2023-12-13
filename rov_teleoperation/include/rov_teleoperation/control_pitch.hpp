@@ -28,6 +28,8 @@ private:
     double MIN_THRUST_ = -2.5;
     double MAX_PITCH_ = 0.785398; // 45°
     double MIN_PITCH_ = -0.785398; // -45°
+    double max_integral_;
+    double derivative_filter_;
     rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr pub_target_pitch_;
     std::array<rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr, 3> propulsor_publishers_;
     void initializePublishers();

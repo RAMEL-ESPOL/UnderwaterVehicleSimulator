@@ -7,7 +7,8 @@ namespace rov_control_pitch {
 ControlPitch::ControlPitch(rclcpp::Node::SharedPtr node)
     : node_(node), target_pitch_(0.0), current_pitch_(0.0),
       error_(0.0), prev_error_(0.0), integral_(0.0), derivative_(0.0),
-      kp_(20.0), ki_(0.04), kd_(18.0), calculated_thrust_(0.0) {
+      kp_(20.0), ki_(0.04), kd_(18.0), max_integral_(25.0),
+      derivative_filter_(0.3), calculated_thrust_(0.0) {
     initializePublishers();
 }
 
@@ -30,8 +31,8 @@ void ControlPitch::updateControl(const nav_msgs::msg::Odometry::SharedPtr& odome
     current_pitch_ = pitch;   
 
     error_ = target_pitch_ - current_pitch_;
-    integral_ += error_;
-    derivative_ = error_ - prev_error_;
+    integral_ = std::max(std::min(integral_ + error_, max_integral_), -max_integral_);
+    derivative_ = derivative_filter_ * derivative_ + (1 - derivative_filter_) * (error_ - prev_error_);
     prev_error_ = error_;
 
     std_msgs::msg::Float64 target_pitch_msg;
