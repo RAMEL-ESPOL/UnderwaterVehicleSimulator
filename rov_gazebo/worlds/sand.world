@@ -181,7 +181,6 @@
     <include>
      <uri>model://sand_heightmap</uri>
      <pose>0 7 -10 0 0 0</pose>
-     <scale>100 100 100</scale>
     </include>
 
     <scene>
