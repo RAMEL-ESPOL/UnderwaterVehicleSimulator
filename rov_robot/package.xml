@@ -13,6 +13,8 @@
   <exec_depend>rov_bringup</exec_depend>
   <exec_depend>rov_teleoperation</exec_depend>
   <exec_depend>rov_gazebo</exec_depend>
+  <exec_depend>rov_control_teleop</exec_depend>
+  <exec_depend>rov_control_vel</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
