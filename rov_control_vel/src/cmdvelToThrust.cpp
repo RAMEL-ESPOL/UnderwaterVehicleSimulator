@@ -46,6 +46,8 @@ private:
     rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr pub_pro_l_;
     rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr pub_pro_r_;
 
+    const double MAX_THRUST_ = 2.5; // Velocidad máxima del propulsor
+
     // Función para publicar valores de empuje
     void publishThrust(double thrust, rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr& publisher) {
         std_msgs::msg::Float64 msg;
@@ -55,24 +57,18 @@ private:
 
     // Calcula las velocidades para los propulsores verticales
     std::tuple<double, double, double> calculateVerticalThrusters(double linear_z, double angular_y) {
-        // [Lógica para calcular las velocidades de los propulsores verticales...]
-        double base_thrust = linear_z / 3;  // Dividir igualmente la velocidad lineal en Z
-        // Ajustar basado en la velocidad angular en Y
-        // Esto es un ejemplo y puede necesitar ser ajustado
-        double vel_pvc = base_thrust + angular_y / 2;
-        double vel_pvi = base_thrust - angular_y / 4;
-        double vel_pvd = base_thrust - angular_y / 4;
+        double base_thrust = std::clamp(linear_z / 3, -MAX_THRUST_, MAX_THRUST_);
+        double vel_pvc = std::clamp(base_thrust + angular_y / 2, -MAX_THRUST_, MAX_THRUST_);
+        double vel_pvi = std::clamp(base_thrust - angular_y / 4, -MAX_THRUST_, MAX_THRUST_);
+        double vel_pvd = std::clamp(base_thrust - angular_y / 4, -MAX_THRUST_, MAX_THRUST_);
         return std::make_tuple(vel_pvc, vel_pvi, vel_pvd);
     }
 
     // Calcula las velocidades para los propulsores horizontales
     std::tuple<double, double> calculateHorizontalThrusters(double linear_x, double angular_z) {
-        // [Lógica para calcular las velocidades de los propulsores horizontales...]
-        double base_thrust = linear_x / 2;  // Dividir igualmente la velocidad lineal en X
-        // Ajustar basado en la velocidad angular en Z
-        // Esto es un ejemplo y puede necesitar ser ajustado
-        double vel_pi = base_thrust + angular_z / 2;
-        double vel_pd = base_thrust - angular_z / 2;
+        double base_thrust = std::clamp(linear_x / 2, -MAX_THRUST_, MAX_THRUST_);
+        double vel_pi = std::clamp(base_thrust + angular_z / 2, -MAX_THRUST_, MAX_THRUST_);
+        double vel_pd = std::clamp(base_thrust - angular_z / 2, -MAX_THRUST_, MAX_THRUST_);
         return std::make_tuple(vel_pi, vel_pd);
     }
 };
