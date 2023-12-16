@@ -19,9 +19,9 @@
           </mesh>
         </geometry>
         <material>
-            <ambient>1 1 0 0.7</ambient>
-            <diffuse>1 1 0 0.7</diffuse>
-            <specular>1 1 0 0.7</specular>
+            <ambient>1 1 0 1</ambient>
+            <diffuse>1 1 0 1</diffuse>
+            <specular>1 1 0 1</specular>
         </material>
       </visual>
       
@@ -55,6 +55,7 @@
         <pose>0.15571 -0.00016 -0.00084 0 0 0</pose>
         <always_on>1</always_on>
         <update_rate>1000.0</update_rate>
+        <topic>/model/rov_max/imu</topic>
       </sensor>
 
     </link>
@@ -116,6 +117,67 @@
     <joint name="shell_to_camera" type="fixed">
       <parent>rov_max_shell</parent>
       <child>camera</child>
+    </joint>
+
+    <!-- ***************************** -->
+    <!-- ********** SONAR ************ -->
+    <!-- ***************************** -->
+    <link name="sonar_link">
+      <pose>0.075 0 0.05 0 0 0</pose>
+      <visual name="sonar_tube">
+        <geometry>
+          <box>
+            <size>0.01 0.02 0.01</size>
+          </box>
+        </geometry>
+        <material>
+            <ambient>0.7 0.7 0.7 1.0</ambient>
+            <diffuse>0.7 0.7 0.7 1.0</diffuse>
+            <specular>0.7 0.7 0.7 1.0</specular>
+        </material>
+      </visual>
+      <sensor name="sonar_simulado" type="gpu_ray">
+        <pose>0 0 0 0 0 0</pose> <!-- Ajustar la posición y orientación del sensor -->
+        <update_rate>5</update_rate> <!-- Frecuencia de actualización en Hz -->
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>100</samples> <!-- Número de puntos del rayo horizontalmente -->
+              <resolution>1</resolution> <!-- Resolución del rayo -->
+              <min_angle>-1.57</min_angle> <!-- Ángulo mínimo en radianes -->
+              <max_angle>1.57</max_angle> <!-- Ángulo máximo en radianes -->
+            </horizontal>
+          </scan>
+          <range>
+              <min>0.1</min> <!-- Distancia mínima en metros -->
+              <max>10</max> <!-- Distancia máxima en metros, ajustar según el alcance del sonar real -->
+          </range>
+        </ray>
+        <plugin name="gazebo_ros_gpu_laser" filename="libgazebo_ros_gpu_laser.so">
+            <ros>
+              <namespace>/rov</namespace>
+              <remapping>scan:=sonar_sim</remapping>
+            </ros>
+            <frame_name>sonar_link</frame_name>
+        </plugin>
+        <topic>/model/rov_max/sonar</topic>
+      </sensor>
+      <inertial>
+        <mass>0.002667</mass>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0</iyz>
+          <izz>0.001</izz>
+        </inertia>
+      </inertial>
+    </link>
+
+    <joint name="shell_to_sonar" type="fixed">
+      <parent>rov_max_shell</parent>
+      <child>sonar_link</child>
     </joint>
 
     <!-- ***************************** -->
