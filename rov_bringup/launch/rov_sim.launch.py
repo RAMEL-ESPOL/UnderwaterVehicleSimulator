@@ -64,10 +64,17 @@ def generate_launch_description():
         output='screen'
     )
 
+    cmd_vel = Node(
+        package='rov_control_vel',
+        executable='cmd_vel_to_propulsers',
+        output='screen',
+    )
+
     # Launch!
     return LaunchDescription([
         config_time,
         rviz_launch,
         gz_sim,
-        bridge
+        bridge,
+        cmd_vel
     ])
