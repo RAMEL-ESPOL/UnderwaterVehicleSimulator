@@ -20,13 +20,13 @@ include_directories(
   include
 )
 
-# add_library(${PROJECT_NAME}_lib
-#   # "src/control_profundidad.cpp"
-#   # "src/rov_teleoperacion.cpp" 
-#   # "src/control_posxy.cpp"
-#   # "src/control_yaw.cpp"
-#   # "src/control_pitch.cpp"
-# )
+add_library(${PROJECT_NAME}_lib
+  # "src/control_profundidad.cpp"
+  # "src/rov_teleoperacion.cpp" 
+  # "src/control_posxy.cpp"
+  # "src/control_yaw.cpp"
+  "src/cmdvelToThrust.cpp"
+)
 
 set(DEPENDENCIES
   "rclcpp"
@@ -38,19 +38,19 @@ set(DEPENDENCIES
   "tf2_geometry_msgs"
 )
 
-# target_link_libraries(${PROJECT_NAME}_lib)
-# ament_target_dependencies(${PROJECT_NAME}_lib ${DEPENDENCIES})
+target_link_libraries(${PROJECT_NAME}_lib)
+ament_target_dependencies(${PROJECT_NAME}_lib ${DEPENDENCIES})
 
-set(EXEC_NAME "rov_control_vel")
+set(EXEC_NAME "cmd_vel_to_propulsers")
 
-# add_executable(${EXEC_NAME} src/rov_teleoperacion.cpp)
-# target_link_libraries(${EXEC_NAME} ${PROJECT_NAME}_lib ncurses)
-# ament_target_dependencies(${EXEC_NAME} ${DEPENDENCIES})
+add_executable(${EXEC_NAME} src/cmdvelToThrust.cpp)
+target_link_libraries(${EXEC_NAME} ${PROJECT_NAME}_lib ncurses)
+ament_target_dependencies(${EXEC_NAME} ${DEPENDENCIES})
 
 
-# install(TARGETS ${EXEC_NAME}
-#   DESTINATION lib/${PROJECT_NAME}
-# )
+install(TARGETS ${EXEC_NAME}
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 install(DIRECTORY include/
   DESTINATION include/
