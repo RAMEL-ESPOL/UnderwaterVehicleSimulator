@@ -34,16 +34,16 @@ public:
                 case KEY_LEFT:
                     decreaseLinearX();
                     break;
-                case 'a':
+                case 'd':
                     increaseAngularZ();
                     break;
-                case 'd':
+                case 'a':
                     decreaseAngularZ();
                     break;
-                case 'w':
+                case 's':
                     increaseAngularY();
                     break;
-                case 's':
+                case 'w':
                     decreaseAngularY();
                     break;
                 default:
