@@ -57,18 +57,16 @@ private:
 
     // Calcula las velocidades para los propulsores verticales
     std::tuple<double, double, double> calculateVerticalThrusters(double linear_z, double angular_y) {
-        double base_thrust = std::clamp(linear_z / 3, -MAX_THRUST_, MAX_THRUST_);
-        double vel_pvc = std::clamp(base_thrust + angular_y / 2, -MAX_THRUST_, MAX_THRUST_);
-        double vel_pvi = std::clamp(base_thrust - angular_y / 4, -MAX_THRUST_, MAX_THRUST_);
-        double vel_pvd = std::clamp(base_thrust - angular_y / 4, -MAX_THRUST_, MAX_THRUST_);
+        double vel_pvc = std::clamp((linear_z + angular_y)*1.2, -MAX_THRUST_*1.2, MAX_THRUST_*1.2);
+        double vel_pvi = std::clamp(linear_z - angular_y, -MAX_THRUST_, MAX_THRUST_);
+        double vel_pvd = std::clamp(linear_z - angular_y, -MAX_THRUST_, MAX_THRUST_);
         return std::make_tuple(vel_pvc, vel_pvi, vel_pvd);
     }
 
     // Calcula las velocidades para los propulsores horizontales
     std::tuple<double, double> calculateHorizontalThrusters(double linear_x, double angular_z) {
-        double base_thrust = std::clamp(linear_x / 2, -MAX_THRUST_, MAX_THRUST_);
-        double vel_pi = std::clamp(base_thrust + angular_z / 2, -MAX_THRUST_, MAX_THRUST_);
-        double vel_pd = std::clamp(base_thrust - angular_z / 2, -MAX_THRUST_, MAX_THRUST_);
+        double vel_pi = std::clamp(linear_x + angular_z, -MAX_THRUST_, MAX_THRUST_);
+        double vel_pd = std::clamp(linear_x - angular_z, -MAX_THRUST_, MAX_THRUST_);
         return std::make_tuple(vel_pi, vel_pd);
     }
 };
