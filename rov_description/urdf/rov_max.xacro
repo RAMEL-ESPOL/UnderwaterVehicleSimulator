@@ -112,6 +112,32 @@
   </joint>
 
   <!-- ***************************** -->
+  <!-- ********** SONAR ************ -->
+  <!-- ***************************** -->
+  <link name="sonar_link">
+    <visual>
+      <geometry>
+        <box size="0.01 0.02 0.01"/>
+      </geometry>
+      <material name="Gray"/>
+    </visual>
+
+    <inertial>
+      <mass value="0.002667"/>
+      <inertia ixx="0.001" ixy="0.00" ixz="0.00" iyy="0.001" iyz="0.00" izz="0.001"/>
+    </inertial>
+
+  </link>
+
+  <joint name="shell_to_sonar" type="fixed">
+    <parent link="rov_max_shell"/>
+    <child link="sonar_link"/>
+    <origin xyz="0.075 0 0.05"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+
+  <!-- ***************************** -->
   <!-- **** VERTICAL THRUST LEFT *** -->
   <!-- ***************************** -->
   <link name="vert_thrust_left">
