@@ -101,14 +101,14 @@
         <topic>/model/rov_max/camera</topic>
       </sensor>
       <inertial>
-        <mass>0.002667</mass>
+        <mass>0.002</mass>
         <inertia>
-          <ixx>0.001</ixx>
+          <ixx>1.11e-7</ixx>
           <ixy>0</ixy>
           <ixz>0</ixz>
-          <iyy>0.001</iyy>
+          <iyy>4.45e-8</iyy>
           <iyz>0</iyz>
-          <izz>0.001</izz>
+          <izz>1.11e-7</izz>
         </inertia>
       </inertial>
     </link>
@@ -163,14 +163,14 @@
         <topic>/model/rov_max/sonar</topic>
       </sensor>
       <inertial>
-        <mass>0.002667</mass>
+        <mass>0.00097</mass>
         <inertia>
-          <ixx>0.001</ixx>
+          <ixx>1.11e-7</ixx>
           <ixy>0</ixy>
           <ixz>0</ixz>
-          <iyy>0.001</iyy>
+          <iyy>4.45e-8</iyy>
           <iyz>0</iyz>
-          <izz>0.001</izz>
+          <izz>1.11e-7</izz>
         </inertia>
       </inertial>
     </link>
@@ -178,6 +178,113 @@
     <joint name="shell_to_sonar" type="fixed">
       <parent>rov_max_shell</parent>
       <child>sonar_link</child>
+    </joint>
+
+    <!-- ***************************** -->
+    <!-- ********** LUZ ************** -->
+    <!-- ***************************** -->
+    <link name="link_luz_derecho">
+      <pose>0.15571 -0.071 -0.00084 0 0 0</pose> <!-- Posición y orientación del foco izquierdo -->
+
+      <light name="foco_delantero_izquierdo" type="spot">
+        <pose>0 0 0 0 -1.5708 0</pose>
+        <diffuse>1 1 1 1</diffuse> <!-- Color blanco de la luz -->
+        <specular>0.1 0.1 0.1 1</specular>
+        <visualize>false</visualize>
+        <attenuation>
+          <range>20</range> <!-- Alcance de la luz en metros -->
+          <constant>0.5</constant>
+          <linear>0.01</linear>
+          <quadratic>0.001</quadratic>
+        </attenuation>
+        <spot>
+          <inner_angle>0.3</inner_angle> <!-- Ángulo interior del haz de luz -->
+          <outer_angle>1.4</outer_angle> <!-- Ángulo exterior del haz de luz -->
+          <falloff>1.0</falloff>
+        </spot>
+      </light>
+
+      <visual name="luz_der">
+        <geometry>
+          <box>
+            <size>0.01 0.02 0.01</size>
+          </box>
+        </geometry>
+        <material>
+            <ambient>0.7 0.7 0.7 1.0</ambient>
+            <diffuse>0.7 0.7 0.7 1.0</diffuse>
+            <specular>0.7 0.7 0.7 1.0</specular>
+        </material>
+      </visual>
+
+      <inertial>
+        <mass>0.0001</mass>
+        <inertia>
+          <ixx>1.11e-7</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>4.45e-8</iyy>
+          <iyz>0</iyz>
+          <izz>1.11e-7</izz>
+        </inertia>
+      </inertial>
+    </link>
+
+    <joint name="shell_to_luz_derecho" type="fixed">
+      <parent>rov_max_shell</parent>
+      <child>link_luz_derecho</child>
+    </joint>
+
+    <link name="link_luz_izquierdo">
+      <pose>0.15571 0.071 -0.00084 0 0 0</pose> <!-- Posición y orientación del foco izquierdo -->
+
+      <light name="foco_delantero_izquierdo" type="spot">
+        <pose>0 0 0 0 -1.5708 0</pose>
+        <visualize>false</visualize>
+        <diffuse>1 1 1 1</diffuse> <!-- Color blanco de la luz -->
+        <specular>0.1 0.1 0.1 1</specular>
+        <attenuation>
+          <range>20</range> <!-- Alcance de la luz en metros -->
+          <constant>0.5</constant>
+          <linear>0.01</linear>
+          <quadratic>0.001</quadratic>
+        </attenuation>
+        <spot>
+          <inner_angle>0.3</inner_angle> <!-- Ángulo interior del haz de luz -->
+          <outer_angle>1.4</outer_angle> <!-- Ángulo exterior del haz de luz -->
+          <falloff>1.0</falloff>
+        </spot>
+      </light>
+
+      <visual name="luz_der">
+        <geometry>
+          <box>
+            <size>0.01 0.02 0.01</size>
+          </box>
+        </geometry>
+        <material>
+            <ambient>0.7 0.7 0.7 1.0</ambient>
+            <diffuse>0.7 0.7 0.7 1.0</diffuse>
+            <specular>0.7 0.7 0.7 1.0</specular>
+        </material>
+      </visual>
+
+      <inertial>
+        <mass>0.0001</mass>
+        <inertia>
+          <ixx>1.11e-7</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>4.45e-8</iyy>
+          <iyz>0</iyz>
+          <izz>1.11e-7</izz>
+        </inertia>
+      </inertial>
+    </link>
+
+    <joint name="shell_to_luz_izquierda" type="fixed">
+      <parent>rov_max_shell</parent>
+      <child>link_luz_izquierdo</child>
     </joint>
 
     <!-- ***************************** -->
@@ -395,7 +502,7 @@
         name="gz::sim::systems::Thruster">
       <namespace>rov_max</namespace>
       <joint_name>shell_to_vert_thrust_left</joint_name>
-      <thrust_coefficient>0.02</thrust_coefficient>
+      <thrust_coefficient>-0.02</thrust_coefficient>
       <fluid_density>1000</fluid_density>
       <propeller_diameter>0.1</propeller_diameter>
       <velocity_control>true</velocity_control>
@@ -408,19 +515,6 @@
         name="gz::sim::systems::Thruster">
       <namespace>rov_max</namespace>
       <joint_name>shell_to_vert_thrust_right</joint_name>
-      <thrust_coefficient>-0.02</thrust_coefficient>
-      <fluid_density>1000</fluid_density>
-      <propeller_diameter>0.1</propeller_diameter>
-      <velocity_control>true</velocity_control>
-      <use_angvel_cmd>False</use_angvel_cmd>
-    </plugin>
-
-    <!-- THRUSTER RIGHT -->
-    <plugin
-        filename="gz-sim-thruster-system"
-        name="gz::sim::systems::Thruster">
-      <namespace>rov_max</namespace>
-      <joint_name>shell_to_left_thrust</joint_name>
       <thrust_coefficient>0.02</thrust_coefficient>
       <fluid_density>1000</fluid_density>
       <propeller_diameter>0.1</propeller_diameter>
@@ -433,8 +527,21 @@
         filename="gz-sim-thruster-system"
         name="gz::sim::systems::Thruster">
       <namespace>rov_max</namespace>
-      <joint_name>shell_to_right_thrust</joint_name>
+      <joint_name>shell_to_left_thrust</joint_name>
       <thrust_coefficient>-0.02</thrust_coefficient>
+      <fluid_density>1000</fluid_density>
+      <propeller_diameter>0.1</propeller_diameter>
+      <velocity_control>true</velocity_control>
+      <use_angvel_cmd>False</use_angvel_cmd>
+    </plugin>
+
+    <!-- THRUSTER RIGHT -->
+    <plugin
+        filename="gz-sim-thruster-system"
+        name="gz::sim::systems::Thruster">
+      <namespace>rov_max</namespace>
+      <joint_name>shell_to_right_thrust</joint_name>
+      <thrust_coefficient>0.02</thrust_coefficient>
       <fluid_density>1000</fluid_density>
       <propeller_diameter>0.1</propeller_diameter>
       <velocity_control>true</velocity_control>
