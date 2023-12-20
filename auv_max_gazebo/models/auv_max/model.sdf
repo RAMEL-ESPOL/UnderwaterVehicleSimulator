@@ -1,0 +1,643 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<sdf version="1.6">
+  <model name="auv_max">
+    <pose>0 0 0 0 0 0</pose>
+
+    <link name="auv_max_frame">
+    </link>
+
+    <!-- ***************************** -->
+    <!-- ********* CHASSIS *********** -->
+    <!-- ***************************** -->
+    <link name="auv_max_shell">
+      <pose>0.15571 -0.00016 -0.00084 3.1416 3.1416 0</pose>  
+      <visual name="auv_max_shell_visual">
+        <geometry>
+          <mesh>
+            <uri>model://auv_max/meshes/auv_max.stl</uri>
+            <scale>0.001 0.001 0.001</scale>
+          </mesh>
+        </geometry>
+        <material>
+            <ambient>1 1 0 1</ambient>
+            <diffuse>1 1 0 1</diffuse>
+            <specular>1 1 0 1</specular>
+        </material>
+      </visual>
+      
+      <!-- Collision volume * fluid_density == displaced mass, used by BuoyancyPlugin -->
+      <collision name="auv_max_shell_collision">
+        <pose>0.15571 -0.00016 -0.00084 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.53 0.32 0.033</size> <!-- 452 -->
+          </box>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <pose>0.15571 -0.00016 -0.00084 0 0 0</pose>  
+        <mass>4.488</mass>
+        <inertia>
+          <ixx>0.03870488600000001</ixx> 
+          <ixy>0.00000</ixy>
+          <ixz>0.00000</ixz>
+          <iyy>0.067961036</iyy> 
+          <iyz>0</iyz>
+          <izz>0.10585135000000001</izz>
+        </inertia>
+      </inertial>
+
+      <!-- IMU sensor gyro and accel data will be sent to ArduSub -->
+      <sensor name="imu_sensor" type="imu">
+        <!-- Transform from the Gazebo body frame (x-forward, y-left, z-up)
+             to the ArduPilot body frame (x-forward, y-right, z-down) -->
+        <pose>0.15571 -0.00016 -0.00084 0 0 0</pose>
+        <always_on>1</always_on>
+        <update_rate>1000.0</update_rate>
+        <topic>/model/auv_max/imu</topic>
+      </sensor>
+
+    </link>
+
+    <joint name="base_frame_to_shell" type="fixed">
+      <parent>auv_max_frame</parent>
+      <child>auv_max_shell</child>
+    </joint>
+
+    <!-- ***************************** -->
+    <!-- *********** CAMERA ********** -->
+    <!-- ***************************** -->
+    <link name="camera">
+      <pose>0.15571 0 0 0 0 0</pose>
+      <visual name="camera_tube">
+        <geometry>
+          <box>
+            <size>0.02 0.04 0.02</size>
+          </box>
+        </geometry>
+        <material>
+            <ambient>0.7 0.7 0.7 1.0</ambient>
+            <diffuse>0.7 0.7 0.7 1.0</diffuse>
+            <specular>0.7 0.7 0.7 1.0</specular>
+        </material>
+      </visual>
+      <sensor name="sensor_camera" type="camera">
+        <pose>0 0 0.008750000000000001 0 0 0</pose>
+        <camera>
+          <horizontal_fov>1.4</horizontal_fov>
+          <image>
+            <width>800</width>
+            <height>600</height>
+          </image>
+          <clip>
+            <near>0.4</near>
+            <far>100</far>
+          </clip>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>5</update_rate>
+        <visualize>true</visualize>
+        <topic>/model/auv_max/camera</topic>
+      </sensor>
+      <inertial>
+        <mass>0.002</mass>
+        <inertia>
+          <ixx>1.11e-7</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>4.45e-8</iyy>
+          <iyz>0</iyz>
+          <izz>1.11e-7</izz>
+        </inertia>
+      </inertial>
+    </link>
+
+    <!-- Attach camera_link to auv_max_shell -->
+    <joint name="shell_to_camera" type="fixed">
+      <parent>auv_max_shell</parent>
+      <child>camera</child>
+    </joint>
+
+    <!-- ***************************** -->
+    <!-- ********** SONAR ************ -->
+    <!-- ***************************** -->
+    <link name="sonar_link">
+      <pose>0.075 0 0.05 0 0 0</pose>
+      <visual name="sonar_tube">
+        <geometry>
+          <box>
+            <size>0.01 0.02 0.01</size>
+          </box>
+        </geometry>
+        <material>
+            <ambient>0.7 0.7 0.7 1.0</ambient>
+            <diffuse>0.7 0.7 0.7 1.0</diffuse>
+            <specular>0.7 0.7 0.7 1.0</specular>
+        </material>
+      </visual>
+      <sensor name="sonar_simulado" type="gpu_ray">
+        <pose>0 0 0 0 0 0</pose> <!-- Ajustar la posición y orientación del sensor -->
+        <update_rate>5</update_rate> <!-- Frecuencia de actualización en Hz -->
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>100</samples> <!-- Número de puntos del rayo horizontalmente -->
+              <resolution>1</resolution> <!-- Resolución del rayo -->
+              <min_angle>-1.57</min_angle> <!-- Ángulo mínimo en radianes -->
+              <max_angle>1.57</max_angle> <!-- Ángulo máximo en radianes -->
+            </horizontal>
+          </scan>
+          <range>
+              <min>0.1</min> <!-- Distancia mínima en metros -->
+              <max>10</max> <!-- Distancia máxima en metros, ajustar según el alcance del sonar real -->
+          </range>
+        </ray>
+        <plugin name="gazebo_ros_gpu_laser" filename="libgazebo_ros_gpu_laser.so">
+            <ros>
+              <namespace>/auv</namespace>
+              <remapping>scan:=sonar_sim</remapping>
+            </ros>
+            <frame_name>sonar_link</frame_name>
+        </plugin>
+        <topic>/model/auv_max/sonar</topic>
+      </sensor>
+      <inertial>
+        <mass>0.00097</mass>
+        <inertia>
+          <ixx>1.11e-7</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>4.45e-8</iyy>
+          <iyz>0</iyz>
+          <izz>1.11e-7</izz>
+        </inertia>
+      </inertial>
+    </link>
+
+    <joint name="shell_to_sonar" type="fixed">
+      <parent>auv_max_shell</parent>
+      <child>sonar_link</child>
+    </joint>
+
+    <!-- ***************************** -->
+    <!-- ********** LUZ ************** -->
+    <!-- ***************************** -->
+    <link name="link_luz_derecho">
+      <pose>0.15571 -0.071 -0.00084 0 0 0</pose> <!-- Posición y orientación del foco izquierdo -->
+
+      <light name="foco_delantero_izquierdo" type="spot">
+        <pose>0 0 0 0 -1.5708 0</pose>
+        <diffuse>1 1 1 1</diffuse> <!-- Color blanco de la luz -->
+        <specular>0.1 0.1 0.1 1</specular>
+        <visualize>false</visualize>
+        <attenuation>
+          <range>20</range> <!-- Alcance de la luz en metros -->
+          <constant>0.5</constant>
+          <linear>0.01</linear>
+          <quadratic>0.001</quadratic>
+        </attenuation>
+        <spot>
+          <inner_angle>0.3</inner_angle> <!-- Ángulo interior del haz de luz -->
+          <outer_angle>1.4</outer_angle> <!-- Ángulo exterior del haz de luz -->
+          <falloff>1.0</falloff>
+        </spot>
+      </light>
+
+      <visual name="luz_der">
+        <geometry>
+          <box>
+            <size>0.01 0.02 0.01</size>
+          </box>
+        </geometry>
+        <material>
+            <ambient>0.7 0.7 0.7 1.0</ambient>
+            <diffuse>0.7 0.7 0.7 1.0</diffuse>
+            <specular>0.7 0.7 0.7 1.0</specular>
+        </material>
+      </visual>
+
+      <inertial>
+        <mass>0.0001</mass>
+        <inertia>
+          <ixx>1.11e-7</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>4.45e-8</iyy>
+          <iyz>0</iyz>
+          <izz>1.11e-7</izz>
+        </inertia>
+      </inertial>
+    </link>
+
+    <joint name="shell_to_luz_derecho" type="fixed">
+      <parent>auv_max_shell</parent>
+      <child>link_luz_derecho</child>
+    </joint>
+
+    <link name="link_luz_izquierdo">
+      <pose>0.15571 0.071 -0.00084 0 0 0</pose> <!-- Posición y orientación del foco izquierdo -->
+
+      <light name="foco_delantero_izquierdo" type="spot">
+        <pose>0 0 0 0 -1.5708 0</pose>
+        <visualize>false</visualize>
+        <diffuse>1 1 1 1</diffuse> <!-- Color blanco de la luz -->
+        <specular>0.1 0.1 0.1 1</specular>
+        <attenuation>
+          <range>20</range> <!-- Alcance de la luz en metros -->
+          <constant>0.5</constant>
+          <linear>0.01</linear>
+          <quadratic>0.001</quadratic>
+        </attenuation>
+        <spot>
+          <inner_angle>0.3</inner_angle> <!-- Ángulo interior del haz de luz -->
+          <outer_angle>1.4</outer_angle> <!-- Ángulo exterior del haz de luz -->
+          <falloff>1.0</falloff>
+        </spot>
+      </light>
+
+      <visual name="luz_der">
+        <geometry>
+          <box>
+            <size>0.01 0.02 0.01</size>
+          </box>
+        </geometry>
+        <material>
+            <ambient>0.7 0.7 0.7 1.0</ambient>
+            <diffuse>0.7 0.7 0.7 1.0</diffuse>
+            <specular>0.7 0.7 0.7 1.0</specular>
+        </material>
+      </visual>
+
+      <inertial>
+        <mass>0.0001</mass>
+        <inertia>
+          <ixx>1.11e-7</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>4.45e-8</iyy>
+          <iyz>0</iyz>
+          <izz>1.11e-7</izz>
+        </inertia>
+      </inertial>
+    </link>
+
+    <joint name="shell_to_luz_izquierda" type="fixed">
+      <parent>auv_max_shell</parent>
+      <child>link_luz_izquierdo</child>
+    </joint>
+
+    <!-- ***************************** -->
+    <!-- **** VERTICAL THRUST LEFT *** -->
+    <!-- ***************************** -->
+    <link name="vert_thrust_left">
+      <pose>0.108 0.071 0 0 0 0</pose>
+      <visual name="thruster_prop_visual">
+        <pose>0 0 0 -1.5707963267948966 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://auv_max/meshes/t200-ccw-prop.dae</uri>
+            <scale>0.8 0.8 0.8</scale>
+          </mesh>
+        </geometry>
+      </visual>
+      <inertial>
+        <mass>0.002</mass>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0</iyz>
+          <izz>0.001</izz>
+        </inertia>
+      </inertial>
+    </link>
+
+    <joint name="shell_to_vert_thrust_left" type="revolute">
+      <parent>auv_max_shell</parent>
+      <child>vert_thrust_left</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+      </axis>
+    </joint>
+
+    <!-- ***************************** -->
+    <!-- *** VERTICAL THRUST RIGHT *** -->
+    <!-- ***************************** -->
+    <link name="vert_thrust_right">
+      <pose>0.108 -0.071 0 0 0 0</pose>
+      <visual name="thruster_prop_visual">
+        <pose>0 0 0 1.5707963267948966 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://auv_max/meshes/t200-cw-prop.dae</uri>
+            <scale>0.8 0.8 0.8</scale>
+          </mesh>
+        </geometry>
+      </visual>
+      <inertial>
+        <mass>0.002</mass>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0</iyz>
+          <izz>0.001</izz>
+        </inertia>
+      </inertial>
+    </link>
+
+    <joint name="shell_to_vert_thrust_right" type="revolute">
+      <parent>auv_max_shell</parent>
+      <child>vert_thrust_right</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+      </axis>
+    </joint>
+
+    <!-- ***************************** -->
+    <!-- ******* THRUSTER LEFT ******* -->
+    <!-- ***************************** -->
+    <link name="left_thruster">
+      <pose>-0.12429 0.075 0 0 1.5707963267948966 0</pose>
+      <visual name="thruster_prop_visual">
+        <pose>0 0 0 -1.5707963267948966 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://auv_max/meshes/t200-ccw-prop.dae</uri>
+            <scale>0.8 0.8 0.8</scale>
+          </mesh>
+        </geometry>
+      </visual>
+      <inertial>
+        <mass>0.002</mass>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0</iyz>
+          <izz>0.001</izz>
+        </inertia>
+      </inertial>
+    </link>
+
+    <joint name="shell_to_left_thrust" type="revolute">
+      <parent>auv_max_shell</parent>
+      <child>left_thruster</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+      </axis>
+    </joint>
+
+    <!-- ***************************** -->
+    <!-- ******* THRUSTER RIGHT ****** -->
+    <!-- ***************************** -->
+    <link name="right_thruster">
+      <pose>-0.12429 -0.075 0 0 1.5707963267948966 0</pose>
+      <visual name="thruster_prop_visual">
+        <pose>0 0 0 1.5707963267948966 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://auv_max/meshes/t200-cw-prop.dae</uri>
+            <scale>0.8 0.8 0.8</scale>
+          </mesh>
+        </geometry>
+      </visual>
+      <inertial>
+        <mass>0.002</mass>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0</iyz>
+          <izz>0.001</izz>
+        </inertia>
+      </inertial>
+    </link>
+
+    <joint name="shell_to_right_thrust" type="revolute">
+      <parent>auv_max_shell</parent>
+      <child>right_thruster</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+      </axis>
+    </joint>
+
+    <!-- ***************************** -->
+    <!-- ******* THRUSTER CENTR ****** -->
+    <!-- ***************************** -->
+    <link name="center_thruster">
+      <pose>-0.175 0 0 0 0 0</pose>
+      <visual name="thruster_prop_visual">
+        <pose>0 0 0 -1.5707963267948966 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://auv_max/meshes/t200-ccw-prop.dae</uri>
+            <scale>0.8 0.8 0.8</scale>
+          </mesh>
+        </geometry>
+      </visual>
+      <inertial>
+        <mass>0.002</mass>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0</iyz>
+          <izz>0.001</izz>
+        </inertia>
+      </inertial>
+    </link>
+
+    <joint name="shell_to_center_thrust" type="revolute">
+      <parent>auv_max_shell</parent>
+      <child>center_thruster</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+      </axis>
+    </joint>
+
+    <!-- ***************************** -->
+    <!-- ********** PLUGINS ********** -->
+    <!-- ***************************** -->
+    
+    <!-- CHASSIS - HYDRODYNAMICS PLUGINS -->
+    <plugin
+        filename="gz-sim-hydrodynamics-system"
+        name="gz::sim::systems::Hydrodynamics">
+      <link_name>auv_max_frame</link_name>
+      <water_density>1000</water_density>
+      <!-- Added mass: -->
+      <xDotU>0</xDotU>
+      <yDotV>0</yDotV>
+      <zDotW>0</zDotW>
+      <kDotP>0</kDotP>
+      <mDotQ>0</mDotQ>
+      <nDotR>0</nDotR>
+      <!-- First order stability derivative: -->
+      <xU>0</xU>
+      <yV>0</yV>
+      <zW>0</zW>
+      <kP>0</kP>
+      <mQ>0</mQ>
+      <nR>0</nR>
+      <!-- Second order stability derivative: -->
+      <xUabsU>-13.516800000000002</xUabsU>
+      <yVabsV>-21.318</yVabsV>
+      <zWabsW>-64.60000000000001s</zWabsW>
+      <kPabsP>-4</kPabsP>
+      <mQabsQ>-4</mQabsQ>
+      <nRabsR>-4</nRabsR>
+    </plugin>
+
+    <!-- **** PLUGINS FOR THRUSTERS **** -->
+    <!-- VERTICAL THRUST LEFT -->
+    <plugin
+        filename="gz-sim-thruster-system"
+        name="gz::sim::systems::Thruster">
+      <namespace>auv_max</namespace>
+      <joint_name>shell_to_vert_thrust_left</joint_name>
+      <thrust_coefficient>-0.02</thrust_coefficient>
+      <fluid_density>1000</fluid_density>
+      <propeller_diameter>0.1</propeller_diameter>
+      <velocity_control>true</velocity_control>
+      <use_angvel_cmd>False</use_angvel_cmd>
+    </plugin>
+
+    <!-- VERTICAL THRUST RIGHT -->
+    <plugin
+        filename="gz-sim-thruster-system"
+        name="gz::sim::systems::Thruster">
+      <namespace>auv_max</namespace>
+      <joint_name>shell_to_vert_thrust_right</joint_name>
+      <thrust_coefficient>0.02</thrust_coefficient>
+      <fluid_density>1000</fluid_density>
+      <propeller_diameter>0.1</propeller_diameter>
+      <velocity_control>true</velocity_control>
+      <use_angvel_cmd>False</use_angvel_cmd>
+    </plugin>
+
+    <!-- THRUSTER RIGHT -->
+    <plugin
+        filename="gz-sim-thruster-system"
+        name="gz::sim::systems::Thruster">
+      <namespace>auv_max</namespace>
+      <joint_name>shell_to_left_thrust</joint_name>
+      <thrust_coefficient>-0.02</thrust_coefficient>
+      <fluid_density>1000</fluid_density>
+      <propeller_diameter>0.1</propeller_diameter>
+      <velocity_control>true</velocity_control>
+      <use_angvel_cmd>False</use_angvel_cmd>
+    </plugin>
+
+    <!-- THRUSTER RIGHT -->
+    <plugin
+        filename="gz-sim-thruster-system"
+        name="gz::sim::systems::Thruster">
+      <namespace>auv_max</namespace>
+      <joint_name>shell_to_right_thrust</joint_name>
+      <thrust_coefficient>0.02</thrust_coefficient>
+      <fluid_density>1000</fluid_density>
+      <propeller_diameter>0.1</propeller_diameter>
+      <velocity_control>true</velocity_control>
+      <use_angvel_cmd>False</use_angvel_cmd>
+    </plugin>
+    
+    <!-- THRUSTER CENTER -->
+    <plugin
+        filename="gz-sim-thruster-system"
+        name="gz::sim::systems::Thruster">
+      <namespace>auv_max</namespace>
+      <joint_name>shell_to_center_thrust</joint_name>
+      <thrust_coefficient>-0.02</thrust_coefficient>
+      <fluid_density>1000</fluid_density>
+      <propeller_diameter>0.1</propeller_diameter>
+      <velocity_control>true</velocity_control>
+      <use_angvel_cmd>False</use_angvel_cmd>
+    </plugin>
+
+    <!-- ARDUPILOT - COMUNNICATION -->
+    <plugin name="ArduPilotPlugin" filename="libArduPilotPlugin.so">
+      <!-- Port settings -->
+      <fdm_addr>127.0.0.1</fdm_addr>
+      <fdm_port_in>9002</fdm_port_in>
+      <connectionTimeoutMaxCount>5</connectionTimeoutMaxCount>
+      <lock_step>1</lock_step>
+
+      <!-- Transform from the Gazebo body frame (x-forward, y-left, z-up)
+           to the ArduPilot body frame (x-forward, y-right, z-down) -->
+      <modelXYZToAirplaneXForwardZDown>0 0 0 3.141592653589793 0 0</modelXYZToAirplaneXForwardZDown>
+
+      <!-- Transform from the Gazebo world frame (ENU)
+           to the ArduPilot world frame (NED) -->
+      <gazeboXYZToNED>0 0 0 3.141592653589793 0 1.5707963267948966</gazeboXYZToNED>
+
+      <!-- Sensors -->
+      <imuName>imu_sensor</imuName>
+
+      <!-- Thrusters -->
+      <control channel="0">
+        <jointName>shell_to_vert_thrust_left</jointName>
+        <servo_min>1100</servo_min>
+        <servo_max>1900</servo_max>
+        <type>COMMAND</type>
+        <cmd_topic>/model/auv_max/joint/shell_to_vert_thrust_left/cmd_thrust</cmd_topic>
+        <offset>-0.5</offset>
+        <multiplier>100</multiplier>
+      </control>
+      <control channel="1">
+        <jointName>shell_to_vert_thrust_right</jointName>
+        <servo_min>1100</servo_min>
+        <servo_max>1900</servo_max>
+        <type>COMMAND</type>
+        <cmd_topic>/model/auv_max/joint/shell_to_vert_thrust_right/cmd_thrust</cmd_topic>
+        <offset>-0.5</offset>
+        <multiplier>100</multiplier>
+      </control>
+      <control channel="2">
+        <jointName>shell_to_left_thrust</jointName>
+        <servo_min>1100</servo_min>
+        <servo_max>1900</servo_max>
+        <type>COMMAND</type>
+        <cmd_topic>/model/auv_max/joint/shell_to_left_thrust/cmd_thrust</cmd_topic>
+        <offset>-0.5</offset>
+        <multiplier>100</multiplier>
+      </control>
+      <control channel="3">
+        <jointName>shell_to_right_thrust</jointName>
+        <servo_min>1100</servo_min>
+        <servo_max>1900</servo_max>
+        <type>COMMAND</type>
+        <cmd_topic>/model/auv_max/joint/shell_to_right_thrust/cmd_thrust</cmd_topic>
+        <offset>-0.5</offset>
+        <multiplier>100</multiplier>
+      </control>
+      <control channel="4">
+        <jointName>shell_to_center_thrust</jointName>
+        <servo_min>1100</servo_min>
+        <servo_max>1900</servo_max>
+        <type>COMMAND</type>
+        <cmd_topic>/model/auv_max/joint/shell_to_center_thrust/cmd_thrust</cmd_topic>
+        <offset>-0.5</offset>
+        <multiplier>100</multiplier>
+      </control>
+
+    </plugin>
+
+    <!-- PUBLISH THE GROUND-TRUTH POSE FOR RVIZ2 -->
+    <plugin
+        filename="gz-sim-odometry-publisher-system"
+        name="gz::sim::systems::OdometryPublisher">
+      <odom_frame>map</odom_frame>
+      <robot_base_frame>auv_max_shell</robot_base_frame>
+      <dimensions>3</dimensions>
+      <odom_publish_frequency>100</odom_publish_frequency>
+    </plugin>
+
+  </model>
+</sdf>
