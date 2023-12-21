@@ -15,6 +15,7 @@
   <exec_depend>auv_max_gazebo</exec_depend>
   <!-- <exec_depend>auv_max_control_teleop</exec_depend> -->
   <exec_depend>auv_max_control_vel</exec_depend>
+  <exec_depend>auv_max_sonar</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

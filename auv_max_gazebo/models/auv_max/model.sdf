@@ -142,7 +142,7 @@
         <ray>
           <scan>
             <horizontal>
-              <samples>100</samples> <!-- Número de puntos del rayo horizontalmente -->
+              <samples>180</samples> <!-- Número de puntos del rayo horizontalmente -->
               <resolution>1</resolution> <!-- Resolución del rayo -->
               <min_angle>-1.57</min_angle> <!-- Ángulo mínimo en radianes -->
               <max_angle>1.57</max_angle> <!-- Ángulo máximo en radianes -->
