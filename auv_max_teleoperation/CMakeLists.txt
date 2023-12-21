@@ -20,7 +20,7 @@ include_directories(
 )
 
 add_library(${PROJECT_NAME}_lib
-  "src/rov_teleop_keyboard.cpp"
+  "src/auv_teleop_keyboard.cpp"
 )
 
 set(DEPENDENCIES
@@ -36,9 +36,9 @@ set(DEPENDENCIES
 target_link_libraries(${PROJECT_NAME}_lib)
 ament_target_dependencies(${PROJECT_NAME}_lib ${DEPENDENCIES})
 
-set(EXEC_NAME "rov_teleop_keyboard")
+set(EXEC_NAME "auv_teleop_keyboard")
 
-add_executable(${EXEC_NAME} src/rov_teleop_keyboard.cpp)
+add_executable(${EXEC_NAME} src/auv_teleop_keyboard.cpp)
 target_link_libraries(${EXEC_NAME} ${PROJECT_NAME}_lib ncurses)
 ament_target_dependencies(${EXEC_NAME} ${DEPENDENCIES})
 
