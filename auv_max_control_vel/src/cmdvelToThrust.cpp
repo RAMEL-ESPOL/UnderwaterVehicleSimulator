@@ -44,11 +44,11 @@ public:
                 publishThrust(vel_pi, pub_pro_l_);
                 publishThrust(vel_pd, pub_pro_r_);
 
-                joint_velocities_[0] += vel_pvi; 
-                joint_velocities_[1] += vel_pvd; 
-                joint_velocities_[2] += vel_pvc; 
-                joint_velocities_[3] += vel_pi; 
-                joint_velocities_[4] += vel_pd; 
+                joint_velocities_[0] = vel_pvi; 
+                joint_velocities_[1] = vel_pvd; 
+                joint_velocities_[2] = vel_pvc; 
+                joint_velocities_[3] = vel_pi; 
+                joint_velocities_[4] = vel_pd; 
 
                 // Publicar las posiciones de las articulaciones
                 publishJointStates();
