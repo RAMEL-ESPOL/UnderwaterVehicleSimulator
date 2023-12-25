@@ -79,6 +79,12 @@ def generate_launch_description():
         output='screen',
     )
 
+    change_LaserScan = Node(
+        package='auv_max_control_vel',
+        executable='change_LaserScan',
+        output='screen',
+    )
+
     # Launch!
     return LaunchDescription([
         config_time,
@@ -87,4 +93,5 @@ def generate_launch_description():
         bridge,
         cmd_vel,
         vel_rviz,
+        change_LaserScan,
     ])

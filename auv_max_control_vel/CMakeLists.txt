@@ -29,6 +29,7 @@ add_library(${PROJECT_NAME}_lib
   # "src/control_yaw.cpp"
   "src/cmdvelToThrust.cpp"
   "src/velRviz.cpp"
+  "src/remapLaserScan.cpp"
 )
 
 set(DEPENDENCIES
@@ -65,6 +66,17 @@ ament_target_dependencies(${EXEC_NAME2} ${DEPENDENCIES})
 
 
 install(TARGETS ${EXEC_NAME2}
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+set(EXEC_NAME3 "change_LaserScan")
+
+add_executable(${EXEC_NAME3} src/remapLaserScan.cpp)
+target_link_libraries(${EXEC_NAME3} ${PROJECT_NAME}_lib ncurses)
+ament_target_dependencies(${EXEC_NAME3} ${DEPENDENCIES})
+
+
+install(TARGETS ${EXEC_NAME3}
   DESTINATION lib/${PROJECT_NAME}
 )
 
