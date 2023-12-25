@@ -15,6 +15,7 @@ find_package(sensor_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(tf2 REQUIRED)
+find_package(tf2_ros REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 
 include_directories(
@@ -27,6 +28,7 @@ add_library(${PROJECT_NAME}_lib
   # "src/control_posxy.cpp"
   # "src/control_yaw.cpp"
   "src/cmdvelToThrust.cpp"
+  "src/velRviz.cpp"
 )
 
 set(DEPENDENCIES
@@ -37,6 +39,7 @@ set(DEPENDENCIES
   "std_srvs"
   "sensor_msgs"
   "tf2"
+  "tf2_ros"
   "tf2_geometry_msgs"
 )
 
@@ -54,6 +57,17 @@ install(TARGETS ${EXEC_NAME}
   DESTINATION lib/${PROJECT_NAME}
 )
 
+set(EXEC_NAME2 "vel_to_Rviz")
+
+add_executable(${EXEC_NAME2} src/velRviz.cpp)
+target_link_libraries(${EXEC_NAME2} ${PROJECT_NAME}_lib ncurses)
+ament_target_dependencies(${EXEC_NAME2} ${DEPENDENCIES})
+
+
+install(TARGETS ${EXEC_NAME2}
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 install(DIRECTORY include/
   DESTINATION include/
 )
@@ -66,5 +80,6 @@ ament_export_dependencies(nav_msgs)
 ament_export_dependencies(std_srvs)
 ament_export_dependencies(sensor_msgs)
 ament_export_dependencies(tf2)
+ament_export_dependencies(tf2_ros)
 ament_export_dependencies(tf2_geometry_msgs)
 ament_package()

@@ -73,11 +73,18 @@ def generate_launch_description():
         output='screen',
     )
 
+    vel_rviz = Node(
+        package='auv_max_control_vel',
+        executable='vel_to_Rviz',
+        output='screen',
+    )
+
     # Launch!
     return LaunchDescription([
         config_time,
         rviz_launch,
         gz_sim,
         bridge,
-        cmd_vel
+        cmd_vel,
+        vel_rviz,
     ])
