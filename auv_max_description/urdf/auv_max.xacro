@@ -82,7 +82,7 @@
   <joint name="base_frame_to_shell" type="fixed">
     <parent link="auv_max_frame"/>
     <child link="auv_max_shell"/>
-    <origin xyz="0.15571 0.00016 0.00084" rpy="${pi} ${pi} 0"/>
+    <origin xyz="0.15571 0.00016 0.00084" rpy="${pi} ${pi} ${-pi}"/>
     <axis xyz="0 0 1"/>
   </joint>
 
@@ -98,8 +98,8 @@
     </visual>
 
     <inertial>
-      <mass value="0.00133"/>
-      <inertia ixx="0.001" ixy="0.00" ixz="0.00" iyy="0.001" iyz="0.00" izz="0.001"/>
+      <mass value="0.002"/>
+      <inertia ixx="1.11e-7" ixy="0.00" ixz="0.00" iyy="4.45e-8" iyz="0.00" izz="1.11e-7"/>
     </inertial>
 
   </link>
@@ -123,8 +123,8 @@
     </visual>
 
     <inertial>
-      <mass value="0.002667"/>
-      <inertia ixx="0.001" ixy="0.00" ixz="0.00" iyy="0.001" iyz="0.00" izz="0.001"/>
+      <mass value="0.00097"/>
+      <inertia ixx="1.11e-7" ixy="0.00" ixz="0.00" iyy="4.45e-8" iyz="0.00" izz="1.11e-7"/>
     </inertial>
 
   </link>
@@ -144,7 +144,7 @@
     <origin xyz="0 0 0" rpy="0 0 0"/>
 
     <inertial>
-      <mass value="0.001"/>
+      <mass value="0.002"/>
       <inertia ixx="0.001" ixy="0.00" ixz="0.00" iyy="0.001" iyz="0.00" izz="0.001"/>
     </inertial>
 
@@ -172,7 +172,7 @@
     <origin xyz="0 0 0" rpy="0 0 0"/>
 
     <inertial>
-      <mass value="0.001"/>
+      <mass value="0.002"/>
       <inertia ixx="0.001" ixy="0.00" ixz="0.00" iyy="0.001" iyz="0.00" izz="0.001"/>
     </inertial>
 
@@ -201,7 +201,7 @@
     <origin xyz="0 0 0" rpy="0 0 0"/>
 
     <inertial>
-      <mass value="0.001"/>
+      <mass value="0.002"/>
       <inertia ixx="0.001" ixy="0.00" ixz="0.00" iyy="0.001" iyz="0.00" izz="0.001"/>
     </inertial>
 
@@ -229,7 +229,7 @@
     <origin xyz="0 0 0" rpy="0 0 0"/>
 
     <inertial>
-      <mass value="0.001"/>
+      <mass value="0.002"/>
       <inertia ixx="0.001" ixy="0.00" ixz="0.00" iyy="0.001" iyz="0.00" izz="0.001"/>
     </inertial>
 
@@ -257,7 +257,7 @@
     <origin xyz="0 0 0" rpy="0 0 0"/>
 
     <inertial>
-      <mass value="0.001"/>
+      <mass value="0.002"/>
       <inertia ixx="0.001" ixy="0.00" ixz="0.00" iyy="0.001" iyz="0.00" izz="0.001"/>
     </inertial>
 
