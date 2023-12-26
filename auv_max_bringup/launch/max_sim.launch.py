@@ -67,21 +67,9 @@ def generate_launch_description():
         output='screen'
     )
 
-    cmd_vel = Node(
-        package='auv_max_control_vel',
-        executable='cmd_vel_to_propulsers',
-        output='screen',
-    )
-
-    vel_rviz = Node(
-        package='auv_max_control_vel',
-        executable='vel_to_Rviz',
-        output='screen',
-    )
-
-    change_LaserScan = Node(
-        package='auv_max_control_vel',
-        executable='change_LaserScan',
+    max_node = Node(
+        package='auv_max_node',
+        executable='auv_main_node_main',
         output='screen',
     )
 
@@ -91,7 +79,5 @@ def generate_launch_description():
         rviz_launch,
         gz_sim,
         bridge,
-        cmd_vel,
-        vel_rviz,
-        change_LaserScan,
+        max_node,
     ])
