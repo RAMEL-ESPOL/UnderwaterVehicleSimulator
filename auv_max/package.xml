@@ -4,7 +4,7 @@
   <name>auv_max</name>
   <version>0.0.0</version>
   <description>AUV Max - Simulacion / Arquitectura de Software</description>
-  <maintainer email="iesusdavila@gmail.com">Iesis Davila</maintainer>
+  <maintainer email="iesusdavila@gmail.com">Iesus Davila</maintainer>
   <license>TODO: License declaration</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
@@ -13,7 +13,7 @@
   <exec_depend>auv_max_bringup</exec_depend>
   <exec_depend>auv_max_teleoperation</exec_depend>
   <exec_depend>auv_max_gazebo</exec_depend>
-  <!-- <exec_depend>auv_max_control_teleop</exec_depend> -->
+  <exec_depend>auv_max_node</exec_depend>
   <exec_depend>auv_max_control_vel</exec_depend>
   <exec_depend>auv_max_sonar</exec_depend>
 
