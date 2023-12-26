@@ -3,10 +3,7 @@ Panels:
     Help Height: 78
     Name: Displays
     Property Tree Widget:
-      Expanded:
-        - /Global Options1
-        - /Status1
-        - /RobotModel1
+      Expanded: ~
       Splitter Ratio: 0.5
     Tree Height: 725
   - Class: rviz_common/Selection
@@ -26,7 +23,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: ""
+    SyncSource: LaserScan
 Visualization Manager:
   Class: ""
   Displays:
@@ -133,6 +130,8 @@ Visualization Manager:
           Value: true
         left_thruster:
           Value: true
+        map:
+          Value: true
         right_thruster:
           Value: true
         sonar_link:
@@ -147,28 +146,63 @@ Visualization Manager:
       Show Axes: true
       Show Names: false
       Tree:
-        auv_max_frame:
-          auv_max_shell:
-            camera:
-              {}
-            center_thruster:
-              {}
-            left_thruster:
-              {}
-            right_thruster:
-              {}
-            sonar_link:
-              {}
-            vert_thrust_left:
-              {}
-            vert_thrust_right:
-              {}
+        map:
+          auv_max_frame:
+            auv_max_shell:
+              camera:
+                {}
+              center_thruster:
+                {}
+              left_thruster:
+                {}
+              right_thruster:
+                {}
+              sonar_link:
+                {}
+              vert_thrust_left:
+                {}
+              vert_thrust_right:
+                {}
       Update Interval: 0
+      Value: true
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz_default_plugins/LaserScan
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 0
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: LaserScan
+      Position Transformer: XYZ
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.05000000074505806
+      Style: Flat Squares
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /model/auv_max/remapped_sonar
+      Use Fixed Frame: true
+      Use rainbow: true
       Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: auv_max_frame
+    Fixed Frame: map
     Frame Rate: 30
   Name: root
   Tools:
@@ -218,18 +252,18 @@ Visualization Manager:
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0
-        Y: 0
-        Z: 0
+        X: -1.6714974641799927
+        Y: 0.6261444687843323
+        Z: 0.6894947290420532
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.6503981351852417
+      Pitch: 0.45539823174476624
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.8403979539871216
+      Yaw: 1.6103973388671875
     Saved: ~
 Window Geometry:
   Displays:
