@@ -1,6 +1,13 @@
 #include "auv_max_node/sonar_topic_remapper.hpp"
 
 LaserScanFrameRemapper::LaserScanFrameRemapper() : Node("laser_scan_frame_remapper") {
+    if(!rclcpp::ok()) {
+        RCLCPP_ERROR(this->get_logger(), "Node para arreglar el frame_id del sonar no inicializado!");
+        return;
+    }
+
+    RCLCPP_INFO(this->get_logger(), "Node para arreglar el frame_id del sonar inicializado!");
+
     subscription_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
         "/model/auv_max/sonar",
         10,

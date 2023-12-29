@@ -1,6 +1,13 @@
 #include "auv_max_node/cmd_vel_thrust_converter.hpp"
 
 CmdVelThrustConverter::CmdVelThrustConverter() : Node("cmd_to_thrust"), last_update_time_(this->get_clock()->now()) {
+    if(!rclcpp::ok()) {
+        RCLCPP_ERROR(this->get_logger(), "Node para convertir cmd_vel a thrust no inicializado!");
+        return;
+    }
+
+    RCLCPP_INFO(this->get_logger(), "Node para convertir cmd_vel a thrust inicializado!");
+
     pub_pro_vert_l_ = this->create_publisher<std_msgs::msg::Float64>("/model/auv_max/joint/shell_to_vert_thrust_left/cmd_thrust", 10);
     pub_pro_vert_r_ = this->create_publisher<std_msgs::msg::Float64>("/model/auv_max/joint/shell_to_vert_thrust_right/cmd_thrust", 10);
     pub_pro_vert_c_ = this->create_publisher<std_msgs::msg::Float64>("/model/auv_max/joint/shell_to_center_thrust/cmd_thrust", 10);

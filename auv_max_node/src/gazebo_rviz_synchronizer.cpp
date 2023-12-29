@@ -1,6 +1,14 @@
 #include "auv_max_node/gazebo_rviz_synchronizer.hpp"
 
 OdometryToTFPublisher::OdometryToTFPublisher() : Node("odometry_to_tf_publisher") {
+    
+    if(!rclcpp::ok()) {
+        RCLCPP_ERROR(this->get_logger(), "Node para arreglar el frame_id de la Odometria y Pose no inicializado!");
+        return;
+    }
+
+    RCLCPP_INFO(this->get_logger(), "Node para arreglar el frame_id de la Odometria y Pose inicializado!");
+
     odom_sub_ = this->create_subscription<nav_msgs::msg::Odometry>(
         "/model/auv_max/odometry", 10, 
         std::bind(&OdometryToTFPublisher::odomCallback, this, std::placeholders::_1));
@@ -14,7 +22,6 @@ OdometryToTFPublisher::OdometryToTFPublisher() : Node("odometry_to_tf_publisher"
             auto new_msg = *msg;
             new_msg.header.stamp = this->now();
             new_msg.header.frame_id = "auv_max_shell"; // Nuevo frame_id
-            RCLCPP_INFO(this->get_logger(), "PoseArray received and remapped");
             pub_pose_->publish(new_msg);
         }
     );
