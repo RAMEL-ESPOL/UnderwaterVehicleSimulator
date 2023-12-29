@@ -9,11 +9,6 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(geometry_msgs REQUIRED)
-find_package(std_msgs REQUIRED)
-find_package(nav_msgs REQUIRED)
-find_package(std_srvs REQUIRED)
-find_package(tf2 REQUIRED)
-find_package(tf2_geometry_msgs REQUIRED)
 
 include_directories(
   include
@@ -26,11 +21,6 @@ add_library(${PROJECT_NAME}_lib
 set(DEPENDENCIES
   "rclcpp"
   "geometry_msgs"
-  "nav_msgs"
-  "std_msgs"
-  "std_srvs"
-  "tf2"
-  "tf2_geometry_msgs"
 )
 
 target_link_libraries(${PROJECT_NAME}_lib)
@@ -53,10 +43,4 @@ install(DIRECTORY include/
 
 ament_export_include_directories(include)
 ament_export_dependencies(geometry_msgs)
-ament_export_dependencies(rclcpp)
-ament_export_dependencies(std_msgs)
-ament_export_dependencies(nav_msgs)
-ament_export_dependencies(std_srvs)
-ament_export_dependencies(tf2)
-ament_export_dependencies(tf2_geometry_msgs)
 ament_package()

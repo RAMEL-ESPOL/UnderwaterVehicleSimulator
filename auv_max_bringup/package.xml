@@ -3,7 +3,7 @@
 <package format="3">
   <name>auv_max_bringup</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Paquete encargado del bringup del proyecto en general tanto para Rviz, Gazebo o futuras implementaciones físicas</description>
   <maintainer email="iesusdavila@gmail.com">Iesus Davila</maintainer>
   <license>TODO: License declaration</license>
 

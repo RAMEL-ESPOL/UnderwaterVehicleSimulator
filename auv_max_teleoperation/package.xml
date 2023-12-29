@@ -3,7 +3,7 @@
 <package format="3">
   <name>auv_max_teleoperation</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Paquete encargado de la teleoperación del AUV para manejarlo mediante el control de su velocidad</description>
   <maintainer email="iesusdavila@gmail.com">Iesus Davila</maintainer>
   <license>TODO: License declaration</license>
 

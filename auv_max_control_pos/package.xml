@@ -3,7 +3,7 @@
 <package format="3">
   <name>auv_max_control_pos</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Paquete encargado del control de posición del AUV, dicho paquete puede ser mejorado con un control con MPC</description>
   <maintainer email="iesusdavila@gmail.com">rov-robot</maintainer>
   <license>TODO: License declaration</license>
 
