@@ -1,0 +1,2 @@
+export GZ_SIM_SYSTEM_PLUGIN_PATH=$HOME/ros2_ws/src/ardupilot_gazebo/build
+export GZ_SIM_RESOURCE_PATH=$HOME/ros2_ws/src/auv_max/auv_max_gazebo/models:$HOME/ros2_ws/src/auv_max/auv_max_gazebo/worlds:$GZ_SIM_RESOURCE_PATH
