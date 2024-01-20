@@ -40,8 +40,17 @@ class MaxTeleopNode(Node):
             self.cmd_vel_msg.angular.z = angular_z
         self.publish_velocity()
 
+def toggle_controls(state):
+    slider_vx.config(state=state)
+    slider_vz.config(state=state)
+    slider_vyaw.config(state=state)
+    slider_vpitch.config(state=state)
+    btn_stop.config(state=state)
+    btn_emergency.config(state=state)
+
 def startTeleop(nodeTeleop):
     nodeTeleop.startVel = True
+    toggle_controls('normal')
 
 def stopAll(nodeTeleop):
     slider_vyaw.set(0)
@@ -51,10 +60,11 @@ def stopAll(nodeTeleop):
 
     nodeTeleop.update_velocity(0.0, 0.0, 0.0, 0.0)
     nodeTeleop.startVel = False
+    toggle_controls('disabled')
 
 def emergencia(nodeTeleop):
     nodeTeleop.startVel = True
-    
+
     slider_vyaw.set(0)
     slider_vpitch.set(0)
     slider_vx.set(0)
@@ -102,6 +112,8 @@ btn_stop.pack()
 
 btn_emergency = tk.Button(root, text="Emergencia", command=lambda: emergencia(node))
 btn_emergency.pack()
+
+toggle_controls('disabled')
 
 # Ejecutar la aplicación Tkinter
 root.mainloop()
