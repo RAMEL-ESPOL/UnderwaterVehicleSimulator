@@ -5,6 +5,12 @@ from geometry_msgs.msg import Twist
 import rclpy
 from rclpy.node import Node
 
+# Definición de los límites de velocidad como en el código C++
+LIMIT_VEL_LZ = 2.75
+LIMIT_VEL_AY = 0.25
+LIMIT_VEL_LX = 0.75
+LIMIT_VEL_AZ = 1.75
+
 # Clase para el nodo de teleoperación
 class MaxTeleopNode(Node):
     def __init__(self):
@@ -13,27 +19,32 @@ class MaxTeleopNode(Node):
         self.cmd_vel_msg = Twist()
 
     def publish_velocity(self):
+        # Limitar las velocidades antes de publicar
+        self.cmd_vel_msg.linear.x = max(min(self.cmd_vel_msg.linear.x, LIMIT_VEL_LX), -LIMIT_VEL_LX)
+        self.cmd_vel_msg.linear.z = max(min(self.cmd_vel_msg.linear.z, LIMIT_VEL_LZ), -LIMIT_VEL_LZ)
+        self.cmd_vel_msg.angular.y = max(min(self.cmd_vel_msg.angular.y, LIMIT_VEL_AY), -LIMIT_VEL_AY)
+        self.cmd_vel_msg.angular.z = max(min(self.cmd_vel_msg.angular.z, LIMIT_VEL_AZ), -LIMIT_VEL_AZ)
         self.publisher_.publish(self.cmd_vel_msg)
 
-    def set_velocity(self, linear_x, linear_z, angular_y, angular_z):
-        self.cmd_vel_msg.linear.x = linear_x
-        self.cmd_vel_msg.linear.z = linear_z
-        self.cmd_vel_msg.angular.y = angular_y
-        self.cmd_vel_msg.angular.z = angular_z
+    def update_velocity(self, linear_x=None, linear_z=None, angular_y=None, angular_z=None):
+        if linear_x is not None:
+            self.cmd_vel_msg.linear.x = linear_x
+        if linear_z is not None:
+            self.cmd_vel_msg.linear.z = linear_z
+        if angular_y is not None:
+            self.cmd_vel_msg.angular.y = angular_y
+        if angular_z is not None:
+            self.cmd_vel_msg.angular.z = angular_z
         self.publish_velocity()
 
-# Función para iniciar la teleoperación
-def iniciar_teleop(node):
-    print("Teleoperación iniciada.")
 
-# Función para parar los propulsores
-def stop_propulsors(node):
-    node.set_velocity(0.0, 0.0, 0.0, 0.0)
+def stopAll(node):
+    slider_vyaw.set(0)
+    slider_vpitch.set(0)
+    slider_vx.set(0)
+    slider_vz.set(0)
 
-# Función para el paro de emergencia
-def emergency_stop(node):
-    # Establecer la velocidad vertical máxima para emergencia
-    node.set_velocity(0.0, 2.75, 0.0, 0.0)
+    node.update_velocity(0.0, 0.0, 0.0, 0.0)
 
 # Iniciar ROS2
 rclpy.init(args=None)
@@ -43,25 +54,35 @@ node = MaxTeleopNode()
 root = tk.Tk()
 root.title("Control de Teleoperación AUV Max")
 
-# Crear los controles de teleoperación
-slider_vz = tk.Scale(root, from_=-100, to=100, orient='vertical', label='Vz')
+# Controles deslizantes para la velocidad
+slider_vx = tk.Scale(root, from_=-LIMIT_VEL_LX, to=LIMIT_VEL_LX, resolution=0.01, orient='vertical', label='Velocidad X')
+slider_vx.set(0)  # Inicializar con velocidad 0
+slider_vx.pack(side='left')
+#slider_vx.pack()
+
+slider_vz = tk.Scale(root, from_=-LIMIT_VEL_LZ, to=LIMIT_VEL_LZ, resolution=0.01, orient='vertical', label='Velocidad Z')
+slider_vz.set(0)
 slider_vz.pack(side='right')
+#slider_vz.pack()
 
-slider_vyaw = tk.Scale(root, from_=-100, to=100, orient='horizontal', label='Vyaw')
-slider_vyaw.pack(side='left')
+slider_vyaw = tk.Scale(root, from_=-LIMIT_VEL_AZ, to=LIMIT_VEL_AZ, resolution=0.01, orient='horizontal', label='Velocidad Angular Yaw')
+slider_vyaw.set(0)
+slider_vyaw.pack(side='right')
 
-slider_vpitch = tk.Scale(root, from_=-100, to=100, orient='horizontal', label='Vpitch')
-slider_vpitch.pack(side='right')
+slider_vpitch = tk.Scale(root, from_=-LIMIT_VEL_AY, to=LIMIT_VEL_AY, resolution=0.01, orient='horizontal', label='Velocidad Angular Pitch')
+slider_vpitch.set(0)
+slider_vpitch.pack(side='left')
+#slider_vpitch.pack()
+
+# Actualización de las velocidades al mover los controles deslizantes
+slider_vx.bind("<Motion>", lambda event: node.update_velocity(linear_x=slider_vx.get()))
+slider_vz.bind("<Motion>", lambda event: node.update_velocity(linear_z=slider_vz.get()))
+slider_vyaw.bind("<Motion>", lambda event: node.update_velocity(angular_z=slider_vyaw.get()))
+slider_vpitch.bind("<Motion>", lambda event: node.update_velocity(angular_y=slider_vpitch.get()))
 
 # Botones de control
-btn_iniciar = tk.Button(root, text="Iniciar", command=lambda: iniciar_teleop(node))
-btn_iniciar.pack()
-
-btn_emergencia = tk.Button(root, text="Paro Emergencia", command=lambda: emergency_stop(node))
-btn_emergencia.pack()
-
-btn_detener = tk.Button(root, text="Detener", command=lambda: stop_propulsors(node))
-btn_detener.pack()
+btn_stop = tk.Button(root, text="Detener", command=lambda: stopAll(node))
+btn_stop.pack()
 
 # Ejecutar la aplicación Tkinter
 root.mainloop()
