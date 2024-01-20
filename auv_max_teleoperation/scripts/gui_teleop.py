@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import tkinter as tk
+from tkinter import ttk, N, W, E, S
 from geometry_msgs.msg import Twist
 import rclpy
 from rclpy.node import Node
@@ -46,6 +47,7 @@ def toggle_controls(state):
     slider_vyaw.config(state=state)
     slider_vpitch.config(state=state)
     btn_stop.config(state=state)
+    btn_stop2.config(state=state)
     btn_emergency.config(state=state)
 
 def set_val_sliders(value_slider_vx=0, value_slider_vz=0, value_slider_vyaw=0, value_slider_vpitch=0):
@@ -80,18 +82,15 @@ node = MaxTeleopNode()
 root = tk.Tk()
 root.title("Control de Teleoperación AUV Max")
 
-# Controles deslizantes para la velocidad
-slider_vx = tk.Scale(root, from_=LIMIT_VEL_LX, to=-LIMIT_VEL_LX, resolution=0.01, orient='vertical', label='Velocidad X')
-slider_vx.pack(side='left')
+mainframe = ttk.Frame(root, padding="3 3 12 12")
 
-slider_vz = tk.Scale(root, from_=LIMIT_VEL_LZ, to=-LIMIT_VEL_LZ, resolution=0.01, orient='vertical', label='Velocidad Z')
-slider_vz.pack(side='right')
+slider_vx = tk.Scale(mainframe, from_=LIMIT_VEL_LX, to=-LIMIT_VEL_LX, resolution=0.01, orient='vertical', label='Velocidad X')
 
-slider_vyaw = tk.Scale(root, from_=-LIMIT_VEL_AZ, to=LIMIT_VEL_AZ, resolution=0.01, orient='horizontal', label='Velocidad Angular Yaw')
-slider_vyaw.pack(side='right')
+slider_vz = tk.Scale(mainframe, from_=LIMIT_VEL_LZ, to=-LIMIT_VEL_LZ, resolution=0.01, orient='vertical', label='Velocidad Z')
 
-slider_vpitch = tk.Scale(root, from_=-LIMIT_VEL_AY, to=LIMIT_VEL_AY, resolution=0.01, orient='horizontal', label='Velocidad Angular Pitch')
-slider_vpitch.pack(side='left')
+slider_vyaw = tk.Scale(mainframe, from_=-LIMIT_VEL_AZ, to=LIMIT_VEL_AZ, resolution=0.01, orient='horizontal', label='Velocidad Angular Yaw')
+
+slider_vpitch = tk.Scale(mainframe, from_=-LIMIT_VEL_AY, to=LIMIT_VEL_AY, resolution=0.01, orient='horizontal', label='Velocidad Angular Pitch')
 
 set_val_sliders(0, 0, 0, 0)
 
@@ -102,14 +101,23 @@ slider_vyaw.bind("<Motion>", lambda event: node.update_velocity(angular_z=slider
 slider_vpitch.bind("<Motion>", lambda event: node.update_velocity(angular_y=slider_vpitch.get()))
 
 # Botones de control
-btn_start = tk.Button(root, text="Iniciar", command=lambda: start_teleop(node))
-btn_start.pack()
+btn_start = tk.Button(mainframe, text="Iniciar", command=lambda: start_teleop(node))
 
-btn_stop = tk.Button(root, text="Detener", command=lambda: stop_all(node))
-btn_stop.pack()
+btn_stop = tk.Button(mainframe, text="Detener", command=lambda: stop_all(node))
 
-btn_emergency = tk.Button(root, text="Emergencia", command=lambda: emergencia(node))
-btn_emergency.pack()
+btn_stop2 = tk.Button(mainframe, text="Detener 2", command=lambda: stop_all(node))
+
+btn_emergency = tk.Button(mainframe, text="Emergencia", command=lambda: emergencia(node))
+
+mainframe.grid(column=0, row=0)
+slider_vpitch.grid(column=0, row=0, columnspan=2)
+slider_vx.grid(column=0, row=1, columnspan=2, rowspan=4)
+slider_vyaw.grid(column=5, row=0, columnspan=2)
+slider_vz.grid(column=5, row=1, columnspan=2, rowspan=4)
+btn_start.grid(column=2, row=3)
+btn_stop.grid(column=2, row=4)
+btn_stop2.grid(column=4, row=3)
+btn_emergency.grid(column=4, row=4)
 
 toggle_controls('disabled')
 
