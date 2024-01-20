@@ -8,6 +8,7 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(rclpy REQUIRED)
 find_package(geometry_msgs REQUIRED)
 
 include_directories(
@@ -39,6 +40,11 @@ install(TARGETS ${EXEC_NAME}
 
 install(DIRECTORY include/
   DESTINATION include/
+)
+
+install(PROGRAMS
+  scripts/gui_teleop.py
+  DESTINATION lib/${PROJECT_NAME}
 )
 
 ament_export_include_directories(include)
