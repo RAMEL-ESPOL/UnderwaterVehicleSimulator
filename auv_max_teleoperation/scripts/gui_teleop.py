@@ -3,10 +3,16 @@
 import tkinter as tk
 from tkinter import ttk, N, W, E, S
 from geometry_msgs.msg import Twist
+from sensor_msgs.msg import Image
 import rclpy
 from rclpy.node import Node
+from cv_bridge import CvBridge
+from PIL import Image as PilImage
+from PIL import ImageTk
+import cv2
+import threading
 
-# Definición de los límites de velocidad como en el código C++
+# Definición de los límites de velocidad 
 LIMIT_VEL_LZ = 2.75
 LIMIT_VEL_AY = 0.25
 LIMIT_VEL_LX = 0.75
@@ -41,14 +47,48 @@ class MaxTeleopNode(Node):
             self.cmd_vel_msg.angular.z = angular_z
         self.publish_velocity()
 
+class ImageSubscriber(Node):
+    def __init__(self):
+        super().__init__('image_subscriber')
+        self.subscription = self.create_subscription(
+            Image,
+            '/model/auv_max/camera',
+            self.listener_callback,
+            10)
+        self.cv_bridge = CvBridge()
+        self.image = None
+
+    def listener_callback(self, data):
+        cv_image = self.cv_bridge.imgmsg_to_cv2(data, desired_encoding='bgr8')
+
+        scale = 0.4
+        new_width = int(cv_image.shape[1] * scale)
+        new_height = int(cv_image.shape[0] * scale)
+        new_size = (new_width, new_height)
+        cv_image_resized = cv2.resize(cv_image, new_size, interpolation=cv2.INTER_AREA)
+
+        self.image = cv2.cvtColor(cv_image_resized, cv2.COLOR_BGR2RGB)
+
+def update_image_label(image_label, node):
+    if node.image is not None:
+        pil_image = PilImage.fromarray(node.image)
+        tk_image = ImageTk.PhotoImage(image=pil_image)
+        image_label.configure(image=tk_image)
+        image_label.image = tk_image  # evitar que la imagen sea recolectada por el recolector de basura
+    root.after(50, update_image_label, image_label, node)
+
 def toggle_controls(state):
     slider_vx.config(state=state)
     slider_vz.config(state=state)
     slider_vyaw.config(state=state)
     slider_vpitch.config(state=state)
     btn_stop.config(state=state)
-    btn_stop2.config(state=state)
+    btn_shutdown.config(state=state)
     btn_emergency.config(state=state)
+
+    btn_shutdown.config(bg='#e07576' if state == 'disabled' else '#CB191A')
+    btn_stop.config(bg='#e07576' if state == 'disabled' else '#CB191A')
+    btn_emergency.config(bg='#e2e584' if state == 'disabled' else '#C5CB09')
 
 def set_val_sliders(value_slider_vx=0, value_slider_vz=0, value_slider_vyaw=0, value_slider_vpitch=0):
     slider_vx.set(value_slider_vx)
@@ -60,12 +100,17 @@ def start_teleop(nodeTeleop):
     nodeTeleop.startVel = True
     toggle_controls('normal')
 
-def stop_all(nodeTeleop):
+def shutdown_teleop(nodeTeleop):
     set_val_sliders(0, 0, 0, 0)
 
     nodeTeleop.update_velocity(0.0, 0.0, 0.0, 0.0)
     nodeTeleop.startVel = False
     toggle_controls('disabled')
+
+def stop_all(nodeTeleop):
+    set_val_sliders(0, 0, 0, 0)
+
+    nodeTeleop.update_velocity(0.0, 0.0, 0.0, 0.0)
 
 def emergencia(nodeTeleop):
     nodeTeleop.startVel = True
@@ -76,54 +121,70 @@ def emergencia(nodeTeleop):
 
 # Iniciar ROS2
 rclpy.init(args=None)
-node = MaxTeleopNode()
+image_node = ImageSubscriber()
+teleop_node = MaxTeleopNode()
 
 # Crear la ventana de Tkinter
 root = tk.Tk()
 root.title("Control de Teleoperación AUV Max")
 
-mainframe = ttk.Frame(root, padding="3 3 12 12")
+mainframe = tk.Frame(root, bg='#0E111C')
 
-slider_vx = tk.Scale(mainframe, from_=LIMIT_VEL_LX, to=-LIMIT_VEL_LX, resolution=0.01, orient='vertical', label='Velocidad X')
-
-slider_vz = tk.Scale(mainframe, from_=LIMIT_VEL_LZ, to=-LIMIT_VEL_LZ, resolution=0.01, orient='vertical', label='Velocidad Z')
-
-slider_vyaw = tk.Scale(mainframe, from_=-LIMIT_VEL_AZ, to=LIMIT_VEL_AZ, resolution=0.01, orient='horizontal', label='Velocidad Angular Yaw')
-
-slider_vpitch = tk.Scale(mainframe, from_=-LIMIT_VEL_AY, to=LIMIT_VEL_AY, resolution=0.01, orient='horizontal', label='Velocidad Angular Pitch')
+slider_vx = tk.Scale(mainframe, from_=LIMIT_VEL_LX, to=-LIMIT_VEL_LX, resolution=0.01, orient='vertical', label='Vel X', length=175, bg='#0E111C', fg='#e7eaf3')
+slider_vz = tk.Scale(mainframe, from_=LIMIT_VEL_LZ, to=-LIMIT_VEL_LZ, resolution=0.01, orient='vertical', label='Vel Z', length=175, bg='#0E111C', fg='#e7eaf3')
+slider_vyaw = tk.Scale(mainframe, from_=-LIMIT_VEL_AZ, to=LIMIT_VEL_AZ, resolution=0.01, orient='horizontal', label='Vel Yaw', length=125, bg='#0E111C', fg='#e7eaf3')
+slider_vpitch = tk.Scale(mainframe, from_=-LIMIT_VEL_AY, to=LIMIT_VEL_AY, resolution=0.01, orient='horizontal', label='Vel Pitch', length=125, bg='#0E111C', fg='#e7eaf3')
 
 set_val_sliders(0, 0, 0, 0)
 
 # Actualización de las velocidades al mover los controles deslizantes
-slider_vx.bind("<Motion>", lambda event: node.update_velocity(linear_x=slider_vx.get()))
-slider_vz.bind("<Motion>", lambda event: node.update_velocity(linear_z=slider_vz.get()))
-slider_vyaw.bind("<Motion>", lambda event: node.update_velocity(angular_z=slider_vyaw.get()))
-slider_vpitch.bind("<Motion>", lambda event: node.update_velocity(angular_y=slider_vpitch.get()))
+slider_vx.bind("<Motion>", lambda event: teleop_node.update_velocity(linear_x=slider_vx.get()))
+slider_vz.bind("<Motion>", lambda event: teleop_node.update_velocity(linear_z=slider_vz.get()))
+slider_vyaw.bind("<Motion>", lambda event: teleop_node.update_velocity(angular_z=slider_vyaw.get()))
+slider_vpitch.bind("<Motion>", lambda event: teleop_node.update_velocity(angular_y=slider_vpitch.get()))
 
 # Botones de control
-btn_start = tk.Button(mainframe, text="Iniciar", command=lambda: start_teleop(node))
+btn_start = tk.Button(mainframe, text="Start", command=lambda: start_teleop(teleop_node), width=14, height=1, bd=4, bg='#358749', activebackground='#23AF46')
+btn_shutdown = tk.Button(mainframe, text="Shutdown", command=lambda: shutdown_teleop(teleop_node), width=14, height=1, bd=4, activebackground='#E83637')
+btn_stop = tk.Button(mainframe, text="Stop", command=lambda: stop_all(teleop_node), width=14, height=1, bd=4, activebackground='#E83637')
+btn_emergency = tk.Button(mainframe, text="Emergency Climb", command=lambda: emergencia(teleop_node), width=14, height=1, bd=4, activebackground='#E0E62E')
 
-btn_stop = tk.Button(mainframe, text="Detener", command=lambda: stop_all(node))
+# Label para la imagen
+image_label = ttk.Label(mainframe)
 
-btn_stop2 = tk.Button(mainframe, text="Detener 2", command=lambda: stop_all(node))
-
-btn_emergency = tk.Button(mainframe, text="Emergencia", command=lambda: emergencia(node))
-
+# Ubicaciones todas las secciones en el grid
 mainframe.grid(column=0, row=0)
-slider_vpitch.grid(column=0, row=0, columnspan=2)
-slider_vx.grid(column=0, row=1, columnspan=2, rowspan=4)
-slider_vyaw.grid(column=5, row=0, columnspan=2)
-slider_vz.grid(column=5, row=1, columnspan=2, rowspan=4)
-btn_start.grid(column=2, row=3)
-btn_stop.grid(column=2, row=4)
-btn_stop2.grid(column=4, row=3)
-btn_emergency.grid(column=4, row=4)
 
+slider_vpitch.grid(column=0, row=0, columnspan=2, padx=10)
+slider_vyaw.grid(column=5, row=0, columnspan=2, padx=10)
+
+slider_vx.grid(column=0, row=1, columnspan=2, rowspan=4, pady=10)
+slider_vz.grid(column=5, row=1, columnspan=2, rowspan=4, pady=10)
+
+btn_start.grid(column=2, row=3, padx=5, pady=5)
+btn_shutdown.grid(column=4, row=3, padx=5, pady=5)
+
+btn_stop.grid(column=2, row=4, pady=10)
+btn_emergency.grid(column=4, row=4, pady=10)
+
+image_label.grid(column=2, row=0, columnspan=3, rowspan=3, pady=10)
+
+# Desactivar botones diferentes al start al iniciar
 toggle_controls('disabled')
 
-# Ejecutar la aplicación Tkinter
+# Actualizar la imagen en el label
+root.after(0, update_image_label, image_label, image_node)
+
+# Función para ejecutar el spin de ROS2 en un thread
+def run_ros_spin():
+    rclpy.spin(image_node)
+
+ros_thread = threading.Thread(target=run_ros_spin, args=())
+ros_thread.start()
+
 root.mainloop()
 
-# Limpiar y cerrar ROS2
-node.destroy_node()
+teleop_node.destroy_node()
+image_node.destroy_node()
 rclpy.shutdown()
+ros_thread.join()
