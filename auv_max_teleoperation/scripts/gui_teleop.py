@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import ttk, N, W, E, S
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Image
+from nav_msgs.msg import Odometry
 import rclpy
 from rclpy.node import Node
 from cv_bridge import CvBridge
@@ -58,6 +59,19 @@ class ImageSubscriber(Node):
         self.cv_bridge = CvBridge()
         self.image = None
 
+        self.subscription_odom = self.create_subscription(
+            Odometry,
+            'model/auv_max/odometry',
+            self.odom_callback,
+            10)
+
+        self.pos_x = None
+        self.pos_y = None
+        self.pos_z = None
+        self.yaw = None
+        self.pitch = None
+        self.roll = None
+
     def listener_callback(self, data):
         cv_image = self.cv_bridge.imgmsg_to_cv2(data, desired_encoding='bgr8')
 
@@ -65,9 +79,26 @@ class ImageSubscriber(Node):
         new_width = int(cv_image.shape[1] * scale)
         new_height = int(cv_image.shape[0] * scale)
         new_size = (new_width, new_height)
+
         cv_image_resized = cv2.resize(cv_image, new_size, interpolation=cv2.INTER_AREA)
 
+        cv2.putText(cv_image_resized, f'Pos X: {self.pos_x} m', (3, new_height-40), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (0,0,0), 1)
+        cv2.putText(cv_image_resized, f'Pos Y: {self.pos_y} m', (3, new_height-25), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (0,0,0), 1)
+        cv2.putText(cv_image_resized, f'Pos Z: {self.pos_z} m', (3, new_height-10), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (0,0,0), 1)
+
+        cv2.putText(cv_image_resized, f'Roll: {self.roll} rad', (new_width-145, new_height-40), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (0,0,0), 1)
+        cv2.putText(cv_image_resized, f'Pitch: {self.pitch} rad', (new_width-145, new_height-25), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (0,0,0), 1)
+        cv2.putText(cv_image_resized, f'Yaw: {self.yaw} rad', (new_width-145, new_height-10), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (0,0,0), 1)
+
         self.image = cv2.cvtColor(cv_image_resized, cv2.COLOR_BGR2RGB)
+    
+    def odom_callback(self, data):
+        self.pos_x = round(data.pose.pose.position.x, 2)
+        self.pos_y = round(data.pose.pose.position.y, 2)
+        self.pos_z = round(data.pose.pose.position.z, 2)
+        self.yaw = round(data.pose.pose.orientation.z, 2)
+        self.pitch = round(data.pose.pose.orientation.y, 2)
+        self.roll = round(data.pose.pose.orientation.x, 2)
 
 def update_image_label(image_label, node):
     if node.image is not None:
