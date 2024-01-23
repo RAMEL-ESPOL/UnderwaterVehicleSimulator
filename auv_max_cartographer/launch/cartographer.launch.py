@@ -33,7 +33,7 @@ def generate_launch_description():
             parameters=[{'use_sim_time': use_sim_time}],
             arguments=['-configuration_directory', cartographer_config_dir,
                        '-configuration_basename', configuration_basename],
-            remappings=[('/imu', '/model/auv_max/imu'),
+            remappings=[('/imu', '/model/auv_max/remapped_imu'),
                         ('/odom', '/model/auv_max/odometry'),
                         ('/horizontal_laser_3d', '/model/auv_max/remapped_sonar_point_cloud')]),
         

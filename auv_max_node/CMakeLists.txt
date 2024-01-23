@@ -22,6 +22,7 @@ add_library(${PROJECT_NAME}_lib
   "src/cmd_vel_thrust_converter.cpp"
   "src/gazebo_rviz_synchronizer.cpp" 
   "src/sonar_topic_remapper.cpp"
+  "src/imu_topic_remapper.cpp"
   "src/node_main.cpp"
 )
 
