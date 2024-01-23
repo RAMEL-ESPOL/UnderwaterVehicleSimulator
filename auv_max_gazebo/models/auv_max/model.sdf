@@ -147,6 +147,12 @@
               <min_angle>-1.57</min_angle> <!-- Ángulo mínimo en radianes -->
               <max_angle>1.57</max_angle> <!-- Ángulo máximo en radianes -->
             </horizontal>
+            <vertical>
+              <samples>180</samples> 
+              <resolution>1</resolution>
+              <min_angle>0</min_angle> 
+              <max_angle>0.785</max_angle> 
+            </vertical>
           </scan>
           <range>
               <min>0.1</min> <!-- Distancia mínima en metros -->

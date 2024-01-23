@@ -16,6 +16,7 @@
   <exec_depend>auv_max_node</exec_depend>
   <exec_depend>auv_max_control_vel</exec_depend>
   <exec_depend>auv_max_sonar</exec_depend>
+  <exec_depend>auv_max_cartographer</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
