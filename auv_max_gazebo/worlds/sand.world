@@ -202,7 +202,7 @@
 
     <include>
       <uri>model://auv_max</uri>
-      <pose>-5 0 -0.2 0 0 0</pose>
+      <pose>0 0 -0.2 0 0 0</pose>
     </include>
 
     <include>
@@ -216,7 +216,7 @@
     </include>
 
     <include>
-      <pose>0 0 1 0 0 1.57</pose>
+      <pose>3 0 1 0 0 1.57</pose>
       <uri>https://fuel.gazebosim.org/1.0/accurrent/models/MBARI%20Tethys%20LRAUV</uri>
 
       <!-- Joint controllers -->
