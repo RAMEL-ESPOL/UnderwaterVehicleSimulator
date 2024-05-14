@@ -1,4 +1,4 @@
-# AUV Max: Proyecto de UAV Sumergible
+# AUV Max: Proyecto de AUV Sumergible
 
 ## Introducción
 Este proyecto se centra en el desarrollo de un UAV sumergible, utilizando tecnologías avanzadas en robótica, control automático y visión por computadora. Desarrollado con ROS2 Humble, Gazebo Garden 7 y Rviz2, este proyecto representa un esfuerzo pionero en la simulación y operación de vehículos autónomos subacuáticos.
