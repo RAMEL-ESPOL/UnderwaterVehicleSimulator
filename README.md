@@ -1,57 +1,57 @@
-# AUV Max: Proyecto de AUV Sumergible
+# AUV Max: Submarine AUV Project
 
-## Introducción
-Este proyecto se centra en el desarrollo de un UAV sumergible, utilizando tecnologías avanzadas en robótica, control automático y visión por computadora. Desarrollado con ROS2 Humble, Gazebo Garden 7 y Rviz2, este proyecto representa un esfuerzo pionero en la simulación y operación de vehículos autónomos subacuáticos.
+## Introduction
+This project focuses on the development of a submersible UAV, using advanced technologies in robotics, automatic control and computer vision. Developed with ROS2 Humble, Gazebo Garden 7 and Rviz2, this project represents a pioneering effort in the simulation and operation of underwater autonomous vehicles.
 
-## Estructura del Proyecto
-El proyecto se divide en varios paquetes, cada uno enfocado en una funcionalidad específica:
+## Project Structure
+The project is divided into several packages, each focused on a specific functionality:
 
 
-| Paquete | Descripción |
+| Package | Description |
 | --- | --- |
-| `auv_max` | Paquetes necesarios para el correcto funcionamiento del proyecto |
-| `auv_max_bringup` | Archivos launch para el lanzamiento de Gazebo, Rviz y futuras implementaciones físicas |
-| `auv_max_control_pos` | Control de posición mediante un PID para controlar posición lineal X-Z y angular Yaw-Pitch |
-| `auv_max_description` | Archivos URDF y configuraciones de visualización para Rviz |
-| `auv_max_gazebo` | Modelo del AUV y mundo para simulación en Gazebo |
-| `auv_max_graphics` | Módulos gráficos y visualizaciones para el AUV |
-| `auv_max_node` | Nodo principal encargado de la comunicación entre Gazebo-Rviz-ROS |
-| `auv_max_sonar` | Algoritmo encargado para reconocer obstaculos bajo el agua |
-| `auv_max_teleoperation` | Algoritmo para la teleoperación del AUV mediante el uso del teclado |
-| `auv_max_vision_opencv` | Implementación de visión por computadora usando OpenCV |
+| `auv_max` | Packages necessary for the correct functioning of the project |
+| `auv_max_bringup` | Launch files for the launch of Gazebo, Rviz and future physical implementations |
+| `auv_max_control_pos` | Position control using a PID to control linear X-Z and angular position Yaw-Pitch |
+| `auv_max_description` | URDF Files and Display Settings for Rviz |
+| `auv_max_gazebo` | AUV model and world for simulation in Gazebo |
+| `auv_max_graphics` | Graphic modules and visualizations for the AUV |
+| `auv_max_node` | Main node in charge of communication between Gazebo-Rviz-ROS |
+| `auv_max_sonar` | Algorithm commissioned to recognize obstacles underwater |
+| `auv_max_teleoperation` | Algorithm for AUV teleoperation through the use of the keyboard |
+| `auv_max_vision_opencv` | Computer vision implementation using OpenCV |
 
-## Requisitos
+## Requirements
 - ROS2 Humble
 - Gazebo Garden 7
 - Rviz2
 - OpenCV
 
-## Instalación y Configuración
-Siga estos pasos para instalar y configurar el proyecto:
+## Installation and configuration
+Follow these steps to install and configure the project:
 
-1. Clone el repositorio:
+1. Clone the repository:
    ```
    git clone https://github.com/iesusdavila/auv_max
    ```
-2. Navegue al directorio del proyecto y ejecute:
+2. Navigate to the project directory and run:
    ```
    colcon build
    ```
-3. Configure el entorno ROS:
+3. Set up the ROS environment:
    ```
    source /opt/ros/humble/setup.bash
    source install/setup.bash
    ```
 
-## Uso
-- Para lanzar la simulación en Gazebo: `ros2 launch auv_max_bringup max_sim.launch.py`
-- Para activar el control teleoperado: `ros2 run auv_max_teleoperation auv_teleop_keyboard`
+## Use
+- To launch the simulation in Gazebo: `ros2 launch auv_max_bringup max_sim.launch.py`
+- To activate teleoperated control: `ros2 run auv_max_teleoperation auv_teleop_keyboard`
 
-## Desarrollo y Contribuciones
-Si estás interesado en contribuir a este proyecto, considera lo siguiente:
-- **Estilo de Código:** Seguir las convenciones de ROS2 y PEP8 para Python.
-- **Pruebas:** Asegurar que todo nuevo código sea acompañado de pruebas unitarias.
-- **Documentación:** Todo nuevo desarrollo debe ser debidamente documentado.
+## Development and Contributions
+If you are interested in contributing to this project, consider the following:
+- **Code Style:** Follow the ROS2 and PEP8 conventions for Python.
+- **Tests:** Ensure that all new code is accompanied by unit tests.
+- **Documentation:** All new developments must be properly documented.
 
 ---
 © 2023 AUV Max Project
