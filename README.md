@@ -1,4 +1,4 @@
-# AUV Max: Submarine AUV Project
+# AUV Max: Plataform for Submarine AUV
 
 ## Introduction
 This project focuses on the development of a submersible UAV, using advanced technologies in robotics, automatic control and computer vision. Developed with ROS2 Humble, Gazebo Garden 7 and Rviz2, this project represents a pioneering effort in the simulation and operation of underwater autonomous vehicles.
