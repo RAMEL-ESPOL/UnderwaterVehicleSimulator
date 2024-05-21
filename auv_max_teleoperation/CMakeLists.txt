@@ -11,9 +11,9 @@ find_package(rclcpp REQUIRED)
 find_package(rclpy REQUIRED)
 find_package(geometry_msgs REQUIRED)
 
-include_directories(
-  include
-)
+#include_directories(
+#  include
+#)
 
 add_library(${PROJECT_NAME}_lib
   "src/auv_teleop_keyboard.cpp"
@@ -38,9 +38,9 @@ install(TARGETS ${EXEC_NAME}
   DESTINATION lib/${PROJECT_NAME}
 )
 
-install(DIRECTORY include/
-  DESTINATION include/
-)
+#install(DIRECTORY include/
+#  DESTINATION include/
+#)
 
 install(PROGRAMS
   scripts/gui_teleop.py
