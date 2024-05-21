@@ -29,15 +29,37 @@ The project is divided into several packages, each focused on a specific functio
 ## Installation and configuration
 Follow these steps to install and configure the project:
 
-1. Clone the repository:
+### Installing dependencies
+
+1. Install ROS 2 Humble (Documentation: https://docs.ros.org/en/humble/Installation/Alternatives/Ubuntu-Development-Setup.html)
+
+2. Install Gazebo Garden 7 (Documentation: https://gazebosim.org/docs/garden/install_ubuntu)
+
+3. Install OpenCV (Documentation: https://docs.opencv.org/4.x/d7/d9f/tutorial_linux_install.html)
+
+4. Install Install additional dependencies
+   
    ```
+   sudo apt-get install ros-humble-xacro
+   sudo apt-get install libncurses5-dev libncursesw5-dev
+   sudo apt-get install ros-humble-ros-gzgarden*
+   ```
+### Install the project
+
+1. Create a workspace:
+   ```
+   mkdir ~/ros2_ws && cd ~/ros2_ws && mkdir src  
+   ```
+3. Clone the repository:
+   ```
+   cd src
    git clone https://github.com/iesusdavila/auv_max
    ```
-2. Navigate to the project directory and run:
+4. Navigate to the project directory and run:
    ```
    colcon build
    ```
-3. Set up the ROS environment:
+5. Set up the ROS environment:
    ```
    source /opt/ros/humble/setup.bash
    source install/setup.bash
