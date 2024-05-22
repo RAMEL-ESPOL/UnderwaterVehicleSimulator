@@ -66,6 +66,7 @@ Follow these steps to install and configure the project:
    ```
 
 ## Use
+- Execute commands so that Gazebo recognizes plugin and model: https://github.com/RAMEL-ESPOL/auv_max/blob/main/initial_run.bash
 - To launch the simulation in Gazebo: `ros2 launch auv_max_bringup max_sim.launch.py`
 - To activate teleoperated control: `ros2 run auv_max_teleoperation auv_teleop_keyboard`
 
