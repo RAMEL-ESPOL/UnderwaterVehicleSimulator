@@ -37,7 +37,7 @@ Follow these steps to install and configure the project:
 
 3. Install OpenCV (Documentation: https://docs.opencv.org/4.x/d7/d9f/tutorial_linux_install.html)
 
-4. Install Install additional dependencies
+4. Install additional dependencies
    
    ```
    sudo apt-get install ros-humble-xacro
