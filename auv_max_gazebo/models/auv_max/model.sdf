@@ -48,10 +48,7 @@
         </inertia>
       </inertial>
 
-      <!-- IMU sensor gyro and accel data will be sent to ArduSub -->
       <sensor name="imu_sensor" type="imu">
-        <!-- Transform from the Gazebo body frame (x-forward, y-left, z-up)
-             to the ArduPilot body frame (x-forward, y-right, z-down) -->
         <pose>0.15571 -0.00016 -0.00084 0 0 0</pose>
         <always_on>1</always_on>
         <update_rate>1000.0</update_rate>
@@ -113,7 +110,6 @@
       </inertial>
     </link>
 
-    <!-- Attach camera_link to auv_max_shell -->
     <joint name="shell_to_camera" type="fixed">
       <parent>auv_max_shell</parent>
       <child>camera</child>
@@ -472,7 +468,6 @@
     <!-- ********** PLUGINS ********** -->
     <!-- ***************************** -->
     
-    <!-- CHASSIS - HYDRODYNAMICS PLUGINS -->
     <plugin
         filename="gz-sim-hydrodynamics-system"
         name="gz::sim::systems::Hydrodynamics">
@@ -567,20 +562,14 @@
       <use_angvel_cmd>False</use_angvel_cmd>
     </plugin>
 
-    <!-- ARDUPILOT - COMUNNICATION -->
     <plugin name="ArduPilotPlugin" filename="libArduPilotPlugin.so">
-      <!-- Port settings -->
       <fdm_addr>127.0.0.1</fdm_addr>
       <fdm_port_in>9002</fdm_port_in>
       <connectionTimeoutMaxCount>5</connectionTimeoutMaxCount>
       <lock_step>1</lock_step>
 
-      <!-- Transform from the Gazebo body frame (x-forward, y-left, z-up)
-           to the ArduPilot body frame (x-forward, y-right, z-down) -->
       <modelXYZToAirplaneXForwardZDown>0 0 0 3.141592653589793 0 0</modelXYZToAirplaneXForwardZDown>
 
-      <!-- Transform from the Gazebo world frame (ENU)
-           to the ArduPilot world frame (NED) -->
       <gazeboXYZToNED>0 0 0 3.141592653589793 0 1.5707963267948966</gazeboXYZToNED>
 
       <!-- Sensors -->
@@ -635,7 +624,6 @@
 
     </plugin>
 
-    <!-- PUBLISH THE GROUND-TRUTH POSE FOR RVIZ2 -->
     <plugin
         filename="gz-sim-odometry-publisher-system"
         name="gz::sim::systems::OdometryPublisher">
