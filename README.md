@@ -22,8 +22,8 @@ The project is divided into several packages, each focused on a specific functio
 
 ## Requirements
 - ROS2 Humble
+- Rviz2 (Installed directly with ROS2 Humble)
 - Gazebo Garden 7
-- Rviz2
 - OpenCV
 
 ## Installation and configuration
