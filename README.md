@@ -71,6 +71,10 @@ Follow these steps to install and configure the project:
 - To activate GUI teleoperated control: `ros2 run auv_max_teleoperation gui_teleop.py`
 - To activate teleoperated control: `ros2 run auv_max_teleoperation auv_teleop_keyboard`
 
+<p align="center">
+  <img src="docs/teleop_gui_1.png" alt="Texto alternativo">
+</p>
+
 ## Development and Contributions
 If you are interested in contributing to this project, consider the following:
 - **Code Style:** Follow the ROS2 and PEP8 conventions for Python.
